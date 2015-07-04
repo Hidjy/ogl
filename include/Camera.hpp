@@ -8,7 +8,7 @@
 
 #include <GL/glew.h>
 
-enum Direction {FORWARD, BACKWARD, LEFT, RIGHT};
+enum Direction {UP, DOWN, FORWARD, BACKWARD, LEFT, RIGHT};
 
 class Camera
 {

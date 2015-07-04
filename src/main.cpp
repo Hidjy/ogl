@@ -3,6 +3,7 @@
 // Std. Includes
 #include <string>
 #include <iostream>
+#include <vector>
 
 // GLEW
 #define GLEW_STATIC
@@ -33,7 +34,7 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void Do_Movement();
 
 // Camera
-Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+Camera camera(glm::vec3(3.0f, 10.0f, 3.0f));
 bool keys[1024];
 GLfloat lastX = 400, lastY = 300;
 bool firstMouse = true;
@@ -120,18 +121,15 @@ int main()
         -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
         -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
     };
-    glm::vec3 cubePositions[] = {
-        glm::vec3(0.0f, 0.0f, 0.0f),
-        glm::vec3(1.0f, 0.0f, 1.0f),
-        glm::vec3(2.0f, 0.0f, 2.0f),
-        glm::vec3(3.0f, 0.0f, 0.0f),
-        glm::vec3(0.0f, 1.0f, 0.0f),
-        glm::vec3(0.0f, 2.0f, 0.0f),
-        glm::vec3(0.0f, 3.0f, 1.0f),
-        glm::vec3(1.0f, 1.0f, 0.0f),
-        glm::vec3(2.0f, 1.0f, 0.0f),
-        glm::vec3(2.0f, 2.0f, 1.0f),
-    };
+    std::vector<glm::vec3> cubes;
+
+    for (GLfloat x = -100; x < 100; x++) {
+        for (GLfloat y = 0; y < 1; y++) {
+            for (GLfloat z = -100; z < 100; z++) {
+                cubes.push_back(glm::vec3(x,  roundf(10 * cos(sqrt(x*x + z*z) * 0.1)), z));
+            }
+        }
+    }
 
     GLuint VBO, VAO;
     glGenVertexArrays(1, &VAO);
@@ -167,7 +165,7 @@ int main()
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         // Load, create texture and generate mipmaps
         int width, height;
-        unsigned char* image = SOIL_load_image("ressource/0.png", &width, &height, 0, SOIL_LOAD_RGB);
+        unsigned char* image = SOIL_load_image("ressource/dore.png", &width, &height, 0, SOIL_LOAD_RGB);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
         glGenerateMipmap(GL_TEXTURE_2D);
         SOIL_free_image_data(image);
@@ -211,11 +209,10 @@ int main()
         glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
         glBindVertexArray(VAO);
-        for(GLuint i = 0; i < 10; i++)
-        {
+        for (std::vector<glm::vec3>::iterator i = cubes.begin(); i < cubes.end(); ++i) {
             // Calculate the model matrix for each object and pass it to shader before drawing
             glm::mat4 model;
-            model = glm::translate(model, cubePositions[i]);
+            model = glm::translate(model, *i);
             //GLfloat angle = 20.0f * i;
             //model = glm::rotate(model, angle, glm::vec3(1.0f, 0.3f, 0.5f));
             glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
@@ -245,12 +242,16 @@ void Do_Movement()
         camera.ProcessKeyboard(LEFT, deltaTime);
     if(keys[GLFW_KEY_D])
         camera.ProcessKeyboard(RIGHT, deltaTime);
+    if(keys[GLFW_KEY_SPACE])
+        camera.ProcessKeyboard(UP, deltaTime);
+    if(keys[GLFW_KEY_LEFT_SHIFT])
+        camera.ProcessKeyboard(DOWN, deltaTime);
 }
 
 // Is called whenever a key is pressed/released via GLFW
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
 {
-    //cout << key << endl;
+    //std::cout << key << std::endl;
     if(key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, GL_TRUE);
     if (key >= 0 && key < 1024)
