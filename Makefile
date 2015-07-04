@@ -1,6 +1,8 @@
 NAME	= ogl
 
-SRC		=	main.cpp
+SRC		=	main.cpp	\
+			Shader.cpp	\
+			Camera.cpp
 
 HEAD_DIR	= include
 SRC_DIR		= src
@@ -9,14 +11,14 @@ STATIC_DIR	= static
 
 
 INCLUDES	=
-LIBS		= -ldl -lglfw3 -lGL -lX11 -lXi -lXrandr -lXxf86vm -lXinerama -lXcursor -lrt -lm -pthread
+LIBS		= -ldl -lGL -lglfw3 -lGLEW -lSOIL -lX11 -lXi -lXrandr -lXxf86vm -lXinerama -lXcursor -lrt -lm -pthread
 
 
 OBJ	= $(patsubst %.cpp,$(STATIC_DIR)/%.o,$(SRC))
 
 CC			= clang++
 OPTI		= -O3
-FLAGS		= -Wall -Wextra -Wno-unused-result
+FLAGS		= -std=c++11 -Wall #-Wextra -Wno-unused-result
 
 
 $(shell mkdir -p $(STATIC_DIR) $(DEBUG_DIR))
