@@ -1,8 +1,10 @@
 NAME	= ogl
 
-SRC		=	main.cpp	\
-			Shader.cpp	\
-			Camera.cpp
+SRC		=	main.cpp \
+			Shader.cpp \
+			Camera.cpp \
+			Cube.cpp \
+			CubeRenderer.cpp
 
 HEAD_DIR	= include
 SRC_DIR		= src

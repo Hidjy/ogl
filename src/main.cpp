@@ -1,51 +1,41 @@
-
-
-// Std. Includes
-#include <string>
-#include <iostream>
-#include <vector>
-
-// GLEW
 #define GLEW_STATIC
 #include <GL/glew.h>
 
-// GLFW
 #include <GLFW/glfw3.h>
 
-// GL includes
-#include "Shader.hpp"
-#include "Camera.hpp"
-
-// GLM Mathemtics
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-// Other Libs
 #include <SOIL/SOIL.h>
 
-// Properties
-GLuint screenWidth = 800, screenHeight = 600;
+#include <string>
+#include <iostream>
+#include <vector>
 
-// Function prototypes
+#include "Shader.hpp"
+#include "Camera.hpp"
+#include "CubeRenderer.hpp"
+
+#include "Cube.hpp"
+
+GLuint screenWidth = 800, screenHeight = 450;
+
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void Do_Movement();
 
-// Camera
 Camera camera(glm::vec3(3.0f, 10.0f, 3.0f));
 bool keys[1024];
-GLfloat lastX = 400, lastY = 300;
+GLfloat lastX = screenWidth / 2, lastY = screenHeight / 2;
 bool firstMouse = true;
 
 GLfloat deltaTime = 0.0f;
 GLfloat lastFrame = 0.0f;
 
-// The MAIN function, from here we start our application and run our Game loop
 int main()
 {
-    // Init GLFW
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -56,105 +46,24 @@ int main()
     GLFWwindow* window = glfwCreateWindow(screenWidth, screenHeight, "OGL", nullptr, nullptr); // Windowed
     glfwMakeContextCurrent(window);
 
-    // Set the required callback functions
     glfwSetKeyCallback(window, key_callback);
     glfwSetCursorPosCallback(window, mouse_callback);
     glfwSetScrollCallback(window, scroll_callback);
 
-    // Options
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-    // Initialize GLEW to setup the OpenGL Function pointers
     glewExperimental = GL_TRUE;
     glewInit();
 
-    // Define the viewport dimensions
     glViewport(0, 0, screenWidth, screenHeight);
 
-    // Setup some OpenGL options
     glEnable(GL_DEPTH_TEST);
 
-    // Setup and compile our shaders
-    Shader ourShader("shader/shader.vert", "shader/shader.frag");
+    Shader blockShader("shader/block.vert", "shader/block.frag");
 
-    // Set up our vertex data (and buffer(s)) and attribute pointers
-    GLfloat vertices[] = {
-        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-         0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-
-        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-        -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-         0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-         0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-         0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-         0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
-    };
-    std::vector<glm::vec3> cubes;
-
-    for (GLfloat x = -100; x < 100; x++) {
-        for (GLfloat y = 0; y < 1; y++) {
-            for (GLfloat z = -100; z < 100; z++) {
-                cubes.push_back(glm::vec3(x,  roundf(10 * cos(sqrt(x*x + z*z) * 0.1)), z));
-            }
-        }
-    }
-
-    GLuint VBO, VAO;
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    // Bind our Vertex Array Object first, then bind and set our buffers and pointers.
-    glBindVertexArray(VAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-    // Position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
-    glEnableVertexAttribArray(0);
-    // TexCoord attribute
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
-    glEnableVertexAttribArray(1);
-
-    glBindVertexArray(0); // Unbind VAO
-
-
-        // Load and create a texture
+        //TODO: TextureManager
+        // TEXTURE
         GLuint texture;
-        // ====================
-        // Texture 1
-        // ====================
         glGenTextures(1, &texture);
         glBindTexture(GL_TEXTURE_2D, texture); // All upcoming GL_TEXTURE_2D operations now have effect on our texture object
         // Set our texture parameters
@@ -171,61 +80,55 @@ int main()
         SOIL_free_image_data(image);
         glBindTexture(GL_TEXTURE_2D, 0); // Unbind texture when done, so we won't accidentily mess up our texture.
 
+    CubeRenderer *cubeRenderer = new CubeRenderer();
+
+    std::vector<Cube> cubes;
+    GLuint textures[] = {texture, texture, texture, texture, texture, texture};
+
+    for (GLfloat x = -20; x < 20; x++) {
+        for (GLfloat y = 0; y < 1; y++) {
+            for (GLfloat z = -20; z < 20; z++) {
+                cubes.push_back(Cube(glm::vec3(x, roundf(5 * cos(sqrt(x*x + z*z) * 0.2)), z), textures ));
+            }
+        }
+    }
+
     // Game loop
     while(!glfwWindowShouldClose(window))
     {
-        // Set frame time
         GLfloat currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
 
-        // Check and call events
         glfwPollEvents();
         Do_Movement();
 
-        // Clear the colorbuffer
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // Draw our first triangle
-        ourShader.Use();
+        blockShader.Use();
 
-        // Bind Textures using texture units
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture);
-        glUniform1i(glGetUniformLocation(ourShader.Program, "ourTexture"), 0);
+        glUniform1i(glGetUniformLocation(blockShader.Program, "ourTexture"), 0);
 
-        // Create camera transformation
         glm::mat4 view;
         view = camera.GetViewMatrix();
         glm::mat4 projection;
         projection = glm::perspective(camera.Zoom, (float)screenWidth/(float)screenHeight, 0.1f, 1000.0f);
         // Get the uniform locations
-        GLint modelLoc = glGetUniformLocation(ourShader.Program, "model");
-        GLint viewLoc = glGetUniformLocation(ourShader.Program, "view");
-        GLint projLoc = glGetUniformLocation(ourShader.Program, "projection");
+        GLint viewLoc = glGetUniformLocation(blockShader.Program, "view");
+        GLint projLoc = glGetUniformLocation(blockShader.Program, "projection");
         // Pass the matrices to the shader
         glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
         glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
-        glBindVertexArray(VAO);
-        for (std::vector<glm::vec3>::iterator i = cubes.begin(); i < cubes.end(); ++i) {
-            // Calculate the model matrix for each object and pass it to shader before drawing
-            glm::mat4 model;
-            model = glm::translate(model, *i);
-            //GLfloat angle = 20.0f * i;
-            //model = glm::rotate(model, angle, glm::vec3(1.0f, 0.3f, 0.5f));
-            glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-
-            glDrawArrays(GL_TRIANGLES, 0, 36);
-        }
-        glBindVertexArray(0);
+        cubeRenderer->render(cubes, blockShader);
         // Swap the buffers
         glfwSwapBuffers(window);
     }
     // Properly de-allocate all resources once they've outlived their purpose
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
+    delete cubeRenderer;
     glfwTerminate();
     return 0;
 }
