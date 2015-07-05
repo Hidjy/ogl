@@ -24,6 +24,8 @@
 // Other Libs
 #include <SOIL/SOIL.h>
 
+#include "TextManager.hpp"
+
 // Properties
 GLuint screenWidth = 800, screenHeight = 600;
 
@@ -34,7 +36,7 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void Do_Movement();
 
 // Camera
-Camera camera(glm::vec3(3.0f, 10.0f, 3.0f));
+Camera camera(glm::vec3(60.0f, 60.0f, 60.0f));
 bool keys[1024];
 GLfloat lastX = 400, lastY = 300;
 bool firstMouse = true;
@@ -73,9 +75,11 @@ int main()
 
     // Setup some OpenGL options
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     // Setup and compile our shaders
-    Shader ourShader("shader/shader.vert", "shader/shader.frag");
+    Shader ourShader("shaders/block.vert", "shaders/block.frag");
 
     // Set up our vertex data (and buffer(s)) and attribute pointers
     GLfloat vertices[] = {
@@ -123,10 +127,10 @@ int main()
     };
     std::vector<glm::vec3> cubes;
 
-    for (GLfloat x = -100; x < 100; x++) {
-        for (GLfloat y = 0; y < 1; y++) {
-            for (GLfloat z = -100; z < 100; z++) {
-                cubes.push_back(glm::vec3(x,  roundf(10 * cos(sqrt(x*x + z*z) * 0.1)), z));
+    for (GLfloat x = -50; x < 50; x++) {
+        for (GLfloat y = -50; y < 50; y++) {
+            for (GLfloat z = -50; z < 50; z++) {
+                cubes.push_back(glm::vec3(x, y, z));
             }
         }
     }
@@ -149,6 +153,7 @@ int main()
 
     glBindVertexArray(0); // Unbind VAO
 
+    TextManager *textManager = new TextManager();
 
         // Load and create a texture
         GLuint texture;
@@ -165,7 +170,7 @@ int main()
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         // Load, create texture and generate mipmaps
         int width, height;
-        unsigned char* image = SOIL_load_image("ressource/dore.png", &width, &height, 0, SOIL_LOAD_RGB);
+        unsigned char* image = SOIL_load_image("ressources/dore.png", &width, &height, 0, SOIL_LOAD_RGB);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
         glGenerateMipmap(GL_TEXTURE_2D);
         SOIL_free_image_data(image);
@@ -220,6 +225,9 @@ int main()
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
         glBindVertexArray(0);
+
+        textManager->RenderText(std::to_string(static_cast<int>(1.0f / deltaTime)), 25.0f, 525.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
+
         // Swap the buffers
         glfwSwapBuffers(window);
     }

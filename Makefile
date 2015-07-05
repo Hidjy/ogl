@@ -2,7 +2,8 @@ NAME	= ogl
 
 SRC		=	main.cpp	\
 			Shader.cpp	\
-			Camera.cpp
+			Camera.cpp	\
+			TextManager.cpp
 
 HEAD_DIR	= include
 SRC_DIR		= src
@@ -10,9 +11,9 @@ DEBUG_DIR	= debug
 STATIC_DIR	= static
 
 
-INCLUDES	=
-LIBS		= -ldl -lGL -lglfw3 -lGLEW -lSOIL -lX11 -lXi -lXrandr -lXxf86vm -lXinerama -lXcursor -lrt -lm -pthread
-
+INCLUDES	= -I/usr/include/freetype2
+LIBS		= -ldl -lGL -lglfw3 -lGLEW -lSOIL -lX11 -lXi -lXrandr -lXxf86vm -lXinerama -lXcursor -lrt -lm -pthread \
+				-lfreetype -lz -lpng12
 
 OBJ	= $(patsubst %.cpp,$(STATIC_DIR)/%.o,$(SRC))
 
