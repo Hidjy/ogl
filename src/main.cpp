@@ -46,6 +46,8 @@ int main()
     GLFWwindow* window = glfwCreateWindow(screenWidth, screenHeight, "OGL", nullptr, nullptr); // Windowed
     glfwMakeContextCurrent(window);
 
+    srand(glfwGetTime());
+
     glfwSetKeyCallback(window, key_callback);
     glfwSetCursorPosCallback(window, mouse_callback);
     glfwSetScrollCallback(window, scroll_callback);
@@ -80,9 +82,13 @@ int main()
         SOIL_free_image_data(image);
         glBindTexture(GL_TEXTURE_2D, 0); // Unbind texture when done, so we won't accidentily mess up our texture.
 
-    CubeRenderer *cubeRenderer = new CubeRenderer();
+    glm::mat4 projection = glm::perspective(45.0f, (GLfloat)screenWidth/(GLfloat)screenHeight, 1.0f, 10000.0f);
+    blockShader.Use();
+    glUniformMatrix4fv(glGetUniformLocation(blockShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
     std::vector<Cube> cubes;
+    std::vector<glm::mat4> modelMatrices;
+
     GLuint textures[] = {texture, texture, texture, texture, texture, texture};
 
     for (GLfloat x = -20; x < 20; x++) {
@@ -91,6 +97,11 @@ int main()
                 cubes.push_back(Cube(glm::vec3(x, roundf(5 * cos(sqrt(x*x + z*z) * 0.2)), z), textures ));
             }
         }
+    }
+
+    std::vector<CubeRenderer> cubeRenderers;
+    for (std::vector<Cube>::iterator cube = cubes.begin(); cube < cubes.end(); ++cube) {
+        cubeRenderers.push_back(CubeRenderer(*cube));
     }
 
     // Game loop
@@ -118,10 +129,8 @@ int main()
         projection = glm::perspective(camera.Zoom, (float)screenWidth/(float)screenHeight, 0.1f, 1000.0f);
         // Get the uniform locations
         GLint viewLoc = glGetUniformLocation(blockShader.Program, "view");
-        GLint projLoc = glGetUniformLocation(blockShader.Program, "projection");
         // Pass the matrices to the shader
         glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-        glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
         cubeRenderer->render(cubes, blockShader);
         // Swap the buffers

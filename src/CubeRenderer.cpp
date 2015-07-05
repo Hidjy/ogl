@@ -67,7 +67,12 @@ GLfloat CubeRenderer::vertices[6][20] = {
 
 #define FACES 1
 
-CubeRenderer::CubeRenderer() {
+CubeRenderer::CubeRenderer(Cube &cube) {
+
+	glm::mat4 model;
+	model = glm::translate(model, cube.pos);
+	this->modelMatrix = model;
+
 	for (size_t i = 0; i < FACES; i++) {
 		glGenVertexArrays(1, &(this->VAO[i]));
 		glGenBuffers(1, &(this->VBO[i]));
@@ -80,7 +85,7 @@ CubeRenderer::CubeRenderer() {
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
 		glEnableVertexAttribArray(0);
 		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
-		glEnableVertexAttribArray(1);
+		glEnableVertexAttribArray(2);
 
 		glBindVertexArray(0);
 	}

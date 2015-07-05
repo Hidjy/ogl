@@ -9,6 +9,7 @@ class CubeRenderer {
 public:
 	static GLfloat vertices[6][20];
 
+	glm::mat4 modelMatrix;
 	GLuint VAO[6], VBO[6];
 
 	CubeRenderer();
