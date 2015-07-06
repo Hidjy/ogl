@@ -3,7 +3,8 @@ NAME	= ogl
 SRC		=	main.cpp	\
 			Shader.cpp	\
 			Camera.cpp	\
-			TextManager.cpp
+			TextManager.cpp	\
+			Cube.cpp
 
 HEAD_DIR	= include
 SRC_DIR		= src

@@ -13,6 +13,7 @@
 
 #include "Camera.hpp"
 #include "TextManager.hpp"
+#include "Cube.hpp"
 
 GLuint screenWidth = 800, screenHeight = 600;
 
@@ -107,11 +108,11 @@ int main()
         -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
     };
 
-    std::vector<glm::vec3> cubes;
+    std::vector<Cube> cubes;
     for (GLfloat x = -50; x < 50; x++) {
         for (GLfloat y = -50; y < 50; y++) {
             for (GLfloat z = -50; z < 50; z++) {
-                cubes.push_back(glm::vec3(x, y, z));
+                cubes.push_back(Cube(glm::vec3(x, y, z)));
             }
         }
     }
@@ -122,7 +123,7 @@ int main()
     for(GLuint i = 0; i < amount; i++)
     {
         glm::mat4 model;
-        model = glm::translate(model, cubes[i]);
+        model = glm::translate(model, cubes[i].getPos());
         modelMatrices[i] = model;
     }
 
@@ -198,7 +199,7 @@ int main()
         glDrawArraysInstanced(GL_TRIANGLES, 0, 36, amount);
         glBindVertexArray(0);
 
-        textManager->RenderText(std::to_string(static_cast<int>(1.0f / deltaTime)), 25.0f, 525.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
+        textManager->RenderText(std::to_string((1.0f / deltaTime)), 25.0f, 525.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
         // Swap the buffers
         glfwSwapBuffers(window);
     }
