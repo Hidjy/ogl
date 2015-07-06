@@ -14,7 +14,6 @@
 #include "Camera.hpp"
 #include "TextManager.hpp"
 
-// Properties
 GLuint screenWidth = 800, screenHeight = 600;
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
@@ -23,7 +22,6 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void Do_Movement();
 GLuint LoadTexture(std::string path);
 
-// Camera
 Camera camera(glm::vec3(60.0f, 60.0f, 60.0f));
 
 bool keys[1024];
@@ -42,7 +40,7 @@ int main()
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
     glfwWindowHint(GLFW_SAMPLES, 4);
 
-    GLFWwindow* window = glfwCreateWindow(screenWidth, screenHeight, "OGL", nullptr, nullptr); // Windowed
+    GLFWwindow* window = glfwCreateWindow(screenWidth, screenHeight, "OGL", nullptr, nullptr);
     glfwMakeContextCurrent(window);
 
     srand(glfwGetTime());
@@ -61,10 +59,10 @@ int main()
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    // Setup and compile our shaders
-    Shader blockShader("shaders/block.vert", "shaders/block.frag");
+////////////////////////////////////////////////////////////////////////////////
 
-    // Set up our vertex data (and buffer(s)) and attribute pointers
+    Shader blockShader("shaders/instancedBlock.vert", "shaders/block.frag");
+
     GLfloat vertices[] = {
         -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
          0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
@@ -108,14 +106,24 @@ int main()
         -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
         -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
     };
-    std::vector<glm::vec3> cubes;
 
+    std::vector<glm::vec3> cubes;
     for (GLfloat x = -50; x < 50; x++) {
         for (GLfloat y = -50; y < 50; y++) {
             for (GLfloat z = -50; z < 50; z++) {
                 cubes.push_back(glm::vec3(x, y, z));
             }
         }
+    }
+
+    GLuint amount = cubes.size();
+    glm::mat4* modelMatrices;
+    modelMatrices = new glm::mat4[amount];
+    for(GLuint i = 0; i < amount; i++)
+    {
+        glm::mat4 model;
+        model = glm::translate(model, cubes[i]);
+        modelMatrices[i] = model;
     }
 
     GLuint VBO, VAO;
@@ -134,7 +142,27 @@ int main()
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
     glEnableVertexAttribArray(2);
 
-    glBindVertexArray(0); // Unbind VAO
+    GLuint buffer;
+    glGenBuffers(1, &buffer);
+    glBindBuffer(GL_ARRAY_BUFFER, buffer);
+    glBufferData(GL_ARRAY_BUFFER, amount * sizeof(glm::mat4), &modelMatrices[0], GL_STATIC_DRAW);
+    // Vertex Attributes
+    GLsizei vec4Size = sizeof(glm::vec4);
+    glEnableVertexAttribArray(3);
+    glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (GLvoid*)0);
+    glEnableVertexAttribArray(4);
+    glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (GLvoid*)(vec4Size));
+    glEnableVertexAttribArray(5);
+    glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (GLvoid*)(2 * vec4Size));
+    glEnableVertexAttribArray(6);
+    glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (GLvoid*)(3 * vec4Size));
+
+    glVertexAttribDivisor(3, 1);
+    glVertexAttribDivisor(4, 1);
+    glVertexAttribDivisor(5, 1);
+    glVertexAttribDivisor(6, 1);
+
+    glBindVertexArray(0);
 
     TextManager *textManager = new TextManager();
 
@@ -163,23 +191,11 @@ int main()
         glBindTexture(GL_TEXTURE_2D, texture);
         glUniform1i(glGetUniformLocation(blockShader.Program, "ourTexture"), 0);
 
-        glm::mat4 view;
-        view = camera.GetViewMatrix();
-        // Get the uniform locations
-        GLint viewLoc = glGetUniformLocation(blockShader.Program, "view");
-        GLint modelLoc = glGetUniformLocation(blockShader.Program, "model");
-        // Pass the matrices to the shader
-        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+        glm::mat4 view = camera.GetViewMatrix();
+        glUniformMatrix4fv(glGetUniformLocation(blockShader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
 
         glBindVertexArray(VAO);
-        for (std::vector<glm::vec3>::iterator i = cubes.begin(); i < cubes.end(); ++i) {
-            // Calculate the model matrix for each object and pass it to shader before drawing
-            glm::mat4 model;
-            model = glm::translate(model, *i);
-            glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-
-            glDrawArrays(GL_TRIANGLES, 0, 36);
-        }
+        glDrawArraysInstanced(GL_TRIANGLES, 0, 36, amount);
         glBindVertexArray(0);
 
         textManager->RenderText(std::to_string(static_cast<int>(1.0f / deltaTime)), 25.0f, 525.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
