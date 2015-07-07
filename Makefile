@@ -4,7 +4,8 @@ SRC		=	main.cpp	\
 			Shader.cpp	\
 			Camera.cpp	\
 			TextManager.cpp	\
-			Cube.cpp
+			Cube.cpp	\
+			CubeRenderer.cpp
 
 HEAD_DIR	= include
 SRC_DIR		= src
