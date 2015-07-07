@@ -51,22 +51,22 @@ GLfloat CubeRenderer::_vertices[] = {
 };
 
 CubeRenderer::CubeRenderer() {
-	    glGenVertexArrays(1, &(this->_VAO));
-	    glGenBuffers(1, &(this->_VBO));
-	    // Bind our Vertex Array Object first, then bind and set our buffers and pointers.
-	    glBindVertexArray((this->_VAO));
+    glGenVertexArrays(1, &(this->_VAO));
+    glGenBuffers(1, &(this->_VBO));
+    // Bind our Vertex Array Object first, then bind and set our buffers and pointers.
+    glBindVertexArray((this->_VAO));
 
-	    glBindBuffer(GL_ARRAY_BUFFER, (this->_VBO));
-	    glBufferData(GL_ARRAY_BUFFER, sizeof(CubeRenderer::_vertices), CubeRenderer::_vertices, GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, (this->_VBO));
+    glBufferData(GL_ARRAY_BUFFER, sizeof(CubeRenderer::_vertices), CubeRenderer::_vertices, GL_STATIC_DRAW);
 
-	    // Position attribute
-	    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
-	    glEnableVertexAttribArray(0);
-	    // TexCoord attribute
-	    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
-	    glEnableVertexAttribArray(2);
+    // Position attribute
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
+    glEnableVertexAttribArray(0);
+    // TexCoord attribute
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+    glEnableVertexAttribArray(2);
 
-	    glBindVertexArray(0);
+    glBindVertexArray(0);
 }
 
 CubeRenderer::~CubeRenderer() {

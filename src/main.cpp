@@ -14,7 +14,7 @@
 #include "Camera.hpp"
 #include "TextManager.hpp"
 #include "Cube.hpp"
-#include "CubeRenderer.hpp"
+#include "Section.hpp"
 
 GLuint screenWidth = 800, screenHeight = 600;
 
@@ -24,7 +24,7 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void Do_Movement();
 GLuint LoadTexture(std::string path);
 
-Camera camera(glm::vec3(10.0f, 10.0f, 10.0f));
+Camera camera(glm::vec3(1.0f, 1.0f, 1.0f));
 
 bool keys[1024];
 GLfloat lastX = screenWidth / 2, lastY = screenHeight / 2;
@@ -65,9 +65,20 @@ int main()
 
     Shader blockShader("shaders/block.vert", "shaders/block.frag");
 
-    CubeRenderer *cubeRenderer = new CubeRenderer();
-
     TextManager *textManager = new TextManager();
+
+    int cubes[512];
+    for (size_t x = 0; x < 8; x++) {
+        for (size_t y = 0; y < 8; y++) {
+            for (size_t z = 0; z < 8; z++) {
+                cubes[x + y * 8 + z * 8 * 8] = 0;
+            }
+        }
+    }
+    cubes[256] = 1;
+
+    Section test;
+    test.generateMesh(cubes);
 
     GLuint texture = LoadTexture("ressources/dore.png");
 
@@ -97,7 +108,7 @@ int main()
         glm::mat4 view = camera.GetViewMatrix();
         glUniformMatrix4fv(glGetUniformLocation(blockShader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
 
-        cubeRenderer->render(Cube(glm::vec3(0, 0, 0)), blockShader);
+        test.render(blockShader);
 
         textManager->RenderText(std::to_string((1.0f / deltaTime)), 25.0f, 525.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
         // Swap the buffers

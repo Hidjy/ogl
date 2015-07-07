@@ -5,7 +5,8 @@ SRC		=	main.cpp	\
 			Camera.cpp	\
 			TextManager.cpp	\
 			Cube.cpp	\
-			CubeRenderer.cpp
+			CubeRenderer.cpp \
+			Section.cpp
 
 HEAD_DIR	= include
 SRC_DIR		= src
