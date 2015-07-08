@@ -11,6 +11,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include <vector>
+#include <iostream>
 
 #include "Shader.hpp"
 
@@ -49,15 +50,33 @@ static void multipush(std::vector<GLfloat> &target, std::vector<GLfloat> src)
 void Section::addQuad(glm::vec3 pos, int face) {
 
 	if (face == 0) {
-		multipush(this->_vertices, {-0.5f + pos.x, 0.5f + pos.y, -0.5f + pos.z,  0.0f, 1.0f});
+		multipush(this->_vertices, {0.5f + pos.x, -0.5f + pos.y, -0.5f + pos.z,  1.0f, 0.0f});
 		multipush(this->_vertices, {0.5f + pos.x, 0.5f + pos.y,  -0.5f + pos.z,  1.0f, 1.0f});
-		multipush(this->_vertices, {0.5f + pos.x, 0.5f + pos.y,  0.5f + pos.z,  1.0f, 0.0f});
+		multipush(this->_vertices, {0.5f + pos.x, 0.5f + pos.y,  0.5f + pos.z,  0.0f, 1.0f});
 
-		multipush(this->_vertices, {0.5f + pos.x,  0.5f + pos.y,  0.5f + pos.z,  1.0f, 0.0f});
-		multipush(this->_vertices, {-0.5f + pos.x, 0.5f + pos.y,  0.5f + pos.z,  0.0f, 0.0f});
-		multipush(this->_vertices, {-0.5f + pos.x, 0.5f + pos.y,  -0.5f + pos.z,  0.0f, 1.0f});
+		multipush(this->_vertices, {0.5f + pos.x,  0.5f + pos.y,  0.5f + pos.z,  0.0f, 1.0f});
+		multipush(this->_vertices, {0.5f + pos.x, -0.5f + pos.y,  0.5f + pos.z,  0.0f, 0.0f});
+		multipush(this->_vertices, {0.5f + pos.x, -0.5f + pos.y,  -0.5f + pos.z,  1.0f, 0.0f});
 	}
 	else if (face == 1) {
+		multipush(this->_vertices, {-0.5f + pos.x, -0.5f + pos.y, -0.5f + pos.z,  0.0f, 0.0f});
+		multipush(this->_vertices, {-0.5f + pos.x, 0.5f + pos.y,  -0.5f + pos.z,  0.0f, 1.0f});
+		multipush(this->_vertices, {-0.5f + pos.x, 0.5f + pos.y,  0.5f + pos.z,  1.0f, 1.0f});
+
+		multipush(this->_vertices, {-0.5f + pos.x,  0.5f + pos.y,  0.5f + pos.z,  1.0f, 1.0f});
+		multipush(this->_vertices, {-0.5f + pos.x, -0.5f + pos.y,  0.5f + pos.z,  1.0f, 0.0f});
+		multipush(this->_vertices, {-0.5f + pos.x, -0.5f + pos.y,  -0.5f + pos.z, 0.0f, 0.0f});
+	}
+	else if (face == 2) {
+		multipush(this->_vertices, {-0.5f + pos.x, 0.5f + pos.y, -0.5f + pos.z,  0.0f, 0.0f});
+		multipush(this->_vertices, {0.5f + pos.x, 0.5f + pos.y,  -0.5f + pos.z,  1.0f, 0.0f});
+		multipush(this->_vertices, {0.5f + pos.x, 0.5f + pos.y,  0.5f + pos.z,  1.0f, 1.0f});
+
+		multipush(this->_vertices, {0.5f + pos.x,  0.5f + pos.y,  0.5f + pos.z,  1.0f, 1.0f});
+		multipush(this->_vertices, {-0.5f + pos.x, 0.5f + pos.y,  0.5f + pos.z,  0.0f, 1.0f});
+		multipush(this->_vertices, {-0.5f + pos.x, 0.5f + pos.y,  -0.5f + pos.z,  0.0f, 0.0f});
+	}
+	else if (face == 3) {
 		multipush(this->_vertices, {-0.5f + pos.x, -0.5f + pos.y, -0.5f + pos.z,  1.0f, 0.0f});
 		multipush(this->_vertices, {0.5f + pos.x, -0.5f + pos.y,  -0.5f + pos.z,  0.0f, 0.0f});
 		multipush(this->_vertices, {0.5f + pos.x, -0.5f + pos.y,  0.5f + pos.z,  0.0f, 1.0f});
@@ -66,28 +85,59 @@ void Section::addQuad(glm::vec3 pos, int face) {
 		multipush(this->_vertices, {-0.5f + pos.x, -0.5f + pos.y,  0.5f + pos.z,  1.0f, 1.0f});
 		multipush(this->_vertices, {-0.5f + pos.x, -0.5f + pos.y,  -0.5f + pos.z, 1.0f, 0.0f});
 	}
+	else if (face == 4) {
+		multipush(this->_vertices, {-0.5f + pos.x, -0.5f + pos.y, 0.5f + pos.z,  1.0f, 0.0f});
+		multipush(this->_vertices, {0.5f + pos.x, -0.5f + pos.y,  0.5f + pos.z,  0.0f, 0.0f});
+		multipush(this->_vertices, {0.5f + pos.x, 0.5f + pos.y,  0.5f + pos.z,  0.0f, 1.0f});
+
+		multipush(this->_vertices, {0.5f + pos.x,  0.5f + pos.y, 0.5f + pos.z,  0.0f, 1.0f});
+		multipush(this->_vertices, {-0.5f + pos.x, 0.5f + pos.y, 0.5f + pos.z,  1.0f, 1.0f});
+		multipush(this->_vertices, {-0.5f + pos.x, -0.5f + pos.y, 0.5f + pos.z, 1.0f, 0.0f});
+	}
+	else if (face == 5) {
+		multipush(this->_vertices, {-0.5f + pos.x, -0.5f + pos.y, -0.5f + pos.z,  1.0f, 0.0f});
+		multipush(this->_vertices, {0.5f + pos.x, -0.5f + pos.y,  -0.5f + pos.z,  0.0f, 0.0f});
+		multipush(this->_vertices, {0.5f + pos.x, 0.5f + pos.y,  -0.5f + pos.z,  0.0f, 1.0f});
+
+		multipush(this->_vertices, {0.5f + pos.x,  0.5f + pos.y, -0.5f + pos.z,  0.0f, 1.0f});
+		multipush(this->_vertices, {-0.5f + pos.x, 0.5f + pos.y, -0.5f + pos.z,  1.0f, 1.0f});
+		multipush(this->_vertices, {-0.5f + pos.x, -0.5f + pos.y, -0.5f + pos.z, 1.0f, 0.0f});
+	}
 }
 
 void	Section::generateMesh(int cubes[512]) {
 	this->_vertices.clear();
 
-	int actual = 0;
-	int lastX = 0;
-	int lastY = 0;
-	int lastZ = 0;
-	for (size_t x = 0; x < 8; x++) {
-		for (size_t y = 0; y < 8; y++) {
-			for (size_t z = 0; z < 8; z++) {
-				actual = cubes[x + y * 8 + z * 8 * 8];
-				if (actual != 0 && lastY == 0)
-					this->addQuad(glm::vec3(x, y, z), 0);
-				// else if (actual == 0 && lastY != 0)
-				// 	this->addQuad(glm::vec3(x, y - 1, z), 1);
-				lastZ = actual;
+	for (int x = 0; x < 8; x++) {
+		for (int y = 0; y < 8; y++) {
+			for (int z = 0; z < 8; z++) {
+				int current = cubes[x + y * 8 + z * 8 * 8];
+				if (current != 0) {
+					if (x == 0 or cubes[(x - 1) + y * 8 + z * 8 * 8] == 0)
+						this->addQuad(glm::vec3(x, y, z), 1);
+					if (y == 0 or cubes[x + (y - 1) * 8 + z * 8 * 8] == 0)
+						this->addQuad(glm::vec3(x, y, z), 3);
+					if (z == 0 or cubes[x + y * 8 + (z - 1) * 8 * 8] == 0)
+						this->addQuad(glm::vec3(x, y, z), 5);
+				}
 			}
-			lastY = actual;
 		}
-		lastX = actual;
+	}
+
+	for (int x = 7; x >= 0; x--) {
+		for (int y = 7; y >= 0; y--) {
+			for (int z = 7; z >= 0; z--) {
+				int current = cubes[x + y * 8 + z * 8 * 8];
+				if (current != 0) {
+					if (x == 7 or cubes[(x + 1) + y * 8 + z * 8 * 8] == 0)
+						this->addQuad(glm::vec3(x, y, z), 0);
+					if (y == 7 or cubes[x + (y + 1) * 8 + z * 8 * 8] == 0)
+						this->addQuad(glm::vec3(x, y, z), 2);
+					if (z == 7 or cubes[x + y * 8 + (z + 1) * 8 * 8] == 0)
+						this->addQuad(glm::vec3(x, y, z), 4);
+				}
+			}
+		}
 	}
 
 	//Rebind Buffer

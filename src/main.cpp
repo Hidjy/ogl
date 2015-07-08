@@ -71,23 +71,26 @@ int main()
     for (size_t x = 0; x < 8; x++) {
         for (size_t y = 0; y < 8; y++) {
             for (size_t z = 0; z < 8; z++) {
-                cubes[x + y * 8 + z * 8 * 8] = 0;
+                if (rand() % 1 == 0)
+                    cubes[x + y * 8 + z * 8 * 8] = 1;
+                else
+                    cubes[x + y * 8 + z * 8 * 8] = 0;
             }
         }
     }
-    cubes[4 + 4 * 8 + 3 * 8 * 8] = 1;
-    cubes[3 + 4 * 8 + 4 * 8 * 8] = 1;
-    cubes[4 + 4 * 8 + 4 * 8 * 8] = 1;
-    cubes[5 + 4 * 8 + 4 * 8 * 8] = 1;
-    cubes[4 + 4 * 8 + 5 * 8 * 8] = 1;
-    cubes[4 + 3 * 8 + 4 * 8 * 8] = 1;
+    // cubes[4 + 4 * 8 + 3 * 8 * 8] = 1;
+    // cubes[3 + 4 * 8 + 4 * 8 * 8] = 1;
+    // cubes[4 + 4 * 8 + 4 * 8 * 8] = 1;
+    // cubes[5 + 4 * 8 + 4 * 8 * 8] = 1;
+    // cubes[4 + 4 * 8 + 5 * 8 * 8] = 1;
+    // cubes[4 + 3 * 8 + 4 * 8 * 8] = 1;
 
     Section test;
     test.generateMesh(cubes);
 
     GLuint texture = LoadTexture("ressources/dore.png");
 
-    glm::mat4 projection = glm::perspective(45.0f, (GLfloat)screenWidth/(GLfloat)screenHeight, 1.0f, 10000.0f);
+    glm::mat4 projection = glm::perspective(45.0f, (GLfloat)screenWidth/(GLfloat)screenHeight, 0.1f, 10000.0f);
     blockShader.Use();
     glUniformMatrix4fv(glGetUniformLocation(blockShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
