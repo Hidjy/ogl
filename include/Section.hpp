@@ -13,6 +13,8 @@
 
 #include <vector>
 
+#define SECTION_SIZE 8
+
 class Section {
 private:
 	GLuint	_VAO;
@@ -35,7 +37,7 @@ public:
 	void		setPos(glm::vec3 pos);
 
 	void		addQuad(glm::vec3 pos, int face);
-	void		generateMesh(int cubes[512]);
+	void		generateMesh(int cubes[SECTION_SIZE][SECTION_SIZE][SECTION_SIZE]);
 	void		render(Shader shader);
 
 	Section		&operator=(Section const &src);

@@ -68,24 +68,24 @@ int main()
 
     TextManager *textManager = new TextManager();
 
-    int cubes[512];
+    int cubes[8][8][8];
     for (size_t x = 0; x < 8; x++) {
         for (size_t y = 0; y < 8; y++) {
             for (size_t z = 0; z < 8; z++) {
                 if (rand() % 1 == 0)
-                    cubes[x + y * 8 + z * 8 * 8] = 1;
+                    cubes[x][y][z] = 1;
                 else
-                    cubes[x + y * 8 + z * 8 * 8] = 0;
+                    cubes[x][y][z] = 0;
             }
         }
     }
 
-    Section sections[4096];
+    Section sections[16][16][16];
     for (size_t x = 0; x < 16; x++) {
         for (size_t y = 0; y < 16; y++) {
             for (size_t z = 0; z < 16; z++) {
-                sections[x + y * 16 + z * 16 * 16].generateMesh(cubes);
-                sections[x + y * 16 + z * 16 * 16].setPos(glm::vec3(x * 8.0f, y * 8.0f, z * 8.0f));
+                sections[x][y][z].generateMesh(cubes);
+                sections[x][y][z].setPos(glm::vec3(x * 8.0f, y * 8.0f, z * 8.0f));
             }
         }
     }
@@ -118,8 +118,12 @@ int main()
         glm::mat4 view = camera.GetViewMatrix();
         glUniformMatrix4fv(glGetUniformLocation(blockShader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
 
-        for (size_t i = 0; i < 4096; i++) {
-            sections[i].render(blockShader);
+        for (size_t x = 0; x < 16; x++) {
+            for (size_t y = 0; y < 16; y++) {
+                for (size_t z = 0; z < 16; z++) {
+                    sections[x][y][z].render(blockShader);
+                }
+            }
         }
 
         textManager->RenderText(std::to_string((1.0f / deltaTime)), 25.0f, 525.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));

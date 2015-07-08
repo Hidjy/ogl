@@ -128,35 +128,25 @@ void Section::addQuad(glm::vec3 pos, int face) {
 	}
 }
 
-void	Section::generateMesh(int cubes[512]) {
+void	Section::generateMesh(int cubes[8][8][8]) {
 	this->_vertices.clear();
 
 	for (int x = 0; x < 8; x++) {
 		for (int y = 0; y < 8; y++) {
 			for (int z = 0; z < 8; z++) {
-				int current = cubes[x + y * 8 + z * 8 * 8];
+				int current = cubes[x][y][z];
 				if (current != 0) {
-					if (x == 0 or cubes[(x - 1) + y * 8 + z * 8 * 8] == 0)
+					if (x == 0 or cubes[x - 1][y][z] == 0)
 						this->addQuad(glm::vec3(x, y, z), 1);
-					if (y == 0 or cubes[x + (y - 1) * 8 + z * 8 * 8] == 0)
+					if (y == 0 or cubes[x][y - 1][z] == 0)
 						this->addQuad(glm::vec3(x, y, z), 3);
-					if (z == 0 or cubes[x + y * 8 + (z - 1) * 8 * 8] == 0)
+					if (z == 0 or cubes[x][y][z - 1] == 0)
 						this->addQuad(glm::vec3(x, y, z), 5);
-				}
-			}
-		}
-	}
-
-	for (int x = 7; x >= 0; x--) {
-		for (int y = 7; y >= 0; y--) {
-			for (int z = 7; z >= 0; z--) {
-				int current = cubes[x + y * 8 + z * 8 * 8];
-				if (current != 0) {
-					if (x == 7 or cubes[(x + 1) + y * 8 + z * 8 * 8] == 0)
+					if (x == 7 or cubes[x + 1][y][z] == 0)
 						this->addQuad(glm::vec3(x, y, z), 0);
-					if (y == 7 or cubes[x + (y + 1) * 8 + z * 8 * 8] == 0)
+					if (y == 7 or cubes[x][y + 1][z] == 0)
 						this->addQuad(glm::vec3(x, y, z), 2);
-					if (z == 7 or cubes[x + y * 8 + (z + 1) * 8 * 8] == 0)
+					if (z == 7 or cubes[x][y][z + 1] == 0)
 						this->addQuad(glm::vec3(x, y, z), 4);
 				}
 			}
