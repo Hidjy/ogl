@@ -59,6 +59,7 @@ int main()
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
+    glEnable(GL_CULL_FACE); //TODO Benchmark with/without GL_CULL_FACE
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -71,7 +72,7 @@ int main()
     for (size_t x = 0; x < 8; x++) {
         for (size_t y = 0; y < 8; y++) {
             for (size_t z = 0; z < 8; z++) {
-                if (rand() % 1 == 0)
+                if (rand() % 2 == 0)
                     cubes[x + y * 8 + z * 8 * 8] = 1;
                 else
                     cubes[x + y * 8 + z * 8 * 8] = 0;
