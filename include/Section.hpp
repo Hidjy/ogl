@@ -26,6 +26,8 @@ public:
 	Section();
 	~Section();
 
+	void	setPos(glm::vec3 pos);
+
 	void	addQuad(glm::vec3 pos, int face);
 	void	generateMesh(int cubes[512]);
 	void	render(Shader shader);

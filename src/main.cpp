@@ -79,15 +79,16 @@ int main()
             }
         }
     }
-    // cubes[4 + 4 * 8 + 3 * 8 * 8] = 1;
-    // cubes[3 + 4 * 8 + 4 * 8 * 8] = 1;
-    // cubes[4 + 4 * 8 + 4 * 8 * 8] = 1;
-    // cubes[5 + 4 * 8 + 4 * 8 * 8] = 1;
-    // cubes[4 + 4 * 8 + 5 * 8 * 8] = 1;
-    // cubes[4 + 3 * 8 + 4 * 8 * 8] = 1;
 
-    Section test;
-    test.generateMesh(cubes);
+    Section sections[4096];
+    for (size_t x = 0; x < 16; x++) {
+        for (size_t y = 0; y < 16; y++) {
+            for (size_t z = 0; z < 16; z++) {
+                sections[x + y * 16 + z * 16 * 16].generateMesh(cubes);
+                sections[x + y * 16 + z * 16 * 16].setPos(glm::vec3(x * 8.0f, y * 8.0f, z * 8.0f));
+            }
+        }
+    }
 
     GLuint texture = LoadTexture("ressources/dore.png");
 
@@ -117,7 +118,9 @@ int main()
         glm::mat4 view = camera.GetViewMatrix();
         glUniformMatrix4fv(glGetUniformLocation(blockShader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
 
-        test.render(blockShader);
+        for (size_t i = 0; i < 4096; i++) {
+            sections[i].render(blockShader);
+        }
 
         textManager->RenderText(std::to_string((1.0f / deltaTime)), 25.0f, 525.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
         // Swap the buffers

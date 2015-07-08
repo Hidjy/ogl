@@ -21,7 +21,7 @@ Camera::Camera(glm::vec3 p)
 
 void	Camera::ProcessKeyboard(enum Direction dir, GLfloat dt)
 {
-	GLfloat cameraSpeed = 5.0f * dt;
+	GLfloat cameraSpeed = 15.0f * dt;
 	if(dir == UP)
 		this->pos += cameraSpeed * this->up;
 	if(dir == DOWN)

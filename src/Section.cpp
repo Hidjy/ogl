@@ -40,6 +40,10 @@ Section::~Section() {
 	//TODO:Delete Buffers
 }
 
+void Section::setPos(glm::vec3 pos) {
+	this->_pos = pos;
+}
+
 static void multipush(std::vector<GLfloat> &target, std::vector<GLfloat> src)
 {
 	for (std::vector<GLfloat>::iterator it = src.begin(); it < src.end(); ++it) {
