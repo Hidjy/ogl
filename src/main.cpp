@@ -72,7 +72,7 @@ int main()
     for (size_t x = 0; x < 8; x++) {
         for (size_t y = 0; y < 8; y++) {
             for (size_t z = 0; z < 8; z++) {
-                if (rand() % 2 == 0)
+                if (rand() % 1 == 0)
                     cubes[x + y * 8 + z * 8 * 8] = 1;
                 else
                     cubes[x + y * 8 + z * 8 * 8] = 0;
