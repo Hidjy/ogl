@@ -97,6 +97,9 @@ int main()
     glUniformMatrix4fv(glGetUniformLocation(blockShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
     // Game loop
+    GLuint frames = 0;
+    GLuint fps = 0;
+    GLfloat lastFPScount = glfwGetTime();
     while(!glfwWindowShouldClose(window))
     {
         GLfloat currentFrame = glfwGetTime();
@@ -126,7 +129,14 @@ int main()
             }
         }
 
-        textManager->RenderText(std::to_string((1.0f / deltaTime)), 25.0f, 525.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
+
+        if (currentFrame >= lastFPScount + 0.25) {
+            fps = frames * 4;
+            frames = 0;
+            lastFPScount = currentFrame;
+        }
+        frames++;
+        textManager->RenderText(std::to_string(fps), 25.0f, 525.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
         // Swap the buffers
         glfwSwapBuffers(window);
     }
@@ -193,7 +203,7 @@ GLuint LoadTexture(std::string path) {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
     int width, height;
