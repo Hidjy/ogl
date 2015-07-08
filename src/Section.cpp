@@ -46,22 +46,49 @@ static void multipush(std::vector<GLfloat> &target, std::vector<GLfloat> src)
 	}
 }
 
-void Section::addQuad(glm::vec3 pos) {
+void Section::addQuad(glm::vec3 pos, int face) {
 
-	multipush(this->_vertices, {-0.5f, -0.5f, -0.5f, 0.0f, 0.0f});
-	multipush(this->_vertices, {0.5f, -0.5f, -0.5f, 1.0f, 0.0f});
-	multipush(this->_vertices, {0.5f, 0.5f, -0.5f, 1.0f, 1.0f});
+	if (face == 0) {
+		multipush(this->_vertices, {-0.5f + pos.x, 0.5f + pos.y, -0.5f + pos.z,  0.0f, 1.0f});
+		multipush(this->_vertices, {0.5f + pos.x, 0.5f + pos.y,  -0.5f + pos.z,  1.0f, 1.0f});
+		multipush(this->_vertices, {0.5f + pos.x, 0.5f + pos.y,  0.5f + pos.z,  1.0f, 0.0f});
 
-	multipush(this->_vertices, {-0.5f, -0.5f, -0.5f, 0.0f, 0.0f});
-	multipush(this->_vertices, {-0.5f, 0.5f, -0.5f, 0.0f, 1.0f});
-	multipush(this->_vertices, {0.5f, 0.5f, -0.5f, 1.0f, 1.0f});
+		multipush(this->_vertices, {0.5f + pos.x,  0.5f + pos.y,  0.5f + pos.z,  1.0f, 0.0f});
+		multipush(this->_vertices, {-0.5f + pos.x, 0.5f + pos.y,  0.5f + pos.z,  0.0f, 0.0f});
+		multipush(this->_vertices, {-0.5f + pos.x, 0.5f + pos.y,  -0.5f + pos.z,  0.0f, 1.0f});
+	}
+	else if (face == 1) {
+		multipush(this->_vertices, {-0.5f + pos.x, -0.5f + pos.y, -0.5f + pos.z,  1.0f, 0.0f});
+		multipush(this->_vertices, {0.5f + pos.x, -0.5f + pos.y,  -0.5f + pos.z,  0.0f, 0.0f});
+		multipush(this->_vertices, {0.5f + pos.x, -0.5f + pos.y,  0.5f + pos.z,  0.0f, 1.0f});
 
+		multipush(this->_vertices, {0.5f + pos.x,  -0.5f + pos.y,  0.5f + pos.z,  0.0f, 1.0f});
+		multipush(this->_vertices, {-0.5f + pos.x, -0.5f + pos.y,  0.5f + pos.z,  1.0f, 1.0f});
+		multipush(this->_vertices, {-0.5f + pos.x, -0.5f + pos.y,  -0.5f + pos.z, 1.0f, 0.0f});
+	}
 }
 
 void	Section::generateMesh(int cubes[512]) {
 	this->_vertices.clear();
 
-	this->addQuad(glm::vec3(0,0,0));
+	int actual = 0;
+	int lastX = 0;
+	int lastY = 0;
+	int lastZ = 0;
+	for (size_t x = 0; x < 8; x++) {
+		for (size_t y = 0; y < 8; y++) {
+			for (size_t z = 0; z < 8; z++) {
+				actual = cubes[x + y * 8 + z * 8 * 8];
+				if (actual != 0 && lastY == 0)
+					this->addQuad(glm::vec3(x, y, z), 0);
+				// else if (actual == 0 && lastY != 0)
+				// 	this->addQuad(glm::vec3(x, y - 1, z), 1);
+				lastZ = actual;
+			}
+			lastY = actual;
+		}
+		lastX = actual;
+	}
 
 	//Rebind Buffer
 	glBindVertexArray((this->_VAO));

@@ -24,7 +24,7 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void Do_Movement();
 GLuint LoadTexture(std::string path);
 
-Camera camera(glm::vec3(1.0f, 1.0f, 1.0f));
+Camera camera(glm::vec3(10.0f, 10.0f, 10.0f));
 
 bool keys[1024];
 GLfloat lastX = screenWidth / 2, lastY = screenHeight / 2;
@@ -75,7 +75,12 @@ int main()
             }
         }
     }
-    cubes[256] = 1;
+    cubes[4 + 4 * 8 + 3 * 8 * 8] = 1;
+    cubes[3 + 4 * 8 + 4 * 8 * 8] = 1;
+    cubes[4 + 4 * 8 + 4 * 8 * 8] = 1;
+    cubes[5 + 4 * 8 + 4 * 8 * 8] = 1;
+    cubes[4 + 4 * 8 + 5 * 8 * 8] = 1;
+    cubes[4 + 3 * 8 + 4 * 8 * 8] = 1;
 
     Section test;
     test.generateMesh(cubes);
