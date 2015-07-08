@@ -36,9 +36,28 @@ Section::Section() {
 	this->_pos = glm::vec3(0,0,0);
 }
 
+Section::Section(Section const &src) : _VAO(src.getVAO()), _VBO(src.getVBO()), _vertices(src.getVertices()), _pos(src.getPos()) {}
+
 Section::~Section() {
 	//TODO:Delete Buffers
 }
+
+GLuint					Section::getVAO() const {
+	return this->_VAO;
+}
+
+GLuint					Section::getVBO() const {
+	return this->_VBO;
+}
+
+std::vector<GLfloat>	Section::getVertices() const {
+	return this->_vertices;
+}
+
+glm::vec3				Section::getPos() const {
+	return this->_pos;
+}
+
 
 void Section::setPos(glm::vec3 pos) {
 	this->_pos = pos;
@@ -161,4 +180,12 @@ void	Section::render(Shader shader) {
 	glBindVertexArray(this->_VAO);
 	glDrawArrays(GL_TRIANGLES, 0, this->_vertices.size() / 5);
 	glBindVertexArray(0);
+}
+
+Section		&Section::operator=(Section const &src) {
+	this->_VAO = src.getVAO();
+	this->_VBO = src.getVBO();
+	this->_vertices = src.getVertices();
+	this->_pos = src.getPos();
+	return *this;
 }

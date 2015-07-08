@@ -24,11 +24,19 @@ private:
 
 public:
 	Section();
+	Section(Section const &src);
 	~Section();
 
-	void	setPos(glm::vec3 pos);
+	GLuint					getVAO() const;
+	GLuint					getVBO() const;
+	std::vector<GLfloat>	getVertices() const;
+	glm::vec3				getPos() const;
 
-	void	addQuad(glm::vec3 pos, int face);
-	void	generateMesh(int cubes[512]);
-	void	render(Shader shader);
+	void		setPos(glm::vec3 pos);
+
+	void		addQuad(glm::vec3 pos, int face);
+	void		generateMesh(int cubes[512]);
+	void		render(Shader shader);
+
+	Section		&operator=(Section const &src);
 };
