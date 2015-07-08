@@ -13,7 +13,7 @@
 
 #include <vector>
 
-#define SECTION_SIZE 8
+#define SECTION_SIZE 16
 
 class Section {
 private:

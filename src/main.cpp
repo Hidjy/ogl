@@ -68,10 +68,10 @@ int main()
 
     TextManager *textManager = new TextManager();
 
-    int cubes[8][8][8];
-    for (size_t x = 0; x < 8; x++) {
-        for (size_t y = 0; y < 8; y++) {
-            for (size_t z = 0; z < 8; z++) {
+    int cubes[SECTION_SIZE][SECTION_SIZE][SECTION_SIZE];
+    for (size_t x = 0; x < SECTION_SIZE; x++) {
+        for (size_t y = 0; y < SECTION_SIZE; y++) {
+            for (size_t z = 0; z < SECTION_SIZE; z++) {
                 if (rand() % 1 == 0)
                     cubes[x][y][z] = 1;
                 else
@@ -80,12 +80,12 @@ int main()
         }
     }
 
-    Section sections[16][16][16];
-    for (size_t x = 0; x < 16; x++) {
-        for (size_t y = 0; y < 16; y++) {
-            for (size_t z = 0; z < 16; z++) {
+    Section sections[8][8][8];
+    for (size_t x = 0; x < 8; x++) {
+        for (size_t y = 0; y < 8; y++) {
+            for (size_t z = 0; z < 8; z++) {
                 sections[x][y][z].generateMesh(cubes);
-                sections[x][y][z].setPos(glm::vec3(x * 8.0f, y * 8.0f, z * 8.0f));
+                sections[x][y][z].setPos(glm::vec3(x * SECTION_SIZE, y * SECTION_SIZE, z * SECTION_SIZE));
             }
         }
     }
@@ -118,9 +118,9 @@ int main()
         glm::mat4 view = camera.GetViewMatrix();
         glUniformMatrix4fv(glGetUniformLocation(blockShader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
 
-        for (size_t x = 0; x < 16; x++) {
-            for (size_t y = 0; y < 16; y++) {
-                for (size_t z = 0; z < 16; z++) {
+        for (size_t x = 0; x < 8; x++) {
+            for (size_t y = 0; y < 8; y++) {
+                for (size_t z = 0; z < 8; z++) {
                     sections[x][y][z].render(blockShader);
                 }
             }
