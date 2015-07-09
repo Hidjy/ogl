@@ -13,7 +13,7 @@
 
 #include <vector>
 
-#define SECTION_SIZE 32
+#define SECTION_SIZE 32 // !!! Must be a divisor of CHUNK_SIZE (see Chunk.hpp)
 
 class Section {
 private:
