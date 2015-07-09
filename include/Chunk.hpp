@@ -15,7 +15,7 @@
 
 #include <vector>
 
-#define CHUNK_SIZE 64
+#define CHUNK_SIZE 32
 #define CHUNK_RATIO (CHUNK_SIZE / SECTION_SIZE)
 
 class Chunk {

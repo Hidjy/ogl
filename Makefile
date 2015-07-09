@@ -6,7 +6,8 @@ SRC		=	main.cpp	\
 			TextManager.cpp	\
 			Cube.cpp	\
 			Section.cpp	\
-			Chunk.cpp
+			Chunk.cpp	\
+			MessageManager.cpp
 
 HEAD_DIR	= include
 SRC_DIR		= src

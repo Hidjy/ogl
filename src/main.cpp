@@ -16,7 +16,7 @@
 #include "Cube.hpp"
 #include "Chunk.hpp"
 
-GLuint screenWidth = 800, screenHeight = 600;
+GLuint screenWidth = 1600, screenHeight = 900;
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
@@ -73,6 +73,7 @@ int main()
 		for (size_t y = 0; y < CHUNK_SIZE; y++) {
 			for (size_t z = 0; z < CHUNK_SIZE; z++) {
                 if ((x - (CHUNK_SIZE / 2)) * (x - (CHUNK_SIZE / 2)) + (y - (CHUNK_SIZE / 2)) * (y - (CHUNK_SIZE / 2)) + (z - (CHUNK_SIZE / 2)) * (z - (CHUNK_SIZE / 2)) <= (CHUNK_SIZE / 2) * (CHUNK_SIZE / 2))
+                // if (true)
                     cubes[x][y][z] = 1;
                 else
                     cubes[x][y][z] = 0;
@@ -80,18 +81,18 @@ int main()
 		}
 	}
 
-    Chunk *chunks[5*2*5];
-    for (int x = 0; x < 5; x++) {
+    Chunk *chunks[3*2*5];
+    for (int x = 0; x < 3; x++) {
         for (int y = 0; y < 2; y++) {
             for (int z = 0; z < 5; z++) {
-                chunks[x + y * 5 + z * 5 * 2] = new Chunk(glm::vec3(x, y, z));
-                chunks[x + y * 5 + z * 5 * 2]->fill(&cubes);
-                chunks[x + y * 5 + z * 5 * 2]->generateSections();
+                chunks[x + y * 3 + z * 3 * 2] = new Chunk(glm::vec3(x, y, z));
+                chunks[x + y * 3 + z * 3 * 2]->fill(&cubes);
+                chunks[x + y * 3 + z * 3 * 2]->generateSections();
             }
         }
     }
 
-    GLuint texture = LoadTexture("ressources/dore.png");
+    GLuint texture = LoadTexture("ressources/0.png");
 
     glm::mat4 projection = glm::perspective(45.0f, (GLfloat)screenWidth/(GLfloat)screenHeight, 0.1f, 10000.0f);
     blockShader.Use();
@@ -123,10 +124,10 @@ int main()
         glUniformMatrix4fv(glGetUniformLocation(blockShader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
 
         // chunk.render(blockShader);
-        for (int x = 0; x < 5; x++) {
+        for (int x = 0; x < 3; x++) {
             for (int y = 0; y < 2; y++) {
                 for (int z = 0; z < 5; z++) {
-                    chunks[x + y * 5 + z * 5 * 2]->render(blockShader);
+                    chunks[x + y * 3 + z * 3 * 2]->render(blockShader);
                 }
             }
         }

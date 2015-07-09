@@ -1,16 +1,16 @@
 # OpenGL Cube-Based Engine
 
-## To Do:
+## To Do List
 
-### Features:
+### Features
+* World System
 * Skybox
-* Messaging/Event System
-* Texture Manager
+* Texture Manager (Atlas)
 * Simplified Context/Engine (Engine init, close...)
 
-### Performance Improvement:
+### Performance Improvement
 * Frustum Culling (Chunk)
-* Mesh Simplification ?
+* Mesh Simplification
 
 ## Ressources
 * http://0fps.net/category/programming/voxels/
