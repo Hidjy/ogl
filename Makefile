@@ -5,13 +5,14 @@ SRC		=	main.cpp	\
 			Camera.cpp	\
 			TextManager.cpp	\
 			Cube.cpp	\
-			Section.cpp
+			Section.cpp	\
+			Chunk.cpp
 
 HEAD_DIR	= include
 SRC_DIR		= src
 DEBUG_DIR	= debug
 STATIC_DIR	= static
-DEP_DIR	= dep
+DEP_DIR		= dep
 
 
 INCLUDES	= -I/usr/include/freetype2

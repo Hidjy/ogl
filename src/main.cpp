@@ -14,7 +14,7 @@
 #include "Camera.hpp"
 #include "TextManager.hpp"
 #include "Cube.hpp"
-#include "Section.hpp"
+#include "Chunk.hpp"
 
 GLuint screenWidth = 800, screenHeight = 600;
 
@@ -68,24 +68,25 @@ int main()
 
     TextManager *textManager = new TextManager();
 
-    int cubes[SECTION_SIZE][SECTION_SIZE][SECTION_SIZE];
-    for (size_t x = 0; x < SECTION_SIZE; x++) {
-        for (size_t y = 0; y < SECTION_SIZE; y++) {
-            for (size_t z = 0; z < SECTION_SIZE; z++) {
-                if (rand() % 1 == 0)
+    int cubes[CHUNK_SIZE][CHUNK_SIZE][CHUNK_SIZE];
+    for (size_t x = 0; x < CHUNK_SIZE; x++) {
+		for (size_t y = 0; y < CHUNK_SIZE; y++) {
+			for (size_t z = 0; z < CHUNK_SIZE; z++) {
+                if ((x - (CHUNK_SIZE / 2)) * (x - (CHUNK_SIZE / 2)) + (y - (CHUNK_SIZE / 2)) * (y - (CHUNK_SIZE / 2)) + (z - (CHUNK_SIZE / 2)) * (z - (CHUNK_SIZE / 2)) <= (CHUNK_SIZE / 2) * (CHUNK_SIZE / 2))
                     cubes[x][y][z] = 1;
                 else
                     cubes[x][y][z] = 0;
-            }
-        }
-    }
+			}
+		}
+	}
 
-    Section sections[8][8][8];
-    for (size_t x = 0; x < 8; x++) {
-        for (size_t y = 0; y < 8; y++) {
-            for (size_t z = 0; z < 8; z++) {
-                sections[x][y][z].generateMesh(cubes);
-                sections[x][y][z].setPos(glm::vec3(x * SECTION_SIZE, y * SECTION_SIZE, z * SECTION_SIZE));
+    Chunk *chunks[5*2*5];
+    for (int x = 0; x < 5; x++) {
+        for (int y = 0; y < 2; y++) {
+            for (int z = 0; z < 5; z++) {
+                chunks[x + y * 5 + z * 5 * 2] = new Chunk(glm::vec3(x, y, z));
+                chunks[x + y * 5 + z * 5 * 2]->fill(&cubes);
+                chunks[x + y * 5 + z * 5 * 2]->generateSections();
             }
         }
     }
@@ -121,17 +122,17 @@ int main()
         glm::mat4 view = camera.GetViewMatrix();
         glUniformMatrix4fv(glGetUniformLocation(blockShader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
 
-        for (size_t x = 0; x < 8; x++) {
-            for (size_t y = 0; y < 8; y++) {
-                for (size_t z = 0; z < 8; z++) {
-                    sections[x][y][z].render(blockShader);
+        // chunk.render(blockShader);
+        for (int x = 0; x < 5; x++) {
+            for (int y = 0; y < 2; y++) {
+                for (int z = 0; z < 5; z++) {
+                    chunks[x + y * 5 + z * 5 * 2]->render(blockShader);
                 }
             }
         }
 
-
-        if (currentFrame >= lastFPScount + 0.25) {
-            fps = frames * 4;
+        if (currentFrame >= lastFPScount + 1) {
+            fps = frames * 1;
             frames = 0;
             lastFPScount = currentFrame;
         }
