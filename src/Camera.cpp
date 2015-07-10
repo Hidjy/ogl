@@ -9,31 +9,39 @@
 
 Camera::Camera(glm::vec3 p)
 {
-	this->pos = p;
-	this->front = glm::vec3(0.0f, 0.0f, -1.0f);
-	this->up = glm::vec3(0.0f, 1.0f,  0.0f);
+	pos = p;
+	front = glm::vec3(0.0f, 0.0f, -1.0f);
+	up = glm::vec3(0.0f, 1.0f,  0.0f);
 
-	this->yaw = -90.0f;
-	this->pitch = 0.0f;
+	yaw = -90.0f;
+	pitch = 0.0f;
+	speed = 20.0f;
 
-	this->Zoom = 45.0f;
+	Zoom = 45.0f;
 }
 
 void	Camera::ProcessKeyboard(enum Direction dir, GLfloat dt)
 {
-	GLfloat cameraSpeed = 15.0f * dt;
-	if(dir == UP)
-		this->pos += cameraSpeed * this->up;
-	if(dir == DOWN)
-		this->pos -= cameraSpeed * this->up;
-	if(dir == FORWARD)
-		this->pos += cameraSpeed * this->front;
-	if(dir == BACKWARD)
-		this->pos -= cameraSpeed * this->front;
-	if(dir == LEFT)
-		this->pos -= glm::normalize(glm::cross(this->front, this->up)) * cameraSpeed;
-	if(dir == RIGHT)
-		this->pos += glm::normalize(glm::cross(this->front, this->up)) * cameraSpeed;
+	switch (dir) {
+		case UP:
+			pos += dt * speed * up;
+			break;
+		case DOWN:
+			pos -= dt * speed * up;
+			break;
+		case FORWARD:
+			pos += dt * speed * front;
+			break;
+		case BACKWARD:
+			pos -= dt * speed * front;
+			break;
+		case LEFT:
+			pos -= glm::normalize(glm::cross(front, up)) * dt * speed;
+			break;
+		case RIGHT:
+			pos += glm::normalize(glm::cross(front, up)) * dt * speed;
+			break;
+	}
 }
 
 void	Camera::ProcessMouseMovement(GLfloat xoffset, GLfloat yoffset)

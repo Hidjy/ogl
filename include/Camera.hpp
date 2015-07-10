@@ -21,6 +21,8 @@ public:
 	GLfloat		pitch;
 	GLfloat		Zoom;
 
+	GLfloat		speed;
+
 	Camera(glm::vec3 p);
 
 	void	ProcessKeyboard(enum Direction dir, GLfloat dt);

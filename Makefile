@@ -17,8 +17,8 @@ DEP_DIR		= dep
 
 
 INCLUDES	= -I/usr/include/freetype2
-LIBS		= -ldl -lGL -lglfw3 -lGLEW -lSOIL -lX11 -lXi -lXrandr -lXxf86vm -lXinerama -lXcursor -lrt -lm -pthread \
-				-lfreetype -lz -lpng12
+LIBS		= -lGL -lglfw3 -lGLEW -lSOIL -lX11 -lXi -lXrandr -lXxf86vm -lXinerama -lXcursor -lrt -lm -pthread \
+				-lfreetype -lz -lpng12  -ldl
 
 OBJ		= $(patsubst %.cpp,$(STATIC_DIR)/%.o,$(SRC))
 DEPS	= $(patsubst %.cpp,$(DEP_DIR)/%.d,$(SRC))

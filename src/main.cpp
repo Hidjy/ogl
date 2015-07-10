@@ -101,12 +101,14 @@ int main()
     // Game loop
     GLuint frames = 0;
     GLuint fps = 0;
-    GLfloat lastFPScount = glfwGetTime();
+    GLfloat fps_periode = 2;
+    GLfloat fps_time = 0;
     while(!glfwWindowShouldClose(window))
     {
         GLfloat currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
+        fps_time += deltaTime;
 
         glfwPollEvents();
         Do_Movement();
@@ -132,10 +134,10 @@ int main()
             }
         }
 
-        if (currentFrame >= lastFPScount + 1) {
-            fps = frames * 1;
+        if (fps_time > fps_periode) {
+            fps = frames / fps_periode;
             frames = 0;
-            lastFPScount = currentFrame;
+            fps_time = 0;
         }
         frames++;
         textManager->RenderText(std::to_string(fps), 25.0f, 525.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
