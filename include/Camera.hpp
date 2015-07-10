@@ -8,6 +8,8 @@
 
 #include <GL/glew.h>
 
+#define CAMERA_SPEED 20
+
 enum Direction {UP, DOWN, FORWARD, BACKWARD, LEFT, RIGHT};
 
 class Camera
