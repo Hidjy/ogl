@@ -9,37 +9,37 @@
 
 Camera::Camera(glm::vec3 p)
 {
-	pos = p;
-	front = glm::vec3(0.0f, 0.0f, -1.0f);
-	up = glm::vec3(0.0f, 1.0f,  0.0f);
+	_pos = p;
+	_front = glm::vec3(0.0f, 0.0f, -1.0f);
+	_up = glm::vec3(0.0f, 1.0f,  0.0f);
 
-	yaw = -90.0f;
-	pitch = 0.0f;
-	speed = 20.0f;
+	_yaw = -90.0f;
+	_pitch = 0.0f;
+	_zoom = 45.0f;
 
-	Zoom = 45.0f;
+	_speed = 20.0f;
 }
 
 void	Camera::ProcessKeyboard(enum Direction dir, GLfloat dt)
 {
 	switch (dir) {
 		case UP:
-			pos += dt * speed * up;
+			_pos += dt * _speed * _up;
 			break;
 		case DOWN:
-			pos -= dt * speed * up;
+			_pos -= dt * _speed * _up;
 			break;
 		case FORWARD:
-			pos += dt * speed * front;
+			_pos += dt * _speed * _front;
 			break;
 		case BACKWARD:
-			pos -= dt * speed * front;
+			_pos -= dt * _speed * _front;
 			break;
 		case LEFT:
-			pos -= glm::normalize(glm::cross(front, up)) * dt * speed;
+			_pos -= glm::normalize(glm::cross(_front, _up)) * dt * _speed;
 			break;
 		case RIGHT:
-			pos += glm::normalize(glm::cross(front, up)) * dt * speed;
+			_pos += glm::normalize(glm::cross(_front, _up)) * dt * _speed;
 			break;
 	}
 }
@@ -50,24 +50,24 @@ void	Camera::ProcessMouseMovement(GLfloat xoffset, GLfloat yoffset)
 	xoffset *= sensitivity;
 	yoffset *= sensitivity;
 
-	this->yaw   += xoffset;
-	this->pitch += yoffset;
+	_yaw   += xoffset;
+	_pitch += yoffset;
 
-	if(this->pitch > 89.0f)
-		this->pitch = 89.0f;
-	if(this->pitch < -89.0f)
-		this->pitch = -89.0f;
+	if(_pitch > 89.0f)
+		_pitch = 89.0f;
+	if(_pitch < -89.0f)
+		_pitch = -89.0f;
 
 	glm::vec3 tmp;
-	tmp.x = cos(glm::radians(this->yaw)) * cos(glm::radians(this->pitch));
-	tmp.y = sin(glm::radians(this->pitch));
-	tmp.z = sin(glm::radians(this->yaw)) * cos(glm::radians(this->pitch));
-	this->front = glm::normalize(tmp);
+	tmp.x = cos(glm::radians(_yaw)) * cos(glm::radians(_pitch));
+	tmp.y = sin(glm::radians(_pitch));
+	tmp.z = sin(glm::radians(_yaw)) * cos(glm::radians(_pitch));
+	_front = glm::normalize(tmp);
 }
 
 glm::mat4	Camera::GetViewMatrix()
 {
 	glm::mat4 view;
-	view = glm::lookAt(this->pos, this->pos + this->front, this->up);
+	view = glm::lookAt(_pos, _pos + _front, _up);
 	return view;
 }
