@@ -104,17 +104,19 @@ int main()
 
     glm::mat4 projection = glm::perspective(45.0f, (GLfloat)screenWidth/(GLfloat)screenHeight, 0.1f, 10000.0f);
     blockShader.Use();
-    glUniformMatrix4fv(glGetUniformLocation(blockShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+    glUniformMatrix4fv(glGetUniformLocation(blockShader.getProgram(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
     // Game loop
     GLuint frames = 0;
     GLuint fps = 0;
-    GLfloat lastFPScount = glfwGetTime();
+    GLfloat fps_periode = 2;
+    GLfloat fps_time = 0;
     while(!glfwWindowShouldClose(window))
     {
         GLfloat currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
+        fps_time += deltaTime;
 
         glfwPollEvents();
         Do_Movement();
@@ -126,10 +128,10 @@ int main()
 
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture);
-        glUniform1i(glGetUniformLocation(blockShader.Program, "ourTexture"), 0);
+        glUniform1i(glGetUniformLocation(blockShader.getProgram(), "ourTexture"), 0);
 
         glm::mat4 view = camera.GetViewMatrix();
-        glUniformMatrix4fv(glGetUniformLocation(blockShader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
+        glUniformMatrix4fv(glGetUniformLocation(blockShader.getProgram(), "view"), 1, GL_FALSE, glm::value_ptr(view));
 
         // chunk.render(blockShader);
         for (int x = 0; x < 3; x++) {
@@ -140,10 +142,10 @@ int main()
             }
         }
 
-        if (currentFrame >= lastFPScount + 1) {
-            fps = frames * 1;
+        if (fps_time > fps_periode) {
+            fps = frames / fps_periode;
             frames = 0;
-            lastFPScount = currentFrame;
+            fps_time = 0;
         }
         frames++;
         textManager->RenderText(std::to_string(fps), 25.0f, 425.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));

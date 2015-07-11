@@ -15,13 +15,15 @@ enum Direction {UP, DOWN, FORWARD, BACKWARD, LEFT, RIGHT};
 class Camera
 {
 public:
-	glm::vec3	pos;
-	glm::vec3	front;
-	glm::vec3	up;
+	glm::vec3	_pos;
+	glm::vec3	_front;
+	glm::vec3	_up;
 
-	GLfloat		yaw;
-	GLfloat		pitch;
-	GLfloat		Zoom;
+	GLfloat		_yaw;
+	GLfloat		_pitch;
+	GLfloat		_zoom;
+
+	GLfloat		_speed;
 
 	Camera(glm::vec3 p);
 

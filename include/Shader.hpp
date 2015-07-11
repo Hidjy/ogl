@@ -12,10 +12,12 @@
 
 class Shader
 {
-public:
-    GLuint Program;
+private:
+    GLuint _program;
 
+public:
     Shader(const GLchar* vertexPath, const GLchar* fragmentPath);
+    GLuint getProgram();
     void Use();
 };
 
