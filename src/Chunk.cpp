@@ -14,6 +14,8 @@
 
 #include <vector>
 
+Chunk::Chunk() {}
+
 Chunk::Chunk(glm::vec3 pos) : _pos(pos), _empty(true), _sectionsLoaded(false), _sectionsGenerated(false) {
 	for (size_t x = 0; x < CHUNK_SIZE; x++) {
 		for (size_t y = 0; y < CHUNK_SIZE; y++) {
@@ -24,10 +26,32 @@ Chunk::Chunk(glm::vec3 pos) : _pos(pos), _empty(true), _sectionsLoaded(false), _
 	}
 }
 
+Chunk::Chunk(Chunk const &src) : _pos(src.getPos()), _empty(src._empty), _sectionsLoaded(false), _sectionsGenerated(false) {
+	for (size_t x = 0; x < CHUNK_SIZE; x++) {
+		for (size_t y = 0; y < CHUNK_SIZE; y++) {
+			for (size_t z = 0; z < CHUNK_SIZE; z++) {
+				_blocks[x][y][z] = src._blocks[x][y][z];
+			}
+		}
+	}
+}
+
 Chunk::~Chunk() {
 	if (_sectionsLoaded == false)
 		return;
 	delete [] _sections;
+}
+
+bool	Chunk::empty() const {
+	return _empty;
+}
+
+glm::vec3	Chunk::getPos() const {
+	return _pos;
+}
+
+int	Chunk::getBlock(int x, int y, int z) const {
+	return _blocks[x][y][z];
 }
 
 void	Chunk::fill(int (*data)[CHUNK_SIZE][CHUNK_SIZE][CHUNK_SIZE]) {
@@ -93,4 +117,20 @@ void	Chunk::render(Shader shader) {
 			}
 		}
 	}
+}
+
+Chunk	&Chunk::operator=(Chunk const &src) {
+	_pos = src.getPos();
+	_empty = src.empty();
+	_sectionsLoaded = false;
+	_sectionsGenerated = false;
+
+	for (size_t x = 0; x < CHUNK_SIZE; x++) {
+		for (size_t y = 0; y < CHUNK_SIZE; y++) {
+			for (size_t z = 0; z < CHUNK_SIZE; z++) {
+				_blocks[x][y][z] = src.getBlock(x, y, z);
+			}
+		}
+	}
+	return *this;
 }

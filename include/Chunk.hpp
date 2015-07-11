@@ -28,13 +28,22 @@ private:
 
 	int			_blocks[CHUNK_SIZE][CHUNK_SIZE][CHUNK_SIZE];
 
+	Chunk();
+
 public:
 	Chunk(glm::vec3 pos);
+	Chunk(Chunk const &src);
 	~Chunk();
+
+	bool		empty() const;
+	glm::vec3	getPos() const;
+	int			getBlock(int x, int y, int z) const;
 
 	void	fill(int (*data)[CHUNK_SIZE][CHUNK_SIZE][CHUNK_SIZE]);
 	void	loadSections();
 	void	getSectionData(int (*data)[SECTION_SIZE][SECTION_SIZE][SECTION_SIZE], int x, int y, int z);
 	void	generateSections();
 	void	render(Shader shader);
+
+	Chunk	&operator=(Chunk const &src);
 };
