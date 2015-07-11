@@ -96,7 +96,7 @@ int main()
 
     glm::mat4 projection = glm::perspective(45.0f, (GLfloat)screenWidth/(GLfloat)screenHeight, 0.1f, 10000.0f);
     blockShader.Use();
-    glUniformMatrix4fv(glGetUniformLocation(blockShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+    glUniformMatrix4fv(glGetUniformLocation(blockShader.getProgram(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
     // Game loop
     GLuint frames = 0;
@@ -120,10 +120,10 @@ int main()
 
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture);
-        glUniform1i(glGetUniformLocation(blockShader.Program, "ourTexture"), 0);
+        glUniform1i(glGetUniformLocation(blockShader.getProgram(), "ourTexture"), 0);
 
         glm::mat4 view = camera.GetViewMatrix();
-        glUniformMatrix4fv(glGetUniformLocation(blockShader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
+        glUniformMatrix4fv(glGetUniformLocation(blockShader.getProgram(), "view"), 1, GL_FALSE, glm::value_ptr(view));
 
         // chunk.render(blockShader);
         for (int x = 0; x < 3; x++) {

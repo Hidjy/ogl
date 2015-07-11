@@ -28,9 +28,9 @@ struct Character {
 
 class TextManager {
 public:
-	std::map<GLchar, Character> Characters;
-	GLuint VAO, VBO;
-	Shader shader;
+	std::map<GLchar, Character> _characters;
+	GLuint _VAO, _VBO;
+	Shader _shader;
 
 	TextManager();
 	~TextManager();

@@ -83,6 +83,11 @@ Shader::Shader(const GLchar* vertexPath, const GLchar* fragmentPath)
     glDeleteShader(fragment);
 
 }
+
+GLuint Shader::getProgram() {
+    return _program;
+}
+
 // Uses the current shader
 void Shader::Use()
 {

@@ -19,12 +19,12 @@
 // GL includes
 #include "Shader.hpp"
 
-TextManager::TextManager() : shader(Shader("shaders/text.vert", "shaders/text.frag"))
+TextManager::TextManager() : _shader(Shader("shaders/text.vert", "shaders/text.frag"))
 {
     // Compile and setup the shader
     glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(800), 0.0f, static_cast<GLfloat>(600)); //FIXME
-    this->shader.Use();
-    glUniformMatrix4fv(glGetUniformLocation(this->shader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+    _shader.Use();
+    glUniformMatrix4fv(glGetUniformLocation(_shader.getProgram(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
     // FreeType
     FT_Library ft;
@@ -79,7 +79,7 @@ TextManager::TextManager() : shader(Shader("shaders/text.vert", "shaders/text.fr
             glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
             static_cast<GLuint>(face->glyph->advance.x)
         };
-        this->Characters.insert(std::pair<GLchar, Character>(c, character));
+        _characters.insert(std::pair<GLchar, Character>(c, character));
     }
     glBindTexture(GL_TEXTURE_2D, 0);
     // Destroy FreeType once we're finished
@@ -87,11 +87,11 @@ TextManager::TextManager() : shader(Shader("shaders/text.vert", "shaders/text.fr
     FT_Done_FreeType(ft);
 
 
-    // Configure VAO/VBO for texture quads
-    glGenVertexArrays(1, &(this->VAO));
-    glGenBuffers(1, &(this->VBO));
-    glBindVertexArray(this->VAO);
-    glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
+    // Configure _VAO/_VBO for texture quads
+    glGenVertexArrays(1, &(_VAO));
+    glGenBuffers(1, &(_VBO));
+    glBindVertexArray(_VAO);
+    glBindBuffer(GL_ARRAY_BUFFER, _VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), 0);
@@ -100,30 +100,30 @@ TextManager::TextManager() : shader(Shader("shaders/text.vert", "shaders/text.fr
 }
 
 TextManager::~TextManager() {
-	glDeleteVertexArrays(1, &(this->VAO));
-	glDeleteBuffers(1, &(this->VBO));
+	glDeleteVertexArrays(1, &(_VAO));
+	glDeleteBuffers(1, &(_VBO));
 }
 
 void TextManager::RenderText(std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color)
 {
     // Activate corresponding render state
-    this->shader.Use();
-    glUniform3f(glGetUniformLocation(this->shader.Program, "textColor"), color.x, color.y, color.z);
+    _shader.Use();
+    glUniform3f(glGetUniformLocation(_shader.getProgram(), "textColor"), color.x, color.y, color.z);
     glActiveTexture(GL_TEXTURE0);
-    glBindVertexArray(VAO);
+    glBindVertexArray(_VAO);
 
     // Iterate through all characters
     std::string::const_iterator c;
     for (c = text.begin(); c != text.end(); c++)
     {
-        Character ch = Characters[*c];
+        Character ch = _characters[*c];
 
         GLfloat xpos = x + ch.Bearing.x * scale;
         GLfloat ypos = y - (ch.Size.y - ch.Bearing.y) * scale;
 
         GLfloat w = ch.Size.x * scale;
         GLfloat h = ch.Size.y * scale;
-        // Update VBO for each character
+        // Update _VBO for each character
         GLfloat vertices[6][4] = {
             { xpos,     ypos + h,   0.0, 0.0 },
             { xpos,     ypos,       0.0, 1.0 },
@@ -135,8 +135,8 @@ void TextManager::RenderText(std::string text, GLfloat x, GLfloat y, GLfloat sca
         };
         // Render glyph texture over quad
         glBindTexture(GL_TEXTURE_2D, ch.TextureID);
-        // Update content of VBO memory
-        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        // Update content of _VBO memory
+        glBindBuffer(GL_ARRAY_BUFFER, _VBO);
         glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices); // Be sure to use glBufferSubData and not glBufferData
 
         glBindBuffer(GL_ARRAY_BUFFER, 0);
