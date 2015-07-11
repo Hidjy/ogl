@@ -18,37 +18,37 @@ Chunk::Chunk(glm::vec3 pos) : _pos(pos), _empty(true), _sectionsLoaded(false), _
 	for (size_t x = 0; x < CHUNK_SIZE; x++) {
 		for (size_t y = 0; y < CHUNK_SIZE; y++) {
 			for (size_t z = 0; z < CHUNK_SIZE; z++) {
-				this->_blocks[x][y][z] = 0;
+				_blocks[x][y][z] = 0;
 			}
 		}
 	}
 }
 
 Chunk::~Chunk() {
-	if (this->_sectionsLoaded == false)
+	if (_sectionsLoaded == false)
 		return;
-	delete [] this->_sections;
+	delete [] _sections;
 }
 
 void	Chunk::fill(int (*data)[CHUNK_SIZE][CHUNK_SIZE][CHUNK_SIZE]) {
-	this->_empty = false;
+	_empty = false;
 	for (size_t x = 0; x < CHUNK_SIZE; x++) {
 		for (size_t y = 0; y < CHUNK_SIZE; y++) {
 			for (size_t z = 0; z < CHUNK_SIZE; z++) {
-				this->_blocks[x][y][z] = (*data)[x][y][z];
+				_blocks[x][y][z] = (*data)[x][y][z];
 			}
 		}
 	}
 }
 
 void	Chunk::loadSections() {
-	if (this->_sectionsLoaded == true)
+	if (_sectionsLoaded == true)
 		return;
-	this->_sections = new Section[CHUNK_RATIO * CHUNK_RATIO * CHUNK_RATIO];
+	_sections = new Section[CHUNK_RATIO * CHUNK_RATIO * CHUNK_RATIO];
 	for (size_t x = 0; x < CHUNK_RATIO; x++) {
 		for (size_t y = 0; y < CHUNK_RATIO; y++) {
 			for (size_t z = 0; z < CHUNK_RATIO; z++) {
-				this->_sections[x + y * CHUNK_RATIO + z * CHUNK_RATIO * CHUNK_RATIO].setPos(glm::vec3(this->_pos.x * CHUNK_SIZE + x * SECTION_SIZE, this->_pos.y * CHUNK_SIZE + y * SECTION_SIZE, this->_pos.z * CHUNK_SIZE + z * SECTION_SIZE));
+				_sections[x + y * CHUNK_RATIO + z * CHUNK_RATIO * CHUNK_RATIO].setPos(glm::vec3(_pos.x * CHUNK_SIZE + x * SECTION_SIZE, _pos.y * CHUNK_SIZE + y * SECTION_SIZE, _pos.z * CHUNK_SIZE + z * SECTION_SIZE));
 			}
 		}
 	}
@@ -58,38 +58,38 @@ void	Chunk::getSectionData(int (*data)[SECTION_SIZE][SECTION_SIZE][SECTION_SIZE]
 	for (size_t destX = 0; destX < SECTION_SIZE; destX++) {
 		for (size_t destY = 0; destY < SECTION_SIZE; destY++) {
 			for (size_t destZ = 0; destZ < SECTION_SIZE; destZ++) {
-				(*data)[destX][destY][destZ] = this->_blocks[x * SECTION_SIZE + destX][y * SECTION_SIZE + destY][z * SECTION_SIZE + destZ];
+				(*data)[destX][destY][destZ] = _blocks[x * SECTION_SIZE + destX][y * SECTION_SIZE + destY][z * SECTION_SIZE + destZ];
 			}
 		}
 	}
 }
 
 void	Chunk::generateSections() {
-	if (this->_empty)
+	if (_empty)
 		return;
-	if (this->_sectionsLoaded == false)
-		this->loadSections();
+	if (_sectionsLoaded == false)
+		loadSections();
 	for (size_t x = 0; x < CHUNK_RATIO; x++) {
 		for (size_t y = 0; y < CHUNK_RATIO; y++) {
 			for (size_t z = 0; z < CHUNK_RATIO; z++) {
 				int cubes[SECTION_SIZE][SECTION_SIZE][SECTION_SIZE];
-				this->getSectionData(&cubes, x, y, z); //fill the cubes buffer
-				this->_sections[x + y * CHUNK_RATIO + z * CHUNK_RATIO * CHUNK_RATIO].generateMesh(cubes);
+				getSectionData(&cubes, x, y, z); //fill the cubes buffer
+				_sections[x + y * CHUNK_RATIO + z * CHUNK_RATIO * CHUNK_RATIO].generateMesh(cubes);
 			}
 		}
 	}
-	this->_sectionsGenerated = true;
+	_sectionsGenerated = true;
 }
 
 void	Chunk::render(Shader shader) {
-	if (this->_empty)
+	if (_empty)
 		return;
-	if (this->_sectionsGenerated == false)
+	if (_sectionsGenerated == false)
 		return;
 	for (size_t x = 0; x < CHUNK_RATIO; x++) {
 		for (size_t y = 0; y < CHUNK_RATIO; y++) {
 			for (size_t z = 0; z < CHUNK_RATIO; z++) {
-				this->_sections[x + y * CHUNK_RATIO + z * CHUNK_RATIO * CHUNK_RATIO].render(shader);
+				_sections[x + y * CHUNK_RATIO + z * CHUNK_RATIO * CHUNK_RATIO].render(shader);
 			}
 		}
 	}
