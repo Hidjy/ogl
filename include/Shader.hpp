@@ -3,11 +3,7 @@
 #ifndef SHADER_HPP
 #define SHADER_HPP
 
-#include <string>
-#include <fstream>
-#include <sstream>
-#include <iostream>
-
+#define GLEW_STATIC
 #include <GL/glew.h>
 
 class Shader

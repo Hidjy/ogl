@@ -14,7 +14,9 @@
 
 #include <vector>
 
-Chunk::Chunk() {}
+Chunk::Chunk() : Chunk(glm::vec3(0,0,0)) {
+
+}
 
 Chunk::Chunk(glm::vec3 pos) : _pos(pos), _empty(true), _sectionsLoaded(false), _sectionsGenerated(false) {
 	for (size_t x = 0; x < CHUNK_SIZE; x++) {
@@ -109,7 +111,7 @@ void	Chunk::render(Shader shader) {
 	if (_empty)
 		return;
 	if (_sectionsGenerated == false)
-		return;
+		generateSections();
 	for (size_t x = 0; x < CHUNK_RATIO; x++) {
 		for (size_t y = 0; y < CHUNK_RATIO; y++) {
 			for (size_t z = 0; z < CHUNK_RATIO; z++) {

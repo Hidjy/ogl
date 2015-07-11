@@ -13,7 +13,7 @@
 
 #include "Camera.hpp"
 #include "TextManager.hpp"
-#include "Cube.hpp"
+#include "World.hpp"
 #include "Chunk.hpp"
 
 
@@ -83,7 +83,7 @@ int main()
 		for (size_t y = 0; y < CHUNK_SIZE; y++) {
 			for (size_t z = 0; z < CHUNK_SIZE; z++) {
                 // if ((x - (CHUNK_SIZE / 2)) * (x - (CHUNK_SIZE / 2)) + (y - (CHUNK_SIZE / 2)) * (y - (CHUNK_SIZE / 2)) + (z - (CHUNK_SIZE / 2)) * (z - (CHUNK_SIZE / 2)) <= (CHUNK_SIZE / 2) * (CHUNK_SIZE / 2))
-                if (rand() % 10 == 0)
+                if (rand() % 100 == 0)
                     cubes[x][y][z] = 1;
                 else
                     cubes[x][y][z] = 0;
@@ -91,13 +91,14 @@ int main()
 		}
 	}
 
-    Chunk *chunks[3*2*5];
-    for (int x = 0; x < 3; x++) {
-        for (int y = 0; y < 2; y++) {
-            for (int z = 0; z < 5; z++) {
-                chunks[x + y * 3 + z * 3 * 2] = new Chunk(glm::vec3(x, y, z));
-                chunks[x + y * 3 + z * 3 * 2]->fill(&cubes);
-                chunks[x + y * 3 + z * 3 * 2]->generateSections();
+    World world;
+
+    for (int x = -5; x < 5; x++) {
+        for (int y = -5; y < 5; y++) {
+            for (int z = -5; z < 5; z++) {
+                Chunk chunk(glm::vec3(x, y, z));
+                chunk.fill(&cubes);
+                world.add(chunk);
             }
         }
     }
@@ -135,14 +136,7 @@ int main()
         glm::mat4 view = camera.GetViewMatrix();
         glUniformMatrix4fv(glGetUniformLocation(blockShader.getProgram(), "view"), 1, GL_FALSE, glm::value_ptr(view));
 
-        // chunk.render(blockShader);
-        for (int x = 0; x < 3; x++) {
-            for (int y = 0; y < 2; y++) {
-                for (int z = 0; z < 5; z++) {
-                    chunks[x + y * 3 + z * 3 * 2]->render(blockShader);
-                }
-            }
-        }
+        world.renderNear(camera._pos, blockShader);
 
         if (fps_time > fps_periode) {
             fps = frames / fps_periode;

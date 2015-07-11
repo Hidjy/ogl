@@ -28,9 +28,8 @@ private:
 
 	int			_blocks[CHUNK_SIZE][CHUNK_SIZE][CHUNK_SIZE];
 
-	Chunk();
-
 public:
+	Chunk();
 	Chunk(glm::vec3 pos);
 	Chunk(Chunk const &src);
 	~Chunk();
