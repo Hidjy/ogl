@@ -13,15 +13,15 @@ MessageManager::~MessageManager() {
 }
 
 void	MessageManager::add(std::string key, void *data) {
-	if ( MessageManager::_messages.find(key) == MessageManager::_messages.end() )
-		MessageManager::_messages[key] = std::queue<void *>();
+	if ( _messages.find(key) == _messages.end() )
+		_messages[key] = std::queue<void *>();
 	MessageManager::_messages[key].push(data);
 }
 
 void	*MessageManager::get(std::string key) {
-	if ( MessageManager::_messages.find(key) == MessageManager::_messages.end() )
+	if ( _messages.find(key) == _messages.end() )
 		return nullptr;
-	std::queue<void *> q = MessageManager::_messages[key];
+	std::queue<void *> q = _messages[key];
 	if (q.empty())
 		return nullptr;
 	void *message = q.front();
