@@ -83,7 +83,7 @@ int main()
 		for (size_t y = 0; y < CHUNK_SIZE; y++) {
 			for (size_t z = 0; z < CHUNK_SIZE; z++) {
                 // if ((x - (CHUNK_SIZE / 2)) * (x - (CHUNK_SIZE / 2)) + (y - (CHUNK_SIZE / 2)) * (y - (CHUNK_SIZE / 2)) + (z - (CHUNK_SIZE / 2)) * (z - (CHUNK_SIZE / 2)) <= (CHUNK_SIZE / 2) * (CHUNK_SIZE / 2))
-                if ( ((x%4) > 1 && (x%4) < 3) || ((y % 4) > 1 && (y%4) < 3) || ((z % 4) > 1 && (z%4) < 3) )
+                if (( x == 0) || (y == 0) || (z == 0))
                     cubes[x][y][z] = 1;
                 else
                     cubes[x][y][z] = 0;
