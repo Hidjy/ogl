@@ -16,12 +16,12 @@
 #include "Shader.hpp"
 
 Section::Section() {
-	glGenVertexArrays(1, &(this->_VAO));
-	glGenBuffers(1, &(this->_VBO));
+	glGenVertexArrays(1, &(_VAO));
+	glGenBuffers(1, &(_VBO));
 	// Bind our Vertex Array Object first, then bind and set our buffers and pointers.
-	glBindVertexArray((this->_VAO));
+	glBindVertexArray((_VAO));
 
-	glBindBuffer(GL_ARRAY_BUFFER, (this->_VBO));
+	glBindBuffer(GL_ARRAY_BUFFER, (_VBO));
 	//glBufferData(GL_ARRAY_BUFFER, sizeof(CubeRenderer::_vertices), CubeRenderer::_vertices, GL_STATIC_DRAW);
 
 	// Position attribute
@@ -33,7 +33,7 @@ Section::Section() {
 
 	glBindVertexArray(0);
 
-	this->_pos = glm::vec3(0,0,0);
+	_pos = glm::vec3(0,0,0);
 }
 
 Section::Section(Section const &src) : _VAO(src.getVAO()), _VBO(src.getVBO()), _vertices(src.getVertices()), _pos(src.getPos()) {}
@@ -43,24 +43,24 @@ Section::~Section() {
 }
 
 GLuint					Section::getVAO() const {
-	return this->_VAO;
+	return _VAO;
 }
 
 GLuint					Section::getVBO() const {
-	return this->_VBO;
+	return _VBO;
 }
 
 std::vector<GLfloat>	Section::getVertices() const {
-	return this->_vertices;
+	return _vertices;
 }
 
 glm::vec3				Section::getPos() const {
-	return this->_pos;
+	return _pos;
 }
 
 
 void Section::setPos(glm::vec3 pos) {
-	this->_pos = pos;
+	_pos = pos;
 }
 
 static void multipush(std::vector<GLfloat> &target, std::vector<GLfloat> src)
@@ -73,63 +73,63 @@ static void multipush(std::vector<GLfloat> &target, std::vector<GLfloat> src)
 void Section::addQuad(glm::vec3 pos, int face) {
 
 	if (face == 0) {
-		multipush(this->_vertices, {0.5f + pos.x, -0.5f + pos.y, -0.5f + pos.z,  1.0f, 0.0f});
-		multipush(this->_vertices, {0.5f + pos.x, 0.5f + pos.y,  -0.5f + pos.z,  1.0f, 1.0f});
-		multipush(this->_vertices, {0.5f + pos.x, 0.5f + pos.y,  0.5f + pos.z,  0.0f, 1.0f});
+		multipush(_vertices, {0.5f + pos.x, -0.5f + pos.y, -0.5f + pos.z,  1.0f, 0.0f});
+		multipush(_vertices, {0.5f + pos.x, 0.5f + pos.y,  -0.5f + pos.z,  1.0f, 1.0f});
+		multipush(_vertices, {0.5f + pos.x, 0.5f + pos.y,  0.5f + pos.z,  0.0f, 1.0f});
 
-		multipush(this->_vertices, {0.5f + pos.x,  0.5f + pos.y,  0.5f + pos.z,  0.0f, 1.0f});
-		multipush(this->_vertices, {0.5f + pos.x, -0.5f + pos.y,  0.5f + pos.z,  0.0f, 0.0f});
-		multipush(this->_vertices, {0.5f + pos.x, -0.5f + pos.y,  -0.5f + pos.z,  1.0f, 0.0f});
+		multipush(_vertices, {0.5f + pos.x,  0.5f + pos.y,  0.5f + pos.z,  0.0f, 1.0f});
+		multipush(_vertices, {0.5f + pos.x, -0.5f + pos.y,  0.5f + pos.z,  0.0f, 0.0f});
+		multipush(_vertices, {0.5f + pos.x, -0.5f + pos.y,  -0.5f + pos.z,  1.0f, 0.0f});
 	}
 	else if (face == 1) {
-		multipush(this->_vertices, {-0.5f + pos.x, -0.5f + pos.y, -0.5f + pos.z,  0.0f, 0.0f});
-		multipush(this->_vertices, {-0.5f + pos.x, 0.5f + pos.y,  0.5f + pos.z,  1.0f, 1.0f});
-		multipush(this->_vertices, {-0.5f + pos.x, 0.5f + pos.y,  -0.5f + pos.z,  0.0f, 1.0f});
+		multipush(_vertices, {-0.5f + pos.x, -0.5f + pos.y, -0.5f + pos.z,  0.0f, 0.0f});
+		multipush(_vertices, {-0.5f + pos.x, 0.5f + pos.y,  0.5f + pos.z,  1.0f, 1.0f});
+		multipush(_vertices, {-0.5f + pos.x, 0.5f + pos.y,  -0.5f + pos.z,  0.0f, 1.0f});
 
-		multipush(this->_vertices, {-0.5f + pos.x,  0.5f + pos.y,  0.5f + pos.z,  1.0f, 1.0f});
-		multipush(this->_vertices, {-0.5f + pos.x, -0.5f + pos.y,  -0.5f + pos.z, 0.0f, 0.0f});
-		multipush(this->_vertices, {-0.5f + pos.x, -0.5f + pos.y,  0.5f + pos.z,  1.0f, 0.0f});
+		multipush(_vertices, {-0.5f + pos.x,  0.5f + pos.y,  0.5f + pos.z,  1.0f, 1.0f});
+		multipush(_vertices, {-0.5f + pos.x, -0.5f + pos.y,  -0.5f + pos.z, 0.0f, 0.0f});
+		multipush(_vertices, {-0.5f + pos.x, -0.5f + pos.y,  0.5f + pos.z,  1.0f, 0.0f});
 	}
 	else if (face == 2) {
-		multipush(this->_vertices, {-0.5f + pos.x, 0.5f + pos.y, -0.5f + pos.z,  0.0f, 0.0f});
-		multipush(this->_vertices, {0.5f + pos.x, 0.5f + pos.y,  0.5f + pos.z,  1.0f, 1.0f});
-		multipush(this->_vertices, {0.5f + pos.x, 0.5f + pos.y,  -0.5f + pos.z,  1.0f, 0.0f});
+		multipush(_vertices, {-0.5f + pos.x, 0.5f + pos.y, -0.5f + pos.z,  0.0f, 0.0f});
+		multipush(_vertices, {0.5f + pos.x, 0.5f + pos.y,  0.5f + pos.z,  1.0f, 1.0f});
+		multipush(_vertices, {0.5f + pos.x, 0.5f + pos.y,  -0.5f + pos.z,  1.0f, 0.0f});
 
-		multipush(this->_vertices, {0.5f + pos.x,  0.5f + pos.y,  0.5f + pos.z,  1.0f, 1.0f});
-		multipush(this->_vertices, {-0.5f + pos.x, 0.5f + pos.y,  -0.5f + pos.z,  0.0f, 0.0f});
-		multipush(this->_vertices, {-0.5f + pos.x, 0.5f + pos.y,  0.5f + pos.z,  0.0f, 1.0f});
+		multipush(_vertices, {0.5f + pos.x,  0.5f + pos.y,  0.5f + pos.z,  1.0f, 1.0f});
+		multipush(_vertices, {-0.5f + pos.x, 0.5f + pos.y,  -0.5f + pos.z,  0.0f, 0.0f});
+		multipush(_vertices, {-0.5f + pos.x, 0.5f + pos.y,  0.5f + pos.z,  0.0f, 1.0f});
 	}
 	else if (face == 3) {
-		multipush(this->_vertices, {-0.5f + pos.x, -0.5f + pos.y, -0.5f + pos.z,  1.0f, 0.0f});
-		multipush(this->_vertices, {0.5f + pos.x, -0.5f + pos.y,  -0.5f + pos.z,  0.0f, 0.0f});
-		multipush(this->_vertices, {0.5f + pos.x, -0.5f + pos.y,  0.5f + pos.z,  0.0f, 1.0f});
+		multipush(_vertices, {-0.5f + pos.x, -0.5f + pos.y, -0.5f + pos.z,  1.0f, 0.0f});
+		multipush(_vertices, {0.5f + pos.x, -0.5f + pos.y,  -0.5f + pos.z,  0.0f, 0.0f});
+		multipush(_vertices, {0.5f + pos.x, -0.5f + pos.y,  0.5f + pos.z,  0.0f, 1.0f});
 
-		multipush(this->_vertices, {0.5f + pos.x,  -0.5f + pos.y,  0.5f + pos.z,  0.0f, 1.0f});
-		multipush(this->_vertices, {-0.5f + pos.x, -0.5f + pos.y,  0.5f + pos.z,  1.0f, 1.0f});
-		multipush(this->_vertices, {-0.5f + pos.x, -0.5f + pos.y,  -0.5f + pos.z, 1.0f, 0.0f});
+		multipush(_vertices, {0.5f + pos.x,  -0.5f + pos.y,  0.5f + pos.z,  0.0f, 1.0f});
+		multipush(_vertices, {-0.5f + pos.x, -0.5f + pos.y,  0.5f + pos.z,  1.0f, 1.0f});
+		multipush(_vertices, {-0.5f + pos.x, -0.5f + pos.y,  -0.5f + pos.z, 1.0f, 0.0f});
 	}
 	else if (face == 4) {
-		multipush(this->_vertices, {-0.5f + pos.x, -0.5f + pos.y, 0.5f + pos.z,  1.0f, 0.0f});
-		multipush(this->_vertices, {0.5f + pos.x, -0.5f + pos.y,  0.5f + pos.z,  0.0f, 0.0f});
-		multipush(this->_vertices, {0.5f + pos.x, 0.5f + pos.y,  0.5f + pos.z,  0.0f, 1.0f});
+		multipush(_vertices, {-0.5f + pos.x, -0.5f + pos.y, 0.5f + pos.z,  1.0f, 0.0f});
+		multipush(_vertices, {0.5f + pos.x, -0.5f + pos.y,  0.5f + pos.z,  0.0f, 0.0f});
+		multipush(_vertices, {0.5f + pos.x, 0.5f + pos.y,  0.5f + pos.z,  0.0f, 1.0f});
 
-		multipush(this->_vertices, {0.5f + pos.x,  0.5f + pos.y, 0.5f + pos.z,  0.0f, 1.0f});
-		multipush(this->_vertices, {-0.5f + pos.x, 0.5f + pos.y, 0.5f + pos.z,  1.0f, 1.0f});
-		multipush(this->_vertices, {-0.5f + pos.x, -0.5f + pos.y, 0.5f + pos.z, 1.0f, 0.0f});
+		multipush(_vertices, {0.5f + pos.x,  0.5f + pos.y, 0.5f + pos.z,  0.0f, 1.0f});
+		multipush(_vertices, {-0.5f + pos.x, 0.5f + pos.y, 0.5f + pos.z,  1.0f, 1.0f});
+		multipush(_vertices, {-0.5f + pos.x, -0.5f + pos.y, 0.5f + pos.z, 1.0f, 0.0f});
 	}
 	else if (face == 5) {
-		multipush(this->_vertices, {-0.5f + pos.x, -0.5f + pos.y, -0.5f + pos.z,  1.0f, 0.0f});
-		multipush(this->_vertices, {0.5f + pos.x, 0.5f + pos.y,  -0.5f + pos.z,  0.0f, 1.0f});
-		multipush(this->_vertices, {0.5f + pos.x, -0.5f + pos.y,  -0.5f + pos.z,  0.0f, 0.0f});
+		multipush(_vertices, {-0.5f + pos.x, -0.5f + pos.y, -0.5f + pos.z,  1.0f, 0.0f});
+		multipush(_vertices, {0.5f + pos.x, 0.5f + pos.y,  -0.5f + pos.z,  0.0f, 1.0f});
+		multipush(_vertices, {0.5f + pos.x, -0.5f + pos.y,  -0.5f + pos.z,  0.0f, 0.0f});
 
-		multipush(this->_vertices, {0.5f + pos.x,  0.5f + pos.y, -0.5f + pos.z,  0.0f, 1.0f});
-		multipush(this->_vertices, {-0.5f + pos.x, -0.5f + pos.y, -0.5f + pos.z, 1.0f, 0.0f});
-		multipush(this->_vertices, {-0.5f + pos.x, 0.5f + pos.y, -0.5f + pos.z,  1.0f, 1.0f});
+		multipush(_vertices, {0.5f + pos.x,  0.5f + pos.y, -0.5f + pos.z,  0.0f, 1.0f});
+		multipush(_vertices, {-0.5f + pos.x, -0.5f + pos.y, -0.5f + pos.z, 1.0f, 0.0f});
+		multipush(_vertices, {-0.5f + pos.x, 0.5f + pos.y, -0.5f + pos.z,  1.0f, 1.0f});
 	}
 }
 
 void	Section::generateMesh(int cubes[SECTION_SIZE][SECTION_SIZE][SECTION_SIZE]) {
-	this->_vertices.clear();
+	_vertices.clear();
 
 	for (int x = 0; x < SECTION_SIZE; x++) {
 		for (int y = 0; y < SECTION_SIZE; y++) {
@@ -137,26 +137,26 @@ void	Section::generateMesh(int cubes[SECTION_SIZE][SECTION_SIZE][SECTION_SIZE]) 
 				int current = cubes[x][y][z];
 				if (current != 0) {
 					if (x == 0 or cubes[x - 1][y][z] == 0)
-						this->addQuad(glm::vec3(x, y, z), 1);
+						addQuad(glm::vec3(x, y, z), 1);
 					if (y == 0 or cubes[x][y - 1][z] == 0)
-						this->addQuad(glm::vec3(x, y, z), 3);
+						addQuad(glm::vec3(x, y, z), 3);
 					if (z == 0 or cubes[x][y][z - 1] == 0)
-						this->addQuad(glm::vec3(x, y, z), 5);
+						addQuad(glm::vec3(x, y, z), 5);
 					if (x == SECTION_SIZE - 1 or cubes[x + 1][y][z] == 0)
-						this->addQuad(glm::vec3(x, y, z), 0);
+						addQuad(glm::vec3(x, y, z), 0);
 					if (y == SECTION_SIZE - 1 or cubes[x][y + 1][z] == 0)
-						this->addQuad(glm::vec3(x, y, z), 2);
+						addQuad(glm::vec3(x, y, z), 2);
 					if (z == SECTION_SIZE - 1 or cubes[x][y][z + 1] == 0)
-						this->addQuad(glm::vec3(x, y, z), 4);
+						addQuad(glm::vec3(x, y, z), 4);
 				}
 			}
 		}
 	}
 
 	//Rebind Buffer
-	glBindVertexArray((this->_VAO));
-	glBindBuffer(GL_ARRAY_BUFFER, (this->_VBO));
-	glBufferData(GL_ARRAY_BUFFER, this->_vertices.size() * sizeof(GLfloat), &(this->_vertices[0]), GL_STATIC_DRAW);
+	glBindVertexArray((_VAO));
+	glBindBuffer(GL_ARRAY_BUFFER, (_VBO));
+	glBufferData(GL_ARRAY_BUFFER, _vertices.size() * sizeof(GLfloat), &(_vertices[0]), GL_STATIC_DRAW);
 	glBindVertexArray(0);
 }
 
@@ -164,18 +164,18 @@ void	Section::render(Shader shader) {
 	shader.Use();
 
 	glm::mat4 model;
-	model = glm::translate(model, this->_pos);
+	model = glm::translate(model, _pos);
 	glUniformMatrix4fv(glGetUniformLocation(shader.getProgram(), "model"), 1, GL_FALSE, glm::value_ptr(model));
 
-	glBindVertexArray(this->_VAO);
-	glDrawArrays(GL_TRIANGLES, 0, this->_vertices.size() / 5);
+	glBindVertexArray(_VAO);
+	glDrawArrays(GL_TRIANGLES, 0, _vertices.size() / 5);
 	glBindVertexArray(0);
 }
 
 Section		&Section::operator=(Section const &src) {
-	this->_VAO = src.getVAO();
-	this->_VBO = src.getVBO();
-	this->_vertices = src.getVertices();
-	this->_pos = src.getPos();
+	_VAO = src.getVAO();
+	_VBO = src.getVBO();
+	_vertices = src.getVertices();
+	_pos = src.getPos();
 	return *this;
 }
