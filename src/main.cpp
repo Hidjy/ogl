@@ -16,7 +16,6 @@
 #include "Cube.hpp"
 #include "Chunk.hpp"
 
-GLuint screenWidth = 1600, screenHeight = 900;
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
@@ -27,7 +26,7 @@ GLuint LoadTexture(std::string path);
 Camera camera(glm::vec3(10.0f, 10.0f, 10.0f));
 
 bool keys[1024];
-GLfloat lastX = screenWidth / 2, lastY = screenHeight / 2;
+GLfloat lastX, lastY;
 bool firstMouse = true;
 
 GLfloat deltaTime = 0.0f;
@@ -52,6 +51,9 @@ int main()
 
     GLFWwindow* window = glfwCreateWindow(mode->width, mode->height, "OGL", monitor, nullptr);
     glfwMakeContextCurrent(window);
+
+    GLuint screenWidth = mode->width, screenHeight = mode->height;
+    lastX = screenWidth / 2, lastY = screenHeight / 2;
 
     srand(glfwGetTime());
 
@@ -80,8 +82,8 @@ int main()
     for (size_t x = 0; x < CHUNK_SIZE; x++) {
 		for (size_t y = 0; y < CHUNK_SIZE; y++) {
 			for (size_t z = 0; z < CHUNK_SIZE; z++) {
-                if ((x - (CHUNK_SIZE / 2)) * (x - (CHUNK_SIZE / 2)) + (y - (CHUNK_SIZE / 2)) * (y - (CHUNK_SIZE / 2)) + (z - (CHUNK_SIZE / 2)) * (z - (CHUNK_SIZE / 2)) <= (CHUNK_SIZE / 2) * (CHUNK_SIZE / 2))
-                // if (true)
+                // if ((x - (CHUNK_SIZE / 2)) * (x - (CHUNK_SIZE / 2)) + (y - (CHUNK_SIZE / 2)) * (y - (CHUNK_SIZE / 2)) + (z - (CHUNK_SIZE / 2)) * (z - (CHUNK_SIZE / 2)) <= (CHUNK_SIZE / 2) * (CHUNK_SIZE / 2))
+                if (rand() % 10 == 0)
                     cubes[x][y][z] = 1;
                 else
                     cubes[x][y][z] = 0;
