@@ -42,7 +42,15 @@ int main()
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
     glfwWindowHint(GLFW_SAMPLES, 4);
 
-    GLFWwindow* window = glfwCreateWindow(screenWidth, screenHeight, "OGL", nullptr, nullptr);
+    GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+
+    const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+    glfwWindowHint(GLFW_RED_BITS, mode->redBits);
+    glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
+    glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
+    glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
+
+    GLFWwindow* window = glfwCreateWindow(mode->width, mode->height, "OGL", monitor, nullptr);
     glfwMakeContextCurrent(window);
 
     srand(glfwGetTime());
@@ -138,7 +146,7 @@ int main()
             lastFPScount = currentFrame;
         }
         frames++;
-        textManager->RenderText(std::to_string(fps), 25.0f, 525.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
+        textManager->RenderText(std::to_string(fps), 25.0f, 425.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
         // Swap the buffers
         glfwSwapBuffers(window);
     }
