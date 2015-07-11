@@ -49,7 +49,7 @@ int main()
     glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
     glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
 
-    GLFWwindow* window = glfwCreateWindow(mode->width, mode->height, "OGL", monitor, nullptr);
+    GLFWwindow* window = glfwCreateWindow(mode->width, mode->height, "OGL", 0, nullptr);
     glfwMakeContextCurrent(window);
 
     GLuint screenWidth = mode->width, screenHeight = mode->height;
@@ -83,7 +83,7 @@ int main()
 		for (size_t y = 0; y < CHUNK_SIZE; y++) {
 			for (size_t z = 0; z < CHUNK_SIZE; z++) {
                 // if ((x - (CHUNK_SIZE / 2)) * (x - (CHUNK_SIZE / 2)) + (y - (CHUNK_SIZE / 2)) * (y - (CHUNK_SIZE / 2)) + (z - (CHUNK_SIZE / 2)) * (z - (CHUNK_SIZE / 2)) <= (CHUNK_SIZE / 2) * (CHUNK_SIZE / 2))
-                if (rand() % 100 == 0)
+                if ( ((x%4)== 0) || ((y % 4)== 0) || ((z % 4)== 0) )
                     cubes[x][y][z] = 1;
                 else
                     cubes[x][y][z] = 0;
