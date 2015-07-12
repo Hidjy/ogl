@@ -18,13 +18,13 @@ Camera::Camera(glm::vec3 p)
 
 	_speed = 20.0f;
 
-	_faces.push_back("right.jpg");
-	_faces.push_back("left.jpg");
-	_faces.push_back("top.jpg");
-	_faces.push_back("bottom.jpg");
-	_faces.push_back("back.jpg");
-	_faces.push_back("front.jpg");
-	_cubemapTexture = loadCubemap(_faces);
+	// _faces.push_back("right.jpg");
+	// _faces.push_back("left.jpg");
+	// _faces.push_back("top.jpg");
+	// _faces.push_back("bottom.jpg");
+	// _faces.push_back("back.jpg");
+	// _faces.push_back("front.jpg");
+	// _cubemapTexture = loadCubemap(_faces);
 }
 
 GLuint Camera::loadCubemap(std::vector<const GLchar*> faces)
