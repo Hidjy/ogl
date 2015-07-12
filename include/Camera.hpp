@@ -5,6 +5,8 @@
 
 #include <glm/glm.hpp>
 #include <string>
+#include <vector>
+#include <SOIL/SOIL.h>
 
 #include <GL/glew.h>
 
@@ -32,6 +34,14 @@ public:
 	void	ProcessMouseMovement(GLfloat xoffset, GLfloat yoffset);
 
 	glm::mat4	GetViewMatrix();
+
+private:
+	GLuint loadCubemap(std::vector<const GLchar*> faces);
+
+	std::vector<const GLchar*> _faces;
+	GLuint	_cubemapTexture;
+
+
 };
 
 #endif
