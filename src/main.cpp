@@ -87,9 +87,9 @@ int main()
 
     World world;
 
-    for (int x = 0; x < 3; x++) {
+    for (int x = 0; x < 7; x++) {
         for (int y = -1; y < 0; y++) {
-            for (int z = 0; z < 3; z++) {
+            for (int z = 0; z < 7; z++) {
                 Chunk chunk(glm::vec3(x, y, z));
 
                 for (size_t x1 = 0; x1 < CHUNK_SIZE; x1++) {
