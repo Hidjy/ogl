@@ -11,6 +11,7 @@ SRC		=	main.cpp	\
 			MessageManager.cpp	\
 			World.cpp	\
 			WorldGenerator.cpp
+			##Skybox.cpp
 
 HEAD_DIR	= include
 SRC_DIR		= src

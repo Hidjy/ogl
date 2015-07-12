@@ -78,24 +78,24 @@ int main()
     Shader blockShader("shaders/block.vert", "shaders/block.frag");
 
     float noise[GENERATOR_SIZE][GENERATOR_SIZE];
-    GenerateWhiteNoise(noise);
+    GenerateWhiteNoise(&noise);
     float perlinNoise[GENERATOR_SIZE][GENERATOR_SIZE];
-    GeneratePerlinNoise(perlinNoise, noise, 6);
+    GeneratePerlinNoise(&perlinNoise, &noise, 7);
 
     int cubes[CHUNK_SIZE][CHUNK_SIZE][CHUNK_SIZE];
 
 
     World world;
 
-    for (int x = 0; x < 7; x++) {
+    for (int x = -10; x < 10; x++) {
         for (int y = -1; y < 0; y++) {
-            for (int z = 0; z < 7; z++) {
+            for (int z = -10; z < 10; z++) {
                 Chunk chunk(glm::vec3(x, y, z));
 
                 for (size_t x1 = 0; x1 < CHUNK_SIZE; x1++) {
                     for (size_t y1 = 0; y1 < CHUNK_SIZE; y1++) {
                         for (size_t z1 = 0; z1 < CHUNK_SIZE; z1++) {
-                            if (y1 < (perlinNoise[x1 + (x * CHUNK_SIZE)][z1 + (z * CHUNK_SIZE)] * static_cast<float>(CHUNK_SIZE)))
+                            if (y1 < (perlinNoise[x1 + ((x+10) * CHUNK_SIZE)][z1 + ((z+10) * CHUNK_SIZE)] * static_cast<float>(CHUNK_SIZE)))
                                 cubes[x1][y1][z1] = 1;
                             else
                                 cubes[x1][y1][z1] = 0;
