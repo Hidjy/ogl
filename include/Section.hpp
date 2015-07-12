@@ -10,6 +10,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "Shader.hpp"
+#include "TextureManager.hpp"
 
 #include <vector>
 
@@ -36,8 +37,8 @@ public:
 
 	void		setPos(glm::vec3 pos);
 
-	void		addQuad(glm::vec3 pos, int face);
-	void		generateMesh(int cubes[SECTION_SIZE][SECTION_SIZE][SECTION_SIZE]);
+	void		addQuad(TextureManager &tm, int ID, glm::vec3 pos, int face);
+	void		generateMesh(TextureManager &tm, int cubes[SECTION_SIZE][SECTION_SIZE][SECTION_SIZE]);
 	void		render(Shader shader);
 
 	Section		&operator=(Section const &src);

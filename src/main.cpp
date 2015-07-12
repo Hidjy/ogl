@@ -13,6 +13,7 @@
 
 #include "Camera.hpp"
 #include "TextManager.hpp"
+#include "TextureManager.hpp"
 #include "World.hpp"
 #include "WorldGenerator.hpp"
 #include "Chunk.hpp"
@@ -22,7 +23,6 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void Do_Movement();
-GLuint LoadTexture(std::string path);
 
 Camera camera(glm::vec3(10.0f, 10.0f, 10.0f));
 
@@ -77,6 +77,8 @@ int main()
 
     Shader blockShader("shaders/block.vert", "shaders/block.frag");
 
+    TextureManager textureManager("ressources/tileset.png", 8, 4);
+
     float noise[GENERATOR_SIZE][GENERATOR_SIZE];
     GenerateWhiteNoise(&noise);
     float perlinNoise[GENERATOR_SIZE][GENERATOR_SIZE];
@@ -90,7 +92,7 @@ int main()
     for (int x = -10; x < 10; x++) {
         for (int y = -1; y < 0; y++) {
             for (int z = -10; z < 10; z++) {
-                Chunk chunk(glm::vec3(x, y, z));
+                Chunk chunk(glm::vec3(x, y, z), textureManager);
 
                 for (size_t x1 = 0; x1 < CHUNK_SIZE; x1++) {
                     for (size_t y1 = 0; y1 < CHUNK_SIZE; y1++) {
@@ -109,11 +111,14 @@ int main()
         }
     }
 
-    GLuint texture = LoadTexture("ressources/0.png");
-
     glm::mat4 projection = glm::perspective(45.0f, (GLfloat)screenWidth/(GLfloat)screenHeight, 0.1f, 10000.0f);
     blockShader.Use();
     glUniformMatrix4fv(glGetUniformLocation(blockShader.getProgram(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+
+    blockShader.Use();
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, textureManager.getTileset());
+    glUniform1i(glGetUniformLocation(blockShader.getProgram(), "ourTexture"), 0);
 
     // Game loop
     while(!glfwWindowShouldClose(window))
@@ -129,10 +134,6 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         blockShader.Use();
-
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, texture);
-        glUniform1i(glGetUniformLocation(blockShader.getProgram(), "ourTexture"), 0);
 
         glm::mat4 view = camera.GetViewMatrix();
         glUniformMatrix4fv(glGetUniformLocation(blockShader.getProgram(), "view"), 1, GL_FALSE, glm::value_ptr(view));
@@ -199,25 +200,4 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
     lastY = ypos;
 
     camera.ProcessMouseMovement(xoffset, yoffset);
-}
-
-GLuint LoadTexture(std::string path) {
-    GLuint texture;
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-    int width, height;
-    unsigned char* image = SOIL_load_image(path.data(), &width, &height, 0, SOIL_LOAD_RGB);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
-    glGenerateMipmap(GL_TEXTURE_2D);
-    SOIL_free_image_data(image);
-    glBindTexture(GL_TEXTURE_2D, 0);
-
-    return texture;
 }

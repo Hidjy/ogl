@@ -70,65 +70,66 @@ static void multipush(std::vector<GLfloat> &target, std::vector<GLfloat> src)
 	}
 }
 
-void Section::addQuad(glm::vec3 pos, int face) {
-
+void Section::addQuad(TextureManager &tm, int ID, glm::vec3 pos, int face) {
+	glm::vec2 tpos = tm.getTexturePos(ID);
+	glm::vec2 tsize = tm.getTileSize();
 	if (face == 0) {
-		multipush(_vertices, {0.5f + pos.x, -0.5f + pos.y, -0.5f + pos.z,  1.0f, 0.0f});
-		multipush(_vertices, {0.5f + pos.x, 0.5f + pos.y,  -0.5f + pos.z,  1.0f, 1.0f});
-		multipush(_vertices, {0.5f + pos.x, 0.5f + pos.y,  0.5f + pos.z,  0.0f, 1.0f});
+		multipush(_vertices, {0.5f + pos.x, -0.5f + pos.y, -0.5f + pos.z,  tpos.x + tsize.x, tpos.y});
+		multipush(_vertices, {0.5f + pos.x, 0.5f + pos.y,  -0.5f + pos.z,  tpos.x + tsize.x, tpos.y + tsize.y});
+		multipush(_vertices, {0.5f + pos.x, 0.5f + pos.y,  0.5f + pos.z,  tpos.x, tpos.y + tsize.y});
 
-		multipush(_vertices, {0.5f + pos.x,  0.5f + pos.y,  0.5f + pos.z,  0.0f, 1.0f});
-		multipush(_vertices, {0.5f + pos.x, -0.5f + pos.y,  0.5f + pos.z,  0.0f, 0.0f});
-		multipush(_vertices, {0.5f + pos.x, -0.5f + pos.y,  -0.5f + pos.z,  1.0f, 0.0f});
+		multipush(_vertices, {0.5f + pos.x,  0.5f + pos.y,  0.5f + pos.z,  tpos.x, tpos.y + tsize.y});
+		multipush(_vertices, {0.5f + pos.x, -0.5f + pos.y,  0.5f + pos.z,  tpos.x, tpos.y});
+		multipush(_vertices, {0.5f + pos.x, -0.5f + pos.y,  -0.5f + pos.z,  tpos.x + tsize.x, tpos.y});
 	}
 	else if (face == 1) {
-		multipush(_vertices, {-0.5f + pos.x, -0.5f + pos.y, -0.5f + pos.z,  0.0f, 0.0f});
-		multipush(_vertices, {-0.5f + pos.x, 0.5f + pos.y,  0.5f + pos.z,  1.0f, 1.0f});
-		multipush(_vertices, {-0.5f + pos.x, 0.5f + pos.y,  -0.5f + pos.z,  0.0f, 1.0f});
+		multipush(_vertices, {-0.5f + pos.x, -0.5f + pos.y, -0.5f + pos.z,  tpos.x, tpos.y});
+		multipush(_vertices, {-0.5f + pos.x, 0.5f + pos.y,  0.5f + pos.z,  tpos.x + tsize.x, tpos.y + tsize.y});
+		multipush(_vertices, {-0.5f + pos.x, 0.5f + pos.y,  -0.5f + pos.z,  tpos.x, tpos.y + tsize.y});
 
-		multipush(_vertices, {-0.5f + pos.x,  0.5f + pos.y,  0.5f + pos.z,  1.0f, 1.0f});
-		multipush(_vertices, {-0.5f + pos.x, -0.5f + pos.y,  -0.5f + pos.z, 0.0f, 0.0f});
-		multipush(_vertices, {-0.5f + pos.x, -0.5f + pos.y,  0.5f + pos.z,  1.0f, 0.0f});
+		multipush(_vertices, {-0.5f + pos.x,  0.5f + pos.y,  0.5f + pos.z,  tpos.x + tsize.x, tpos.y + tsize.y});
+		multipush(_vertices, {-0.5f + pos.x, -0.5f + pos.y,  -0.5f + pos.z, tpos.x, tpos.y});
+		multipush(_vertices, {-0.5f + pos.x, -0.5f + pos.y,  0.5f + pos.z,  tpos.x + tsize.x, tpos.y});
 	}
 	else if (face == 2) {
-		multipush(_vertices, {-0.5f + pos.x, 0.5f + pos.y, -0.5f + pos.z,  0.0f, 0.0f});
-		multipush(_vertices, {0.5f + pos.x, 0.5f + pos.y,  0.5f + pos.z,  1.0f, 1.0f});
-		multipush(_vertices, {0.5f + pos.x, 0.5f + pos.y,  -0.5f + pos.z,  1.0f, 0.0f});
+		multipush(_vertices, {-0.5f + pos.x, 0.5f + pos.y, -0.5f + pos.z,  tpos.x, tpos.y});
+		multipush(_vertices, {0.5f + pos.x, 0.5f + pos.y,  0.5f + pos.z,  tpos.x + tsize.x, tpos.y + tsize.y});
+		multipush(_vertices, {0.5f + pos.x, 0.5f + pos.y,  -0.5f + pos.z,  tpos.x + tsize.x, tpos.y});
 
-		multipush(_vertices, {0.5f + pos.x,  0.5f + pos.y,  0.5f + pos.z,  1.0f, 1.0f});
-		multipush(_vertices, {-0.5f + pos.x, 0.5f + pos.y,  -0.5f + pos.z,  0.0f, 0.0f});
-		multipush(_vertices, {-0.5f + pos.x, 0.5f + pos.y,  0.5f + pos.z,  0.0f, 1.0f});
+		multipush(_vertices, {0.5f + pos.x,  0.5f + pos.y,  0.5f + pos.z,  tpos.x + tsize.x, tpos.y + tsize.y});
+		multipush(_vertices, {-0.5f + pos.x, 0.5f + pos.y,  -0.5f + pos.z,  tpos.x, tpos.y});
+		multipush(_vertices, {-0.5f + pos.x, 0.5f + pos.y,  0.5f + pos.z,  tpos.x, tpos.y + tsize.y});
 	}
 	else if (face == 3) {
-		multipush(_vertices, {-0.5f + pos.x, -0.5f + pos.y, -0.5f + pos.z,  1.0f, 0.0f});
-		multipush(_vertices, {0.5f + pos.x, -0.5f + pos.y,  -0.5f + pos.z,  0.0f, 0.0f});
-		multipush(_vertices, {0.5f + pos.x, -0.5f + pos.y,  0.5f + pos.z,  0.0f, 1.0f});
+		multipush(_vertices, {-0.5f + pos.x, -0.5f + pos.y, -0.5f + pos.z,  tpos.x + tsize.x, tpos.y});
+		multipush(_vertices, {0.5f + pos.x, -0.5f + pos.y,  -0.5f + pos.z,  tpos.x, tpos.y});
+		multipush(_vertices, {0.5f + pos.x, -0.5f + pos.y,  0.5f + pos.z,  tpos.x, tpos.y + tsize.y});
 
-		multipush(_vertices, {0.5f + pos.x,  -0.5f + pos.y,  0.5f + pos.z,  0.0f, 1.0f});
-		multipush(_vertices, {-0.5f + pos.x, -0.5f + pos.y,  0.5f + pos.z,  1.0f, 1.0f});
-		multipush(_vertices, {-0.5f + pos.x, -0.5f + pos.y,  -0.5f + pos.z, 1.0f, 0.0f});
+		multipush(_vertices, {0.5f + pos.x,  -0.5f + pos.y,  0.5f + pos.z,  tpos.x, tpos.y + tsize.y});
+		multipush(_vertices, {-0.5f + pos.x, -0.5f + pos.y,  0.5f + pos.z,  tpos.x + tsize.x, tpos.y + tsize.y});
+		multipush(_vertices, {-0.5f + pos.x, -0.5f + pos.y,  -0.5f + pos.z, tpos.x + tsize.x, tpos.y});
 	}
 	else if (face == 4) {
-		multipush(_vertices, {-0.5f + pos.x, -0.5f + pos.y, 0.5f + pos.z,  1.0f, 0.0f});
-		multipush(_vertices, {0.5f + pos.x, -0.5f + pos.y,  0.5f + pos.z,  0.0f, 0.0f});
-		multipush(_vertices, {0.5f + pos.x, 0.5f + pos.y,  0.5f + pos.z,  0.0f, 1.0f});
+		multipush(_vertices, {-0.5f + pos.x, -0.5f + pos.y, 0.5f + pos.z,  tpos.x + tsize.x, tpos.y});
+		multipush(_vertices, {0.5f + pos.x, -0.5f + pos.y,  0.5f + pos.z,  tpos.x, tpos.y});
+		multipush(_vertices, {0.5f + pos.x, 0.5f + pos.y,  0.5f + pos.z,  tpos.x, tpos.y + tsize.y});
 
-		multipush(_vertices, {0.5f + pos.x,  0.5f + pos.y, 0.5f + pos.z,  0.0f, 1.0f});
-		multipush(_vertices, {-0.5f + pos.x, 0.5f + pos.y, 0.5f + pos.z,  1.0f, 1.0f});
-		multipush(_vertices, {-0.5f + pos.x, -0.5f + pos.y, 0.5f + pos.z, 1.0f, 0.0f});
+		multipush(_vertices, {0.5f + pos.x,  0.5f + pos.y, 0.5f + pos.z,  tpos.x, tpos.y + tsize.y});
+		multipush(_vertices, {-0.5f + pos.x, 0.5f + pos.y, 0.5f + pos.z,  tpos.x + tsize.x, tpos.y + tsize.y});
+		multipush(_vertices, {-0.5f + pos.x, -0.5f + pos.y, 0.5f + pos.z, tpos.x + tsize.x, tpos.y});
 	}
 	else if (face == 5) {
-		multipush(_vertices, {-0.5f + pos.x, -0.5f + pos.y, -0.5f + pos.z,  1.0f, 0.0f});
-		multipush(_vertices, {0.5f + pos.x, 0.5f + pos.y,  -0.5f + pos.z,  0.0f, 1.0f});
-		multipush(_vertices, {0.5f + pos.x, -0.5f + pos.y,  -0.5f + pos.z,  0.0f, 0.0f});
+		multipush(_vertices, {-0.5f + pos.x, -0.5f + pos.y, -0.5f + pos.z,  tpos.x + tsize.x, tpos.y});
+		multipush(_vertices, {0.5f + pos.x, 0.5f + pos.y,  -0.5f + pos.z,  tpos.x, tpos.y + tsize.y});
+		multipush(_vertices, {0.5f + pos.x, -0.5f + pos.y,  -0.5f + pos.z,  tpos.x, tpos.y});
 
-		multipush(_vertices, {0.5f + pos.x,  0.5f + pos.y, -0.5f + pos.z,  0.0f, 1.0f});
-		multipush(_vertices, {-0.5f + pos.x, -0.5f + pos.y, -0.5f + pos.z, 1.0f, 0.0f});
-		multipush(_vertices, {-0.5f + pos.x, 0.5f + pos.y, -0.5f + pos.z,  1.0f, 1.0f});
+		multipush(_vertices, {0.5f + pos.x,  0.5f + pos.y, -0.5f + pos.z,  tpos.x, tpos.y + tsize.y});
+		multipush(_vertices, {-0.5f + pos.x, -0.5f + pos.y, -0.5f + pos.z, tpos.x + tsize.x, tpos.y});
+		multipush(_vertices, {-0.5f + pos.x, 0.5f + pos.y, -0.5f + pos.z,  tpos.x + tsize.x, tpos.y + tsize.y});
 	}
 }
 
-void	Section::generateMesh(int cubes[SECTION_SIZE][SECTION_SIZE][SECTION_SIZE]) {
+void	Section::generateMesh(TextureManager &tm, int cubes[SECTION_SIZE][SECTION_SIZE][SECTION_SIZE]) {
 	_vertices.clear();
 
 	for (int x = 0; x < SECTION_SIZE; x++) {
@@ -137,17 +138,17 @@ void	Section::generateMesh(int cubes[SECTION_SIZE][SECTION_SIZE][SECTION_SIZE]) 
 				int current = cubes[x][y][z];
 				if (current != 0) {
 					if (x == 0 or cubes[x - 1][y][z] == 0)
-						addQuad(glm::vec3(x, y, z), 1);
+						addQuad(tm, current, glm::vec3(x, y, z), 1);
 					if (y == 0 or cubes[x][y - 1][z] == 0)
-						addQuad(glm::vec3(x, y, z), 3);
+						addQuad(tm, current, glm::vec3(x, y, z), 3);
 					if (z == 0 or cubes[x][y][z - 1] == 0)
-						addQuad(glm::vec3(x, y, z), 5);
+						addQuad(tm, current, glm::vec3(x, y, z), 5);
 					if (x == SECTION_SIZE - 1 or cubes[x + 1][y][z] == 0)
-						addQuad(glm::vec3(x, y, z), 0);
+						addQuad(tm, current, glm::vec3(x, y, z), 0);
 					if (y == SECTION_SIZE - 1 or cubes[x][y + 1][z] == 0)
-						addQuad(glm::vec3(x, y, z), 2);
+						addQuad(tm, current, glm::vec3(x, y, z), 2);
 					if (z == SECTION_SIZE - 1 or cubes[x][y][z + 1] == 0)
-						addQuad(glm::vec3(x, y, z), 4);
+						addQuad(tm, current, glm::vec3(x, y, z), 4);
 				}
 			}
 		}

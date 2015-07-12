@@ -14,11 +14,11 @@
 
 #include <vector>
 
-Chunk::Chunk() : Chunk(glm::vec3(0,0,0)) {
+// Chunk::Chunk() : Chunk(glm::vec3(0, 0, 0), TextureManager("ressources/tileset.png", 8, 4)) {
+//
+// }
 
-}
-
-Chunk::Chunk(glm::vec3 pos) : _pos(pos), _empty(true), _sectionsLoaded(false), _sectionsGenerated(false) {
+Chunk::Chunk(glm::vec3 pos, TextureManager &t) : _pos(pos), _textureManager(t), _empty(true), _sectionsLoaded(false), _sectionsGenerated(false) {
 	for (size_t x = 0; x < CHUNK_SIZE; x++) {
 		for (size_t y = 0; y < CHUNK_SIZE; y++) {
 			for (size_t z = 0; z < CHUNK_SIZE; z++) {
@@ -28,15 +28,15 @@ Chunk::Chunk(glm::vec3 pos) : _pos(pos), _empty(true), _sectionsLoaded(false), _
 	}
 }
 
-Chunk::Chunk(Chunk const &src) : _pos(src.getPos()), _empty(src._empty), _sectionsLoaded(false), _sectionsGenerated(false) {
-	for (size_t x = 0; x < CHUNK_SIZE; x++) {
-		for (size_t y = 0; y < CHUNK_SIZE; y++) {
-			for (size_t z = 0; z < CHUNK_SIZE; z++) {
-				_blocks[x][y][z] = src._blocks[x][y][z];
-			}
-		}
-	}
-}
+// Chunk::Chunk(Chunk const &src) : _pos(src.getPos()), _empty(src._empty), _sectionsLoaded(false), _sectionsGenerated(false) {
+// 	for (size_t x = 0; x < CHUNK_SIZE; x++) {
+// 		for (size_t y = 0; y < CHUNK_SIZE; y++) {
+// 			for (size_t z = 0; z < CHUNK_SIZE; z++) {
+// 				_blocks[x][y][z] = src._blocks[x][y][z];
+// 			}
+// 		}
+// 	}
+// }
 
 Chunk::~Chunk() {
 	if (_sectionsLoaded == false)
@@ -100,7 +100,7 @@ void	Chunk::generateSections() {
 			for (size_t z = 0; z < CHUNK_RATIO; z++) {
 				int cubes[SECTION_SIZE][SECTION_SIZE][SECTION_SIZE];
 				getSectionData(&cubes, x, y, z); //fill the cubes buffer
-				_sections[x + y * CHUNK_RATIO + z * CHUNK_RATIO * CHUNK_RATIO].generateMesh(cubes);
+				_sections[x + y * CHUNK_RATIO + z * CHUNK_RATIO * CHUNK_RATIO].generateMesh(_textureManager, cubes);
 			}
 		}
 	}
@@ -121,18 +121,18 @@ void	Chunk::render(Shader shader) {
 	}
 }
 
-Chunk	&Chunk::operator=(Chunk const &src) {
-	_pos = src.getPos();
-	_empty = src.empty();
-	_sectionsLoaded = false;
-	_sectionsGenerated = false;
-
-	for (size_t x = 0; x < CHUNK_SIZE; x++) {
-		for (size_t y = 0; y < CHUNK_SIZE; y++) {
-			for (size_t z = 0; z < CHUNK_SIZE; z++) {
-				_blocks[x][y][z] = src.getBlock(x, y, z);
-			}
-		}
-	}
-	return *this;
-}
+// Chunk	&Chunk::operator=(Chunk const &src) {
+// 	_pos = src.getPos();
+// 	_empty = src.empty();
+// 	_sectionsLoaded = false;
+// 	_sectionsGenerated = false;
+//
+// 	for (size_t x = 0; x < CHUNK_SIZE; x++) {
+// 		for (size_t y = 0; y < CHUNK_SIZE; y++) {
+// 			for (size_t z = 0; z < CHUNK_SIZE; z++) {
+// 				_blocks[x][y][z] = src.getBlock(x, y, z);
+// 			}
+// 		}
+// 	}
+// 	return *this;
+// }

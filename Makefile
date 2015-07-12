@@ -10,7 +10,8 @@ SRC		=	main.cpp	\
 			Chunk.cpp	\
 			MessageManager.cpp	\
 			World.cpp	\
-			WorldGenerator.cpp
+			WorldGenerator.cpp	\
+			TextureManager.cpp
 			##Skybox.cpp
 
 HEAD_DIR	= include

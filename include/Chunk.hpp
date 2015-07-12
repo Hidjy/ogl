@@ -12,6 +12,7 @@
 #include "Section.hpp"
 #include "Shader.hpp"
 #include "Cube.hpp"
+#include "TextureManager.hpp"
 
 #include <vector>
 
@@ -20,18 +21,20 @@
 
 class Chunk {
 private:
-	glm::vec3	_pos;
-	Section		*_sections;
-	bool		_empty;
-	bool		_sectionsLoaded;
-	bool		_sectionsGenerated;
+	glm::vec3		_pos;
+	TextureManager	&_textureManager;
+	Section			*_sections;
+	bool			_empty;
+	bool			_sectionsLoaded;
+	bool			_sectionsGenerated;
 
-	int			_blocks[CHUNK_SIZE][CHUNK_SIZE][CHUNK_SIZE];
+	int				_blocks[CHUNK_SIZE][CHUNK_SIZE][CHUNK_SIZE];
+
+	// Chunk();
 
 public:
-	Chunk();
-	Chunk(glm::vec3 pos);
-	Chunk(Chunk const &src);
+	Chunk(glm::vec3 pos, TextureManager &t);
+	// Chunk(Chunk const &src);
 	~Chunk();
 
 	bool		empty() const;
@@ -44,5 +47,5 @@ public:
 	void	generateSections();
 	void	render(Shader shader);
 
-	Chunk	&operator=(Chunk const &src);
+	// Chunk	&operator=(Chunk const &src);
 };
