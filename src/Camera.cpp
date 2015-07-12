@@ -41,6 +41,12 @@ void	Camera::ProcessKeyboard(enum Direction dir, GLfloat dt)
 		case RIGHT:
 			_pos += glm::normalize(glm::cross(_front, _up)) * dt * _speed;
 			break;
+		case BOOST_PLUS:
+			_speed++;
+			break;
+		case BOOST_MOINS:
+			_speed--;
+			break;
 	}
 }
 

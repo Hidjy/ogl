@@ -10,7 +10,7 @@
 
 #define CAMERA_SPEED 20
 
-enum Direction {UP, DOWN, FORWARD, BACKWARD, LEFT, RIGHT};
+enum Direction {UP, DOWN, FORWARD, BACKWARD, LEFT, RIGHT, BOOST_PLUS, BOOST_MOINS};
 
 class Camera
 {

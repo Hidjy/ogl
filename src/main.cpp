@@ -164,6 +164,10 @@ void Do_Movement()
         camera.ProcessKeyboard(UP, deltaTime);
     if(keys[GLFW_KEY_LEFT_SHIFT])
         camera.ProcessKeyboard(DOWN, deltaTime);
+    if (keys[GLFW_KEY_Q])
+        camera.ProcessKeyboard(BOOST_PLUS, deltaTime);
+    if (keys[GLFW_KEY_E])
+        camera.ProcessKeyboard(BOOST_MOINS, deltaTime);
 }
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
