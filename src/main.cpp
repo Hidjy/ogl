@@ -14,6 +14,7 @@
 #include "Camera.hpp"
 #include "TextManager.hpp"
 #include "World.hpp"
+#include "WorldGenerator.hpp"
 #include "Chunk.hpp"
 
 
@@ -49,13 +50,13 @@ int main()
     glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
     glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
 
-    GLFWwindow* window = glfwCreateWindow(mode->width, mode->height, "OGL", 0, nullptr);
+    GLFWwindow* window = glfwCreateWindow(mode->width, mode->height, "OGL", nullptr, nullptr);
     glfwMakeContextCurrent(window);
 
     GLuint screenWidth = mode->width, screenHeight = mode->height;
     lastX = screenWidth / 2, lastY = screenHeight / 2;
 
-    srand(glfwGetTime());
+    srand(time(NULL));
 
     glfwSetKeyCallback(window, key_callback);
     glfwSetCursorPosCallback(window, mouse_callback);
@@ -69,21 +70,23 @@ int main()
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
-    glEnable(GL_CULL_FACE); //TODO Benchmark with/without GL_CULL_FACE
+    glEnable(GL_CULL_FACE);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 ////////////////////////////////////////////////////////////////////////////////
 
     Shader blockShader("shaders/block.vert", "shaders/block.frag");
 
-    TextManager *textManager = new TextManager();
+    float noise[GENERATOR_SIZE][GENERATOR_SIZE];
+    GenerateWhiteNoise(&noise);
+    float perlinNoise[GENERATOR_SIZE][GENERATOR_SIZE];
+    GeneratePerlinNoise(&perlinNoise, noise, 6);
 
     int cubes[CHUNK_SIZE][CHUNK_SIZE][CHUNK_SIZE];
     for (size_t x = 0; x < CHUNK_SIZE; x++) {
 		for (size_t y = 0; y < CHUNK_SIZE; y++) {
 			for (size_t z = 0; z < CHUNK_SIZE; z++) {
-                // if ((x - (CHUNK_SIZE / 2)) * (x - (CHUNK_SIZE / 2)) + (y - (CHUNK_SIZE / 2)) * (y - (CHUNK_SIZE / 2)) + (z - (CHUNK_SIZE / 2)) * (z - (CHUNK_SIZE / 2)) <= (CHUNK_SIZE / 2) * (CHUNK_SIZE / 2))
-                if (( x == 0) || (y == 0) || (z == 0))
+                if (y < (perlinNoise[x][z] * static_cast<float>(CHUNK_SIZE)))
                     cubes[x][y][z] = 1;
                 else
                     cubes[x][y][z] = 0;
@@ -93,9 +96,9 @@ int main()
 
     World world;
 
-    for (int x = -5; x < 5; x++) {
-        for (int y = -5; y < 5; y++) {
-            for (int z = -5; z < 5; z++) {
+    for (int x = -10; x < 10; x++) {
+        for (int y = -1; y < 0; y++) {
+            for (int z = -10; z < 10; z++) {
                 Chunk chunk(glm::vec3(x, y, z));
                 chunk.fill(&cubes);
                 world.add(chunk);
@@ -110,16 +113,11 @@ int main()
     glUniformMatrix4fv(glGetUniformLocation(blockShader.getProgram(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
     // Game loop
-    GLuint frames = 0;
-    GLuint fps = 0;
-    GLfloat fps_periode = 2;
-    GLfloat fps_time = 0;
     while(!glfwWindowShouldClose(window))
     {
         GLfloat currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
-        fps_time += deltaTime;
 
         glfwPollEvents();
         Do_Movement();
@@ -138,13 +136,6 @@ int main()
 
         world.renderNear(camera._pos, blockShader);
 
-        if (fps_time > fps_periode) {
-            fps = frames / fps_periode;
-            frames = 0;
-            fps_time = 0;
-        }
-        frames++;
-        textManager->RenderText(std::to_string(fps), 25.0f, 425.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
         // Swap the buffers
         glfwSwapBuffers(window);
     }

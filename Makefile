@@ -8,7 +8,8 @@ SRC		=	main.cpp	\
 			Section.cpp	\
 			Chunk.cpp	\
 			MessageManager.cpp	\
-			World.cpp
+			World.cpp	\
+			WorldGenerator.cpp
 
 HEAD_DIR	= include
 SRC_DIR		= src
