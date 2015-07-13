@@ -32,7 +32,7 @@ public:
 	GLuint _VAO, _VBO;
 	Shader _shader;
 
-	TextManager();
+	TextManager(int width, int height);
 	~TextManager();
 
 	void RenderText(std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color);

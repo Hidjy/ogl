@@ -19,10 +19,10 @@
 // GL includes
 #include "Shader.hpp"
 
-TextManager::TextManager() : _shader(Shader("shaders/text.vert", "shaders/text.frag"))
+TextManager::TextManager(int width, int height) : _shader(Shader("shaders/text.vert", "shaders/text.frag"))
 {
     // Compile and setup the shader
-    glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(800), 0.0f, static_cast<GLfloat>(600)); //FIXME
+    glm::mat4 projection = glm::ortho(0.0f, width, 0.0f, height));
     _shader.Use();
     glUniformMatrix4fv(glGetUniformLocation(_shader.getProgram(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 

@@ -3,7 +3,6 @@
 ## To Do List
 
 ### Features
-* Improve TextManager (Pos)
 * World System
 * Skybox
 * Texture Manager (Atlas)
