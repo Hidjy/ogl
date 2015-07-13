@@ -130,8 +130,8 @@ int main()
 
         glDepthMask(GL_FALSE);;  // Change depth function so depth test passes when values are equal to depth buffer's content
         skyboxShader.Use();
-        view = glm::mat4(glm::mat3(camera.GetViewMatrix()));	// Remove any translation component of the view matrix
-        glUniformMatrix4fv(glGetUniformLocation(skyboxShader.getProgram(), "view"), 1, GL_FALSE, glm::value_ptr(view));
+        glm::mat4 view2 = glm::mat4(glm::mat3(camera.GetViewMatrix()));	// Remove any translation component of the view matrix
+        glUniformMatrix4fv(glGetUniformLocation(skyboxShader.getProgram(), "view"), 1, GL_FALSE, glm::value_ptr(view2));
         glUniformMatrix4fv(glGetUniformLocation(skyboxShader.getProgram(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
         // skybox cube
         glBindVertexArray(camera._skyboxVAO);
@@ -141,8 +141,6 @@ int main()
         glDrawArrays(GL_TRIANGLES, 0, 36);
         glBindVertexArray(0);
         glDepthMask(GL_TRUE); // Set depth function back to default
-
-        blockShader.Use();
 
         blockShader.Use();
         glUniformMatrix4fv(glGetUniformLocation(blockShader.getProgram(), "view"), 1, GL_FALSE, glm::value_ptr(view));
