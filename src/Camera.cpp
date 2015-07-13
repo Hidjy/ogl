@@ -18,13 +18,66 @@ Camera::Camera(glm::vec3 p)
 
 	_speed = 20.0f;
 
-	// _faces.push_back("right.jpg");
-	// _faces.push_back("left.jpg");
-	// _faces.push_back("top.jpg");
-	// _faces.push_back("bottom.jpg");
-	// _faces.push_back("back.jpg");
-	// _faces.push_back("front.jpg");
-	// _cubemapTexture = loadCubemap(_faces);
+	GLfloat skyboxVertices[] = {
+		-1.0f,  1.0f, -1.0f,
+		-1.0f, -1.0f, -1.0f,
+		1.0f, -1.0f, -1.0f,
+		1.0f, -1.0f, -1.0f,
+		1.0f,  1.0f, -1.0f,
+		-1.0f,  1.0f, -1.0f,
+
+		-1.0f, -1.0f,  1.0f,
+		-1.0f, -1.0f, -1.0f,
+		-1.0f,  1.0f, -1.0f,
+		-1.0f,  1.0f, -1.0f,
+		-1.0f,  1.0f,  1.0f,
+		-1.0f, -1.0f,  1.0f,
+
+		1.0f, -1.0f, -1.0f,
+		1.0f, -1.0f,  1.0f,
+		1.0f,  1.0f,  1.0f,
+		1.0f,  1.0f,  1.0f,
+		1.0f,  1.0f, -1.0f,
+		1.0f, -1.0f, -1.0f,
+
+		-1.0f, -1.0f,  1.0f,
+		-1.0f,  1.0f,  1.0f,
+		1.0f,  1.0f,  1.0f,
+		1.0f,  1.0f,  1.0f,
+		1.0f, -1.0f,  1.0f,
+		-1.0f, -1.0f,  1.0f,
+
+		-1.0f,  1.0f, -1.0f,
+		1.0f,  1.0f, -1.0f,
+		1.0f,  1.0f,  1.0f,
+		1.0f,  1.0f,  1.0f,
+		-1.0f,  1.0f,  1.0f,
+		-1.0f,  1.0f, -1.0f,
+
+		-1.0f, -1.0f, -1.0f,
+		-1.0f, -1.0f,  1.0f,
+		1.0f, -1.0f, -1.0f,
+		1.0f, -1.0f, -1.0f,
+		-1.0f, -1.0f,  1.0f,
+		1.0f, -1.0f,  1.0f
+	};
+
+	glGenVertexArrays(1, &_skyboxVAO);
+	glGenBuffers(1, &_skyboxVBO);
+	glBindVertexArray(_skyboxVAO);
+	glBindBuffer(GL_ARRAY_BUFFER, _skyboxVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), &skyboxVertices, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+	glBindVertexArray(0);
+
+	_faces.push_back("ressources/right.jpg");
+	_faces.push_back("ressources/left.jpg");
+ 	_faces.push_back("ressources/top.jpg");
+	_faces.push_back("ressources/bottom.jpg");
+	_faces.push_back("ressources/back.jpg");
+	_faces.push_back("ressources/front.jpg");
+	_cubemapTexture = loadCubemap(_faces);
 }
 
 GLuint Camera::loadCubemap(std::vector<const GLchar*> faces)
@@ -84,6 +137,7 @@ void	Camera::ProcessKeyboard(enum Direction dir, GLfloat dt)
 			break;
 	}
 }
+
 
 void	Camera::ProcessMouseMovement(GLfloat xoffset, GLfloat yoffset)
 {

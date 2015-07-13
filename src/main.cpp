@@ -61,6 +61,7 @@ int main()
 ////////////////////////////////////////////////////////////////////////////////
 
     Shader blockShader("shaders/block.vert", "shaders/block.frag");
+    Shader skyboxShader("shaders/skybox.vert", "shaders/skybox.frag");
 
     TextureManager textureManager("ressources/tileset.png", 8, 4);
 
@@ -101,7 +102,6 @@ int main()
     }
 
     glm::mat4 projection = glm::perspective(45.0f, (GLfloat)screenWidth/(GLfloat)screenHeight, 0.1f, 10000.0f);
-    blockShader.Use();
     glUniformMatrix4fv(glGetUniformLocation(blockShader.getProgram(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
     blockShader.Use();
@@ -129,6 +129,23 @@ int main()
 
         world.renderNear(camera._pos, blockShader);
 
+        /*glActiveTexture(GL_TEXTURE3);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, camera._cubemapTexture);
+
+        glDepthFunc(GL_LEQUAL);  // Change depth function so depth test passes when values are equal to depth buffer's content
+        skyboxShader.Use();
+        view = glm::mat4(glm::mat3(camera.GetViewMatrix()));	// Remove any translation component of the view matrix
+        glUniformMatrix4fv(glGetUniformLocation(skyboxShader.getProgram(), "view"), 1, GL_FALSE, glm::value_ptr(view));
+        glUniformMatrix4fv(glGetUniformLocation(skyboxShader.getProgram(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+        // skybox cube
+        glBindVertexArray(camera._skyboxVAO);
+        glActiveTexture(GL_TEXTURE0);
+        glUniform1i(glGetUniformLocation(skyboxShader.getProgram(), "skybox"), 0);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, camera._cubemapTexture);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+        glBindVertexArray(0);
+        glDepthFunc(GL_LESS); // Set depth function back to default
+*/
         // Swap the buffers
         glfwSwapBuffers(window);
     }
