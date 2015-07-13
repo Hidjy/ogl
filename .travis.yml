@@ -1,0 +1,9 @@
+language: cpp
+
+compiler:
+	- g++
+
+install:
+	- sudo apt-get install libacl1-dev
+script:
+	- make
