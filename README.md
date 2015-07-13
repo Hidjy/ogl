@@ -7,7 +7,6 @@
 * Skybox
 * Texture Manager (Atlas)
 * Simplified Context/Engine (Engine init, close...)
-* InputManager
 
 ### Performance Improvement
 * Frustum Culling (Chunk)
