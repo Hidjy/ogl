@@ -14,21 +14,10 @@
 #include "Camera.hpp"
 #include "TextManager.hpp"
 #include "TextureManager.hpp"
+#include "InputManager.hpp"
 #include "World.hpp"
 #include "WorldGenerator.hpp"
 #include "Chunk.hpp"
-
-
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
-void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-void Do_Movement();
-
-Camera camera(glm::vec3(10.0f, 10.0f, 10.0f));
-
-bool keys[1024];
-GLfloat lastX, lastY;
-bool firstMouse = true;
 
 GLfloat deltaTime = 0.0f;
 GLfloat lastFrame = 0.0f;
@@ -54,12 +43,8 @@ int main()
     glfwMakeContextCurrent(window);
 
     GLuint screenWidth = mode->width, screenHeight = mode->height;
-    lastX = screenWidth / 2, lastY = screenHeight / 2;
 
     srand(time(NULL));
-
-    glfwSetKeyCallback(window, key_callback);
-    glfwSetCursorPosCallback(window, mouse_callback);
 
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
@@ -78,6 +63,10 @@ int main()
     Shader blockShader("shaders/block.vert", "shaders/block.frag");
 
     TextureManager textureManager("ressources/tileset.png", 8, 4);
+
+    Camera camera(glm::vec3(10.0f, 10.0f, 10.0f));
+
+    InputManager inputManager(window, &camera);
 
     float noise[GENERATOR_SIZE][GENERATOR_SIZE];
     GenerateWhiteNoise(&noise);
@@ -128,7 +117,7 @@ int main()
         lastFrame = currentFrame;
 
         glfwPollEvents();
-        Do_Movement();
+        inputManager.update(deltaTime);
 
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -146,58 +135,4 @@ int main()
     // Properly de-allocate all resources once they've outlived their purpose
     glfwTerminate();
     return 0;
-}
-
-//////////////////////////////////////////////////////////////////////////////
-
-// Moves/alters the camera positions based on user input
-void Do_Movement()
-{
-    if(keys[GLFW_KEY_W])
-        camera.ProcessKeyboard(FORWARD, deltaTime);
-    if(keys[GLFW_KEY_S])
-        camera.ProcessKeyboard(BACKWARD, deltaTime);
-    if(keys[GLFW_KEY_A])
-        camera.ProcessKeyboard(LEFT, deltaTime);
-    if(keys[GLFW_KEY_D])
-        camera.ProcessKeyboard(RIGHT, deltaTime);
-    if(keys[GLFW_KEY_SPACE])
-        camera.ProcessKeyboard(UP, deltaTime);
-    if(keys[GLFW_KEY_LEFT_SHIFT])
-        camera.ProcessKeyboard(DOWN, deltaTime);
-    if (keys[GLFW_KEY_Q])
-        camera.ProcessKeyboard(BOOST_PLUS, deltaTime);
-    if (keys[GLFW_KEY_E])
-        camera.ProcessKeyboard(BOOST_MOINS, deltaTime);
-}
-
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
-{
-    if(key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, GL_TRUE);
-    if (key >= 0 && key < 1024)
-    {
-        if(action == GLFW_PRESS)
-            keys[key] = true;
-        else if(action == GLFW_RELEASE)
-            keys[key] = false;
-    }
-}
-
-void mouse_callback(GLFWwindow* window, double xpos, double ypos)
-{
-    if(firstMouse)
-    {
-        lastX = xpos;
-        lastY = ypos;
-        firstMouse = false;
-    }
-
-    GLfloat xoffset = xpos - lastX;
-    GLfloat yoffset = lastY - ypos;  // Reversed since y-coordinates go from bottom to left
-
-    lastX = xpos;
-    lastY = ypos;
-
-    camera.ProcessMouseMovement(xoffset, yoffset);
 }

@@ -22,7 +22,7 @@
 TextManager::TextManager(int width, int height) : _shader(Shader("shaders/text.vert", "shaders/text.frag"))
 {
     // Compile and setup the shader
-    glm::mat4 projection = glm::ortho(0.0f, width, 0.0f, height));
+    glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(width), 0.0f, static_cast<float>(height));
     _shader.Use();
     glUniformMatrix4fv(glGetUniformLocation(_shader.getProgram(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
