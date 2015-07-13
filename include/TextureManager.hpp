@@ -24,6 +24,7 @@ public:
 
 	GLuint		getTileset() const;
 	glm::vec2	getTexturePos(int ID) const;
+	glm::vec2	getTexturePos(int block, int face) const;
 	glm::vec2	getTileSize() const;
 
 	//TODO Register and Get texture per blockID:FACE pair.
