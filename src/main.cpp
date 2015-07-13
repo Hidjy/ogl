@@ -123,18 +123,12 @@ int main()
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        blockShader.Use();
-
         glm::mat4 view = camera.GetViewMatrix();
-        blockShader.Use();
-        glUniformMatrix4fv(glGetUniformLocation(blockShader.getProgram(), "view"), 1, GL_FALSE, glm::value_ptr(view));
 
-        world.renderNear(camera._pos, blockShader);
-
-        /*glActiveTexture(GL_TEXTURE3);
+        glActiveTexture(GL_TEXTURE3);
         glBindTexture(GL_TEXTURE_CUBE_MAP, camera._cubemapTexture);
 
-        glDepthFunc(GL_LEQUAL);  // Change depth function so depth test passes when values are equal to depth buffer's content
+        glDepthMask(GL_FALSE);;  // Change depth function so depth test passes when values are equal to depth buffer's content
         skyboxShader.Use();
         view = glm::mat4(glm::mat3(camera.GetViewMatrix()));	// Remove any translation component of the view matrix
         glUniformMatrix4fv(glGetUniformLocation(skyboxShader.getProgram(), "view"), 1, GL_FALSE, glm::value_ptr(view));
@@ -146,8 +140,16 @@ int main()
         glBindTexture(GL_TEXTURE_CUBE_MAP, camera._cubemapTexture);
         glDrawArrays(GL_TRIANGLES, 0, 36);
         glBindVertexArray(0);
-        glDepthFunc(GL_LESS); // Set depth function back to default
-*/
+        glDepthMask(GL_TRUE); // Set depth function back to default
+
+        blockShader.Use();
+
+        blockShader.Use();
+        glUniformMatrix4fv(glGetUniformLocation(blockShader.getProgram(), "view"), 1, GL_FALSE, glm::value_ptr(view));
+
+        world.renderNear(camera._pos, blockShader);
+
+
         // Swap the buffers
         glfwSwapBuffers(window);
     }
