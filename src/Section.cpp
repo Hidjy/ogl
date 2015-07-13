@@ -70,8 +70,8 @@ static void multipush(std::vector<GLfloat> &target, std::vector<GLfloat> src)
 	}
 }
 
-void Section::addQuad(TextureManager &tm, int ID, glm::vec3 pos, int face) {
-	glm::vec2 tpos = tm.getTexturePos(ID);
+void Section::addQuad(TextureManager &tm, int block, glm::vec3 pos, int face) {
+	glm::vec2 tpos = tm.getTexturePos(block, face);
 	glm::vec2 tsize = tm.getTileSize();
 	if (face == 0) {
 		multipush(_vertices, {0.5f + pos.x, -0.5f + pos.y, -0.5f + pos.z,  tpos.x + tsize.x, tpos.y});
@@ -110,13 +110,13 @@ void Section::addQuad(TextureManager &tm, int ID, glm::vec3 pos, int face) {
 		multipush(_vertices, {-0.5f + pos.x, -0.5f + pos.y,  -0.5f + pos.z, tpos.x + tsize.x, tpos.y});
 	}
 	else if (face == 4) {
-		multipush(_vertices, {-0.5f + pos.x, -0.5f + pos.y, 0.5f + pos.z,  tpos.x + tsize.x, tpos.y});
-		multipush(_vertices, {0.5f + pos.x, -0.5f + pos.y,  0.5f + pos.z,  tpos.x, tpos.y});
-		multipush(_vertices, {0.5f + pos.x, 0.5f + pos.y,  0.5f + pos.z,  tpos.x, tpos.y + tsize.y});
+		multipush(_vertices, {-0.5f + pos.x, -0.5f + pos.y, 0.5f + pos.z,  tpos.x, tpos.y});
+		multipush(_vertices, {0.5f + pos.x, -0.5f + pos.y,  0.5f + pos.z,  tpos.x + tsize.x, tpos.y});
+		multipush(_vertices, {0.5f + pos.x, 0.5f + pos.y,  0.5f + pos.z,  tpos.x + tsize.x, tpos.y + tsize.y});
 
-		multipush(_vertices, {0.5f + pos.x,  0.5f + pos.y, 0.5f + pos.z,  tpos.x, tpos.y + tsize.y});
-		multipush(_vertices, {-0.5f + pos.x, 0.5f + pos.y, 0.5f + pos.z,  tpos.x + tsize.x, tpos.y + tsize.y});
-		multipush(_vertices, {-0.5f + pos.x, -0.5f + pos.y, 0.5f + pos.z, tpos.x + tsize.x, tpos.y});
+		multipush(_vertices, {0.5f + pos.x,  0.5f + pos.y, 0.5f + pos.z,  tpos.x + tsize.x, tpos.y + tsize.y});
+		multipush(_vertices, {-0.5f + pos.x, 0.5f + pos.y, 0.5f + pos.z,  tpos.x, tpos.y + tsize.y});
+		multipush(_vertices, {-0.5f + pos.x, -0.5f + pos.y, 0.5f + pos.z, tpos.x, tpos.y});
 	}
 	else if (face == 5) {
 		multipush(_vertices, {-0.5f + pos.x, -0.5f + pos.y, -0.5f + pos.z,  tpos.x + tsize.x, tpos.y});

@@ -88,7 +88,7 @@ int main()
                     for (size_t y1 = 0; y1 < CHUNK_SIZE; y1++) {
                         for (size_t z1 = 0; z1 < CHUNK_SIZE; z1++) {
                             if (y1 < (perlinNoise[x1 + ((x+10) * CHUNK_SIZE)][z1 + ((z+10) * CHUNK_SIZE)] * static_cast<float>(CHUNK_SIZE)))
-                                cubes[x1][y1][z1] = 1 + rand() % 5;
+                                cubes[x1][y1][z1] = 1 + y1 % 8;
                             else
                                 cubes[x1][y1][z1] = 0;
                         }

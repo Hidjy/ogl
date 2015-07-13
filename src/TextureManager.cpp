@@ -30,9 +30,26 @@ GLuint		TextureManager::getTileset() const {
 
 glm::vec2	TextureManager::getTexturePos(int ID) const {
 	int x = ID % _xTextures;
-	int y = _yTextures - (ID / _yTextures + 1);
+	int y = _yTextures - (ID / _xTextures + 1);
 
 	return glm::vec2(x * _tileSize.x, y * _tileSize.y);
+}
+
+glm::vec2	TextureManager::getTexturePos(int block, int face) const {
+	// E, W, T, B, S, N
+	int blocks[] = {
+	0, 0, 0, 0, 0, 0,
+	1, 1, 1, 1, 1, 1,
+	3, 3, 30, 2, 3, 3,
+	4, 4, 4, 4, 4, 4,
+	5, 5, 4, 4, 5, 5,
+	6, 6, 7, 7, 6, 6,
+	8, 8, 8, 8, 8, 8,
+	12, 12, 13, 13, 12, 12,
+	21, 21, 22, 23, 21, 21
+	};
+
+	return getTexturePos(blocks[block * 6 + face]);
 }
 
 glm::vec2	TextureManager::getTileSize() const {
