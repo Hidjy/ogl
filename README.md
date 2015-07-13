@@ -5,7 +5,7 @@
 ### Features
 * World System
 * Skybox
-* Texture Manager (Atlas)
+* Atlas Generator
 * Simplified Context/Engine (Engine init, close...)
 
 ### Performance Improvement
