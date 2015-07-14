@@ -3,7 +3,7 @@ language: cpp
 
 compiler:
   - g++
-  - clang++
+  #- clang++
 
 before_install:
   # g++4.8.1
