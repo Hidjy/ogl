@@ -5,6 +5,7 @@ compiler:
   - g++
 
 before_install:
+  - wget https://s3.amazonaws.com/github-cloud/releases/9524997/092e7aee-ce82-11e4-9463-69c7c9f3f463.zip
   - sudo apt-get update -qq
   - sudo apt-get install -y libsoil-dev
 script:
