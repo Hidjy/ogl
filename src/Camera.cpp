@@ -162,7 +162,6 @@ void	Camera::ProcessMouseMovement(GLfloat xoffset, GLfloat yoffset)
 
 glm::mat4	Camera::GetViewMatrix()
 {
-	glm::mat4 view;
-	view = glm::lookAt(_pos, _pos + _front, _up);
+	glm::mat4 view = glm::lookAt(_pos, _pos + _front, _up);
 	return view;
 }

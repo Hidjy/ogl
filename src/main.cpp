@@ -88,7 +88,7 @@ int main()
                     for (size_t y1 = 0; y1 < CHUNK_SIZE; y1++) {
                         for (size_t z1 = 0; z1 < CHUNK_SIZE; z1++) {
                             if (y1 < (perlinNoise[x1 + ((x+10) * CHUNK_SIZE)][z1 + ((z+10) * CHUNK_SIZE)] * static_cast<float>(CHUNK_SIZE)))
-                                cubes[x1][y1][z1] = 1 + y1 % 8;
+                                cubes[x1][y1][z1] = 1 + y1;
                             else
                                 cubes[x1][y1][z1] = 0;
                         }
@@ -120,12 +120,12 @@ int main()
         glfwPollEvents();
         inputManager.update(deltaTime);
 
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        //glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         glm::mat4 view = camera.GetViewMatrix();
 
-        glActiveTexture(GL_TEXTURE3);
+        //glActiveTexture(GL_TEXTURE3);
         glBindTexture(GL_TEXTURE_CUBE_MAP, camera._cubemapTexture);
 
         glDepthMask(GL_FALSE);;  // Change depth function so depth test passes when values are equal to depth buffer's content
@@ -135,18 +135,16 @@ int main()
         glUniformMatrix4fv(glGetUniformLocation(skyboxShader.getProgram(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
         // skybox cube
         glBindVertexArray(camera._skyboxVAO);
-        glActiveTexture(GL_TEXTURE0);
+        //glActiveTexture(GL_TEXTURE0);
         glUniform1i(glGetUniformLocation(skyboxShader.getProgram(), "skybox"), 0);
         glBindTexture(GL_TEXTURE_CUBE_MAP, camera._cubemapTexture);
         glDrawArrays(GL_TRIANGLES, 0, 36);
-        glBindVertexArray(0);
+        //glBindVertexArray(0);
         glDepthMask(GL_TRUE); // Set depth function back to default
 
         blockShader.Use();
         glUniformMatrix4fv(glGetUniformLocation(blockShader.getProgram(), "view"), 1, GL_FALSE, glm::value_ptr(view));
-
         world.renderNear(camera._pos, blockShader);
-
 
         // Swap the buffers
         glfwSwapBuffers(window);
