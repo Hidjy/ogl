@@ -7,19 +7,15 @@ compiler:
 before_install:
   - sudo apt-get update -qq
 
-  - wget http://www.cmake.org/files/v3.0/cmake-3.0.0-1-src.tar.bz2
-  - tar xjf cmake-3.0.0-1-src.tar.bz2
-  - cd cmake-3.0.0
-  - ./configure
-  - make
-  - sudo make install
+  - http://www.cmake.org/files/v3.3/cmake-3.3.0-rc4-Linux-x86_64.sh
+  - sh cmake-3.3.0-rc4-Linux-x86_64.sh
   - sudo apt-get install -y libsoil-dev
   - sudo apt-get install -y xorg-dev
   - sudo apt-get install -y libglu1-mesa-dev
   - git clone https://github.com/glfw/glfw.git
   - cd glfw
   - git checkout 3.1.1
-  - cmake . && make && make install
+  - cmake-3.3.0-rc4-Linux-x86_64/bin/cmake . && make && sudo make install
   - cd ..
 script:
   - make
