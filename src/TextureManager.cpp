@@ -69,6 +69,7 @@ glm::vec2	TextureManager::getTexturePos(int block, int face) const {
 	28, 28, 28, 28, 28, 28,
 	30, 30, 30, 30, 30, 30,
 	31, 31, 31, 31, 31, 31,
+	1, 2, 3, 4, 5, 6,
 	1, 2, 3, 4, 5, 6
 	};
 

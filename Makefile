@@ -30,7 +30,7 @@ OBJ				= $(patsubst %.cpp,$(STATIC_DIR)/%.o,$(SRC))
 OBJ_DEBUG		= $(patsubst %.cpp,$(DEBUG_DIR)/%.o,$(SRC))
 DEPS			= $(patsubst %.cpp,$(DEP_DIR)/%.d,$(SRC))
 
-CXX			= g++
+CXX			= clang++
 OPTI		= -O3
 CXXFLAGS	= -std=c++11 -Wall #-Wextra -Wno-unused-result
 DEPENDS 	= -MT $@ -MD -MP -MF $(subst .o,.d,$@)
