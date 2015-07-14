@@ -1,7 +1,8 @@
 language: cpp
 
 compiler:
-	- g++
+  - clang
+  - gcc
 
 install:
 	- sudo apt-get install libacl1-dev
