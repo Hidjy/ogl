@@ -6,8 +6,13 @@ compiler:
 
 before_install:
   - sudo apt-get update -qq
-  - wget http://www.cmake.org/files/v3.0/cmake-3.0.0-Linux-i386.sh
-  - sudo sh cmake-3.0.0-Linux-i386.sh --skip-license --prefix=/usr
+
+  - wget http://www.cmake.org/files/v3.0/cmake-3.0.0-1-src.tar.bz2
+  - tar xjf cmake-3.0.0-1-src.tar.bz2
+  - cd cmake-3.0.0
+  - ./configure
+  - make
+  - sudo make install
   - sudo apt-get install -y libsoil-dev
   - sudo apt-get install -y xorg-dev
   - sudo apt-get install -y libglu1-mesa-dev
