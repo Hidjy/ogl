@@ -87,15 +87,15 @@ int main()
                 for (size_t x1 = 0; x1 < CHUNK_SIZE; x1++) {
                     for (size_t y1 = 0; y1 < CHUNK_SIZE; y1++) {
                         for (size_t z1 = 0; z1 < CHUNK_SIZE; z1++) {
-                            if ((y1 + (y * CHUNK_SIZE)) < (perlinNoise[x1 + ((x ) * CHUNK_SIZE)][z1 + ((z ) * CHUNK_SIZE)] * static_cast<float>(CHUNK_SIZE * 2.0f))) {
-                                if ((y1 + (y * CHUNK_SIZE)) == 15)
+                            if ((y1 + (y * CHUNK_SIZE)) < (perlinNoise[x1 + ((x ) * CHUNK_SIZE)][z1 + ((z ) * CHUNK_SIZE)] * static_cast<float>(CHUNK_SIZE * 3.0f) - 32)) {
+                                if ((y1 + (y * CHUNK_SIZE)) == 9)
                                     cubes[x1][y1][z1] = 10;
-                                else if (((y1 + (y * CHUNK_SIZE)) + 5 < (perlinNoise[x1 + ((x ) * CHUNK_SIZE)][z1 + ((z ) * CHUNK_SIZE)] * static_cast<float>(CHUNK_SIZE * 2.0f))))
+                                else if (((y1 + (y * CHUNK_SIZE)) + 5 < (perlinNoise[x1 + ((x ) * CHUNK_SIZE)][z1 + ((z ) * CHUNK_SIZE)] * static_cast<float>(CHUNK_SIZE * 3.0f) - 32)))
                                     cubes[x1][y1][z1] = 1;
                                 else
                                     cubes[x1][y1][z1] = 3;
                             }
-                            else if ((y1 + (y * CHUNK_SIZE)) < 16)
+                            else if ((y1 + (y * CHUNK_SIZE)) < 10)
                                 cubes[x1][y1][z1] = 25;
                             else
                                 cubes[x1][y1][z1] = 0;
