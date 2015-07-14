@@ -1,11 +1,9 @@
 language: cpp
 
 compiler:
-  - clang
-  - gcc
+  - g++
 
 install:
   - apt-get install libsoil-dev
-  - apt-get build-dep glfw3
 script:
   - make re
