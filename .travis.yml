@@ -5,6 +5,7 @@ compiler:
   - gcc
 
 install:
-  - make re
+  - apt-get install libsoil-dev
+  - apt-get build-dep glfw3
 script:
   - make re
