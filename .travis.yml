@@ -5,6 +5,6 @@ compiler:
   - gcc
 
 install:
-
+  - make re
 script:
-	- make
+  - make re
