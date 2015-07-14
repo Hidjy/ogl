@@ -4,6 +4,7 @@ compiler:
   - g++
 
 install:
+  - sudo apt-get update -qq
   - sudo apt-get install libsoil-dev
   - sudo apt-get build-dep glfw3
 script:

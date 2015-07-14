@@ -30,9 +30,9 @@ OBJ				= $(patsubst %.cpp,$(STATIC_DIR)/%.o,$(SRC))
 OBJ_DEBUG		= $(patsubst %.cpp,$(DEBUG_DIR)/%.o,$(SRC))
 DEPS			= $(patsubst %.cpp,$(DEP_DIR)/%.d,$(SRC))
 
-CC			= clang++
+CXX			= g++
 OPTI		= -O3
-FLAGS		= -std=c++11 -Wall #-Wextra -Wno-unused-result
+CXXFLAGS	= -std=c++11 -Wall #-Wextra -Wno-unused-result
 DEPENDS 	= -MT $@ -MD -MP -MF $(subst .o,.d,$@)
 
 
@@ -45,18 +45,18 @@ all: $(NAME)
 	@echo "Compilation terminee. (realease)"
 
 $(NAME): $(OBJ)
-	$(CC) $(OPTI) $(FLAGS) -I $(HEAD_DIR) $(INCLUDES) -o $@ $(OBJ) $(LIBS)
+	$(CXX) $(OPTI) $(CXXFLAGS) -I $(HEAD_DIR) $(INCLUDES) -o $@ $(OBJ) $(LIBS)
 
 debug: $(OBJ_DEBUG)
-	$(CC) $(OPTI) $(FLAGS) -I $(HEAD_DIR) $(INCLUDES) -o $(NAME_DEBUG) $(OBJ_DEBUG) $(LIBS) -g
+	$(CXX) $(OPTI) $(CXXFLAGS) -I $(HEAD_DIR) $(INCLUDES) -o $(NAME_DEBUG) $(OBJ_DEBUG) $(LIBS) -g
 
 -include $(OBJ:.o=.d)
 
 $(STATIC_DIR)/%.o: $(SRC_DIR)/%.cpp
-	$(CC) $(OPTI) $(FLAGS) $(DEPENDS) -I $(HEAD_DIR) $(INCLUDES) -o $@ -c $<
+	$(CXX) $(OPTI) $(CXXFLAGS) $(DEPENDS) -I $(HEAD_DIR) $(INCLUDES) -o $@ -c $<
 
 $(DEBUG_DIR)/%.o: $(SRC_DIR)/%.cpp
-	$(CC) $(OPTI) $(FLAGS) $(DEPENDS) -I $(HEAD_DIR) $(INCLUDES) -o $@ -c $< -g
+	$(CXX) $(OPTI) $(CXXFLAGS) $(DEPENDS) -I $(HEAD_DIR) $(INCLUDES) -o $@ -c $< -g
 
 clean:
 	rm -f $(OBJ) $(OBJ_DEBUG) $(DEPS)
