@@ -87,8 +87,16 @@ int main()
                 for (size_t x1 = 0; x1 < CHUNK_SIZE; x1++) {
                     for (size_t y1 = 0; y1 < CHUNK_SIZE; y1++) {
                         for (size_t z1 = 0; z1 < CHUNK_SIZE; z1++) {
-                            if (y1 < (perlinNoise[x1 + ((x+10) * CHUNK_SIZE)][z1 + ((z+10) * CHUNK_SIZE)] * static_cast<float>(CHUNK_SIZE)))
-                                cubes[x1][y1][z1] = 1 + y1;
+                            if (y1 < (perlinNoise[x1 + ((x+10) * CHUNK_SIZE)][z1 + ((z+10) * CHUNK_SIZE)] * static_cast<float>(CHUNK_SIZE))) {
+                                if (y1 == 15)
+                                    cubes[x1][y1][z1] = 10;
+                                else if ((y1 + 5 < (perlinNoise[x1 + ((x+10) * CHUNK_SIZE)][z1 + ((z+10) * CHUNK_SIZE)] * static_cast<float>(CHUNK_SIZE))))
+                                    cubes[x1][y1][z1] = 1;
+                                else
+                                    cubes[x1][y1][z1] = 3;
+                            }
+                            else if (y1 < 16)
+                                cubes[x1][y1][z1] = 25;
                             else
                                 cubes[x1][y1][z1] = 0;
                         }
