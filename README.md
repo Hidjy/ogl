@@ -8,7 +8,6 @@
 
 ### Features
 * World System
-* Skybox
 * Atlas Generator
 * Simplified Context/Engine (Engine init, close...)
 
