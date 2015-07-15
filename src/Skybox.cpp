@@ -30,7 +30,7 @@ GLuint Skybox::loadCubemap(std::vector<const GLchar*> faces)
     return textureID;
 }
 
-Skybox::Skybox() {
+Skybox::Skybox() : _skyboxShader("shaders/skybox.vert", "shaders/skybox.frag"){
     GLfloat skyboxVertices[] = {
     -1.0f,  1.0f, -1.0f,
     -1.0f, -1.0f, -1.0f,
@@ -94,3 +94,23 @@ Skybox::Skybox() {
 }
 
 Skybox::~Skybox() {}
+
+void Skybox::render(Camera &camera, glm::mat4 &projection) {
+    //glActiveTexture(GL_TEXTURE3);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, _cubemapTexture);
+
+    glDepthMask(GL_FALSE);;  // Change depth function so depth test passes when values are equal to depth buffer's content
+    _skyboxShader.Use();
+    glm::mat4 view2 = glm::mat4(glm::mat3(camera.GetViewMatrix()));	// Remove-any translation component of the view matrix
+    glUniformMatrix4fv(glGetUniformLocation(_skyboxShader.getProgram(), "view"), 1, GL_FALSE, glm::value_ptr(view2));
+    glUniformMatrix4fv(glGetUniformLocation(_skyboxShader.getProgram(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+    // skybox cube
+    glBindVertexArray(_skyboxVAO);
+    //glActiveTexture(GL_TEXTURE0);
+    glUniform1i(glGetUniformLocation(_skyboxShader.getProgram(), "skybox"), 0);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, _cubemapTexture);
+    glDrawArrays(GL_TRIANGLES, 0, 36);
+    //glBindVertexArray(0);
+    glDepthMask(GL_TRUE); // Set depth function back to default
+
+}

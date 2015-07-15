@@ -7,6 +7,9 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "Shader.hpp"
+#include "Camera.hpp"
+
 #include <vector>
 
 class Skybox {
@@ -17,9 +20,11 @@ public:
 	GLuint	_cubemapTexture;
 	GLuint	_skyboxVAO;
 	GLuint	_skyboxVBO;
+	Shader _skyboxShader;
 
 public:
 	Skybox();
 	~Skybox();
+	void	render(Camera &camera, glm::mat4 &projection);
 
 };
