@@ -13,7 +13,7 @@
 #include <vector>
 
 class Skybox {
-public:
+private:
 	GLuint loadCubemap(std::vector<const GLchar*> faces);
 
 	std::vector<const GLchar*> _faces;
