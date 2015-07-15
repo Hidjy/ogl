@@ -18,6 +18,7 @@
 #include "World.hpp"
 #include "WorldGenerator.hpp"
 #include "Chunk.hpp"
+#include "Skybox.hpp"
 
 GLfloat deltaTime = 0.0f;
 GLfloat lastFrame = 0.0f;
@@ -68,6 +69,7 @@ int main()
     Camera camera(glm::vec3(10.0f, 10.0f, 10.0f));
 
     InputManager inputManager(window, &camera);
+    Skybox skybox;
 
     float noise[GENERATOR_SIZE][GENERATOR_SIZE];
     GenerateWhiteNoise(&noise);
@@ -134,7 +136,7 @@ int main()
         glm::mat4 view = camera.GetViewMatrix();
 
         //glActiveTexture(GL_TEXTURE3);
-        glBindTexture(GL_TEXTURE_CUBE_MAP, camera._cubemapTexture);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, skybox._cubemapTexture);
 
         glDepthMask(GL_FALSE);;  // Change depth function so depth test passes when values are equal to depth buffer's content
         skyboxShader.Use();
@@ -142,10 +144,10 @@ int main()
         glUniformMatrix4fv(glGetUniformLocation(skyboxShader.getProgram(), "view"), 1, GL_FALSE, glm::value_ptr(view2));
         glUniformMatrix4fv(glGetUniformLocation(skyboxShader.getProgram(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
         // skybox cube
-        glBindVertexArray(camera._skyboxVAO);
+        glBindVertexArray(skybox._skyboxVAO);
         //glActiveTexture(GL_TEXTURE0);
         glUniform1i(glGetUniformLocation(skyboxShader.getProgram(), "skybox"), 0);
-        glBindTexture(GL_TEXTURE_CUBE_MAP, camera._cubemapTexture);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, skybox._cubemapTexture);
         glDrawArrays(GL_TRIANGLES, 0, 36);
         //glBindVertexArray(0);
         glDepthMask(GL_TRUE); // Set depth function back to default

@@ -35,13 +35,6 @@ public:
 
 	glm::mat4	GetViewMatrix();
 
-	GLuint loadCubemap(std::vector<const GLchar*> faces);
-
-	std::vector<const GLchar*> _faces;
-	GLuint	_cubemapTexture;
-	GLuint	_skyboxVAO;
-	GLuint	_skyboxVBO;
-
 };
 
 #endif
