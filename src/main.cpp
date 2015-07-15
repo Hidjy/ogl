@@ -45,7 +45,7 @@ int main()
 
     GLuint screenWidth = mode->width, screenHeight = mode->height;
 
-    srand(time(NULL));
+    srand(1234);
 
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
