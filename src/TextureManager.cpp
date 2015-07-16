@@ -63,6 +63,17 @@ GLuint		TextureManager::getTexturePos(int block, int face) const {
 	return blocks[block * 6 + face];
 }
 
+static void getSubData(unsigned char *src, unsigned char *dst, int xbegin, int ybegin, int xsize, int ysize, int srcWidth)
+{
+	for (int x = 0; x < xsize; x++) {
+		for (int y = 0; y < ysize; y++) {
+			dst[(x + y * xsize) * 3] = src[((x + xbegin) + (y + ybegin) * xsize) * 3 ];
+			dst[(x + y * xsize) * 3 + 1] = src[((x + xbegin) + (y + ybegin) * xsize) * 3 + 1];
+			dst[(x + y * xsize) * 3 + 2] = src[((x + xbegin) + (y + ybegin) * xsize) * 3 + 2];
+		}
+	}
+}
+
 GLuint	TextureManager::loadTexture(std::string path) {
 	int width, height;
 	unsigned char* image = SOIL_load_image(path.data(), &width, &height, 0, SOIL_LOAD_RGB);
@@ -79,7 +90,9 @@ GLuint	TextureManager::loadTexture(std::string path) {
 	//Upload pixel data.
 	for (int x = 0; x < _xTextures; x++) {
 		for (int y = 0; y < _yTextures; y++) {
-			glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, x * textureWidth, y * textureHeight, x + y * x, textureWidth, textureHeight, 1, GL_RGBA, GL_UNSIGNED_BYTE, image);
+			unsigned char sub[textureWidth * textureHeight * 3];
+			getSubData(image, sub, x * textureWidth, y * textureHeight, textureWidth, textureHeight, width);
+			glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, x + y * _xTextures, textureWidth, textureHeight, 1, GL_RGB, GL_UNSIGNED_BYTE, sub);
 		}
 	}
 
