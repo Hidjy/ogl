@@ -15,6 +15,7 @@ class TextureManager {
 private:
 	GLuint		_tileset;
 	glm::vec2	_tileSize;
+	glm::vec2	_pixelSize;
 	int			_xTextures;
 	int			_yTextures;
 
@@ -28,6 +29,7 @@ public:
 	glm::vec2	getTileSize() const;
 
 	//TODO Register and Get texture per blockID:FACE pair.
+	//TODO Texture Atlas Generator
 
-	static GLuint	loadTexture(std::string path);
+	static GLuint	loadTexture(std::string path, int *width, int *height);
 };

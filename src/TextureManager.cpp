@@ -11,13 +11,10 @@
 
 #include <string>
 
-GLuint		_tileset;
-glm::vec2	_tileSize;
-int			_xTextures;
-int			_yTextures;
-
 TextureManager::TextureManager(std::string path, int xTextures, int yTextures) : _xTextures(xTextures), _yTextures(yTextures) {
-	_tileset = loadTexture(path);
+	int width, height;
+	_tileset = loadTexture(path, &width, &height);
+	_pixelSize = glm::vec2(1.0f / static_cast<GLfloat>(width), 1.0f / static_cast<GLfloat>(height));
 	_tileSize = glm::vec2(1.0f / static_cast<GLfloat>(xTextures), 1.0f / static_cast<GLfloat>(yTextures));
 }
 
@@ -32,7 +29,7 @@ glm::vec2	TextureManager::getTexturePos(int ID) const {
 	int x = ID % _xTextures;
 	int y = _yTextures - (ID / _xTextures + 1);
 
-	return glm::vec2(x * _tileSize.x, y * _tileSize.y);
+	return glm::vec2(x * _tileSize.x + _pixelSize.x * 0.5f, y * _tileSize.y  + _pixelSize.y * 0.5f);
 }
 
 glm::vec2	TextureManager::getTexturePos(int block, int face) const {
@@ -77,10 +74,10 @@ glm::vec2	TextureManager::getTexturePos(int block, int face) const {
 }
 
 glm::vec2	TextureManager::getTileSize() const {
-	return _tileSize;
+	return glm::vec2(_tileSize.x - _pixelSize.x, _tileSize.y - _pixelSize.y);
 }
 
-GLuint	TextureManager::loadTexture(std::string path) {
+GLuint	TextureManager::loadTexture(std::string path, int *width, int *height) {
 	GLuint texture;
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture);
@@ -91,9 +88,8 @@ GLuint	TextureManager::loadTexture(std::string path) {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-	int width, height;
-	unsigned char* image = SOIL_load_image(path.data(), &width, &height, 0, SOIL_LOAD_RGB);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+	unsigned char* image = SOIL_load_image(path.data(), width, height, 0, SOIL_LOAD_RGB);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, *width, *height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
 	glGenerateMipmap(GL_TEXTURE_2D);
 	SOIL_free_image_data(image);
 	glBindTexture(GL_TEXTURE_2D, 0);
