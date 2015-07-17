@@ -27,7 +27,6 @@ install:
   - sudo apt-get install -y xorg-dev
   - sudo apt-get install -y libglu1-mesa-dev
   - sudo apt-get install -y libglew-dev
-  - sudo apt-get install -y libgmlib-dev
   - sudo apt-get install -y libglm-dev
 
   - git clone https://github.com/glfw/glfw.git
