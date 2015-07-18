@@ -12,10 +12,7 @@
 #include <string>
 
 TextureManager::TextureManager(std::string path, int xTextures, int yTextures) : _xTextures(xTextures), _yTextures(yTextures) {
-	int width, height;
-	_tileset = loadTexture(path, &width, &height);
-	_pixelSize = glm::vec2(1.0f / static_cast<GLfloat>(width), 1.0f / static_cast<GLfloat>(height));
-	_tileSize = glm::vec2(1.0f / static_cast<GLfloat>(xTextures), 1.0f / static_cast<GLfloat>(yTextures));
+	_tileset = loadTexture(path);
 }
 
 TextureManager::~TextureManager() {
@@ -25,14 +22,7 @@ GLuint		TextureManager::getTileset() const {
 	return _tileset;
 }
 
-glm::vec2	TextureManager::getTexturePos(int ID) const {
-	int x = ID % _xTextures;
-	int y = _yTextures - (ID / _xTextures + 1);
-
-	return glm::vec2(x * _tileSize.x + _pixelSize.x * 0.5f, y * _tileSize.y  + _pixelSize.y * 0.5f);
-}
-
-glm::vec2	TextureManager::getTexturePos(int block, int face) const {
+GLuint		TextureManager::getTexturePos(int block, int face) const {
 	// E, W, T, B, S, N
 	int blocks[] = {
 	0, 0, 0, 0, 0, 0,
@@ -70,29 +60,53 @@ glm::vec2	TextureManager::getTexturePos(int block, int face) const {
 	1, 2, 3, 4, 5, 6
 	};
 
-	return getTexturePos(blocks[block * 6 + face]);
+	return blocks[block * 6 + face];
 }
 
-glm::vec2	TextureManager::getTileSize() const {
-	return glm::vec2(_tileSize.x - _pixelSize.x, _tileSize.y - _pixelSize.y);
+static void getSubData(unsigned char *src, unsigned char *dst, int xbegin, int ybegin, int xsize, int ysize, int srcWidth)
+{
+	for (int x = 0; x < xsize; x++) {
+		for (int y = 0; y < ysize; y++) {
+			dst[(x + y * xsize) * 3] = src[((x + xbegin) + (y + ybegin) * xsize) * 3 ];
+			dst[(x + y * xsize) * 3 + 1] = src[((x + xbegin) + (y + ybegin) * xsize) * 3 + 1];
+			dst[(x + y * xsize) * 3 + 2] = src[((x + xbegin) + (y + ybegin) * xsize) * 3 + 2];
+		}
+	}
 }
 
-GLuint	TextureManager::loadTexture(std::string path, int *width, int *height) {
+GLuint	TextureManager::loadTexture(std::string path) {
+	int width, height;
+	unsigned char* image = SOIL_load_image(path.data(), &width, &height, 0, SOIL_LOAD_RGB);
+
+	int textureWidth = width / _xTextures;
+	int textureHeight = height / _yTextures;
+	int nbTextures = _xTextures * _yTextures;
+
 	GLuint texture;
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
+	glGenTextures(1,&texture);
+	glBindTexture(GL_TEXTURE_2D_ARRAY,texture);
+	//Allocate the storage.
+	glTexStorage3D(GL_TEXTURE_2D_ARRAY, 1, GL_RGB8, textureWidth, textureHeight, nbTextures);
+	//Upload pixel data.
+	for (int x = 0; x < _xTextures; x++) {
+		for (int y = 0; y < _yTextures; y++) {
+			unsigned char sub[textureWidth * textureHeight * 3];
+			getSubData(image, sub, x * textureWidth, y * textureHeight, textureWidth, textureHeight, width);
+			glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, x + y * _xTextures, textureWidth, textureHeight, 1, GL_RGB, GL_UNSIGNED_BYTE, sub);
+		}
+	}
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	//Always set reasonable texture parameters
+	glTexParameteri(GL_TEXTURE_2D_ARRAY,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D_ARRAY,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D_ARRAY,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D_ARRAY,GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	//glGenerateMipmap(GL_TEXTURE_2D);
 
-	unsigned char* image = SOIL_load_image(path.data(), width, height, 0, SOIL_LOAD_RGB);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, *width, *height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
-	glGenerateMipmap(GL_TEXTURE_2D);
-	SOIL_free_image_data(image);
 	glBindTexture(GL_TEXTURE_2D, 0);
+
+	SOIL_free_image_data(image);
 
 	return texture;
 }
