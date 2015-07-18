@@ -25,11 +25,19 @@ void	World::add(Chunk const &chunk) {
 	_chunks.push_back(chunk);
 }
 
+
+Chunk	&World::getChuck(int x, int y, int z) {
+	for (std::vector<Chunk>::iterator it = _chunks.begin() ; it != _chunks.end(); ++it) {
+		if (it->getPos().x == x && it->getPos().y == y && it->getPos().z == z)
+			return (*it);
+	}
+}
+
 void	World::renderNear(glm::vec3 pos, Shader shader) {
 	for (size_t i = 0; i < _chunks.size(); i++) {
 		glm::vec3 temp = glm::vec3(pos.x / CHUNK_SIZE + 0.5f, pos.y / CHUNK_SIZE + 0.5f, pos.z / CHUNK_SIZE + 0.5f) - _chunkPos[i];
 		GLfloat distSqr = glm::dot(temp, temp);
-		if (sqrt(distSqr) < 10)
+		if (sqrt(distSqr) < 5)
 			_chunks[i].render(shader);
 	}
 }

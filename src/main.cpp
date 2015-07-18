@@ -10,7 +10,6 @@
 #include <SOIL/SOIL.h>
 
 #include <vector>
-
 #include "Camera.hpp"
 #include "TextManager.hpp"
 #include "TextureManager.hpp"
@@ -40,10 +39,10 @@ int main()
     glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
     glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
 
-    GLFWwindow* window = glfwCreateWindow(mode->width, mode->height, "OGL", nullptr, nullptr);
+    GLFWwindow* window = glfwCreateWindow(500,500, "OGL", nullptr, nullptr);
     glfwMakeContextCurrent(window);
 
-    GLuint screenWidth = mode->width, screenHeight = mode->height;
+    GLuint screenWidth = 500, screenHeight = 500;
 
     srand(1234);
 
@@ -139,6 +138,17 @@ int main()
         blockShader.Use();
         glUniformMatrix4fv(glGetUniformLocation(blockShader.getProgram(), "view"), 1, GL_FALSE, glm::value_ptr(view));
         world.renderNear(camera._pos, blockShader);
+        //printf("camera.pos = {%f, %f}\n", camera._pos.x / CHUNK_SIZE, camera._pos.z / CHUNK_SIZE, camera._pos.x % CHUNK_SIZE, camera._pos.z % CHUNK_SIZE);
+        printf("block = %d\n", world.getChuck(
+            camera._pos.x / CHUNK_SIZE,
+            camera._pos.y / CHUNK_SIZE,
+            camera._pos.z / CHUNK_SIZE
+            ).getBlock(
+                static_cast<int>(camera._pos.x) % CHUNK_SIZE,
+                static_cast<int>(camera._pos.y) % CHUNK_SIZE,
+                static_cast<int>(camera._pos.z) % CHUNK_SIZE
+            )
+        );
 
         // Swap the buffers
         glfwSwapBuffers(window);

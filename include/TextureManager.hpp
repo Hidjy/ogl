@@ -1,5 +1,6 @@
 #pragma once
 
+ #define GLM_FORCE_RADIANS
 #define GLEW_STATIC
 #include <GL/glew.h>
 
