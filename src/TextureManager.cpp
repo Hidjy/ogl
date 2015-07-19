@@ -67,20 +67,59 @@ static void getSubData(unsigned char *src, unsigned char *dst, int xbegin, int y
 {
 	for (int x = 0; x < xsize; x++) {
 		for (int y = 0; y < ysize; y++) {
-			dst[(x + y * xsize) * 3] = src[((x + xbegin) + (y + ybegin) * xsize) * 3 ];
-			dst[(x + y * xsize) * 3 + 1] = src[((x + xbegin) + (y + ybegin) * xsize) * 3 + 1];
-			dst[(x + y * xsize) * 3 + 2] = src[((x + xbegin) + (y + ybegin) * xsize) * 3 + 2];
+			dst[(x + y * xsize) * 3] = src[((x + xbegin) + (y + ybegin) * srcWidth) * 3 ];
+			dst[(x + y * xsize) * 3 + 1] = src[((x + xbegin) + (y + ybegin) * srcWidth) * 3 + 1];
+			dst[(x + y * xsize) * 3 + 2] = src[((x + xbegin) + (y + ybegin) * srcWidth) * 3 + 2];
 		}
 	}
 }
 
 GLuint	TextureManager::loadTexture(std::string path) {
 	int width, height;
-	unsigned char* image = SOIL_load_image(path.data(), &width, &height, 0, SOIL_LOAD_RGB);
+	// unsigned char* image = SOIL_load_image(path.data(), &width, &height, 0, SOIL_LOAD_RGB);
 
-	int textureWidth = width / _xTextures;
-	int textureHeight = height / _yTextures;
-	int nbTextures = _xTextures * _yTextures;
+	// int textureWidth = width / _xTextures;
+	// int textureHeight = height / _yTextures;
+	// int nbTextures = _xTextures * _yTextures;
+
+	std::string paths[] = {
+	"ressources/0.png",
+	"ressources/1.png",
+	"ressources/2.png",
+	"ressources/3.png",
+	"ressources/4.png",
+	"ressources/5.png",
+	"ressources/6.png",
+	"ressources/7.png",
+	"ressources/8.png",
+	"ressources/9.png",
+	"ressources/10.png",
+	"ressources/11.png",
+	"ressources/12.png",
+	"ressources/13.png",
+	"ressources/14.png",
+	"ressources/15.png",
+	"ressources/16.png",
+	"ressources/17.png",
+	"ressources/18.png",
+	"ressources/19.png",
+	"ressources/20.png",
+	"ressources/21.png",
+	"ressources/22.png",
+	"ressources/23.png",
+	"ressources/24.png",
+	"ressources/25.png",
+	"ressources/26.png",
+	"ressources/27.png",
+	"ressources/28.png",
+	"ressources/29.png",
+	"ressources/30.png",
+	"ressources/31.png",
+	};
+
+	int textureWidth = 16;
+	int textureHeight = 16;
+	int nbTextures = 32;
 
 	GLuint texture;
 	glGenTextures(1,&texture);
@@ -88,12 +127,18 @@ GLuint	TextureManager::loadTexture(std::string path) {
 	//Allocate the storage.
 	glTexStorage3D(GL_TEXTURE_2D_ARRAY, 1, GL_RGB8, textureWidth, textureHeight, nbTextures);
 	//Upload pixel data.
-	for (int x = 0; x < _xTextures; x++) {
-		for (int y = 0; y < _yTextures; y++) {
-			unsigned char sub[textureWidth * textureHeight * 3];
-			getSubData(image, sub, x * textureWidth, y * textureHeight, textureWidth, textureHeight, width);
-			glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, x + y * _xTextures, textureWidth, textureHeight, 1, GL_RGB, GL_UNSIGNED_BYTE, sub);
-		}
+	// for (int x = 0; x < _xTextures; x++) {
+	// 	for (int y = 0; y < _yTextures; y++) {
+	// 		unsigned char sub[textureWidth * textureHeight * 3];
+	// 		getSubData(image, sub, x * textureWidth, y * textureHeight, textureWidth, textureHeight, width);
+	// 		glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, x + y * _xTextures, textureWidth, textureHeight, 1, GL_RGB, GL_UNSIGNED_BYTE, sub);
+	// 	}
+	// }
+
+	for (int i = 0; i < nbTextures; i++) {
+			unsigned char* image = SOIL_load_image(paths[i].data(), &width, &height, 0, SOIL_LOAD_RGB);
+			glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, i, textureWidth, textureHeight, 1, GL_RGB, GL_UNSIGNED_BYTE, image);
+			SOIL_free_image_data(image);
 	}
 
 	//Always set reasonable texture parameters
@@ -104,9 +149,9 @@ GLuint	TextureManager::loadTexture(std::string path) {
 
 	//glGenerateMipmap(GL_TEXTURE_2D);
 
-	glBindTexture(GL_TEXTURE_2D, 0);
+	//glBindTexture(GL_TEXTURE_2D, 0);
 
-	SOIL_free_image_data(image);
+	// SOIL_free_image_data(image);
 
 	return texture;
 }
