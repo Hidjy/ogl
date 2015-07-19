@@ -7,5 +7,5 @@ uniform sampler2DArray ourTexture;
 
 void main()
 {
-    color = texture(ourTexture, vec3(TexCoord.x, TexCoord.y, max(0, min(31, floor(TexCoord.z + 0.5))) ));
+    color = texture(ourTexture, TexCoord);
 }
