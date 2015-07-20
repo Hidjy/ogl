@@ -115,7 +115,7 @@ int main()
 
     blockShader.Use();
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, textureManager.getTileset());
+    glBindTexture(GL_TEXTURE_2D_ARRAY, textureManager.getTileset());
     glUniform1i(glGetUniformLocation(blockShader.getProgram(), "ourTexture"), 0);
 
     // Game loop
