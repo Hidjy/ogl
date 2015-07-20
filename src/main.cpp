@@ -10,6 +10,7 @@
 #include <SOIL/SOIL.h>
 
 #include <vector>
+#include "Player.hpp"
 #include "Camera.hpp"
 #include "TextManager.hpp"
 #include "TextureManager.hpp"
@@ -64,9 +65,6 @@ int main()
 
     TextureManager textureManager("ressources/tileset.png", 8, 4);
 
-    Camera camera(glm::vec3(10.0f, 20.0f, 10.0f));
-
-    InputManager inputManager(window, &camera);
     Skybox skybox;
 
     float noise[GENERATOR_SIZE][GENERATOR_SIZE];
@@ -78,6 +76,8 @@ int main()
 
 
     World world;
+    Player player(glm::vec3(10.0f, 20.0f, 10.0f), &world);
+    InputManager inputManager(window, &player);
 
     for (int x = 0; x < 10; x++) {
         for (int y = 0; y < 2; y++) {
@@ -131,15 +131,15 @@ int main()
         //glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        glm::mat4 view = camera.GetViewMatrix();
+        glm::mat4 view = player.GetViewMatrix();
 
-        skybox.render(camera, projection);
+        skybox.render(player._camera, projection);
 
         blockShader.Use();
         glUniformMatrix4fv(glGetUniformLocation(blockShader.getProgram(), "view"), 1, GL_FALSE, glm::value_ptr(view));
-        world.renderNear(camera._pos, blockShader);
+        world.renderNear(player._pos, blockShader);
         //printf("camera.pos = {%f, %f}\n", camera._pos.x / CHUNK_SIZE, camera._pos.z / CHUNK_SIZE, camera._pos.x % CHUNK_SIZE, camera._pos.z % CHUNK_SIZE);
-        printf("block = %d\n", world.getWorldBlockId(camera._pos.x, camera._pos.y, camera._pos.z));
+        printf("block = %d\n", world.getWorldBlockId(player._pos.x, player._pos.y, player._pos.z));
         // printf("block = %d\n", world.getChuck(
         //     camera._pos.x / CHUNK_SIZE,
         //     camera._pos.y / CHUNK_SIZE,

@@ -46,6 +46,10 @@ GLint	World::getWorldBlockId(float x, float y, float z) {
 	}
 }
 
+GLint	World::getWorldBlockId(glm::vec3 const &v) {
+	return getWorldBlockId(v.x, v.y, v.z);
+}
+
 void	World::add(Chunk const &chunk) {
 	_chunkPos.push_back(chunk.getPos());
 	_chunks.push_back(chunk);

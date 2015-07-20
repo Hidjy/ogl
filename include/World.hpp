@@ -27,5 +27,5 @@ public:
 	void	add(Chunk const &chunk);
 	void	renderNear(glm::vec3 pos, Shader shader);
 	GLint	getWorldBlockId(float x, float y, float z);
-
+	GLint	getWorldBlockId(glm::vec3 const &v);
 };

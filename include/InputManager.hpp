@@ -4,7 +4,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-#include "Camera.hpp"
+#include "Player.hpp"
 
 class InputManager {
 private:
@@ -12,10 +12,10 @@ private:
 	static GLfloat		_lastX, _lastY;
 	static bool			_firstMouse;
 
-	static Camera		*_camera;
+	static Player		*_player;
 
 public:
-	InputManager(GLFWwindow* window, Camera *camera);
+	InputManager(GLFWwindow* window, Player *player);
 	~InputManager();
 
 	static void	key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);

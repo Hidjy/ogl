@@ -14,7 +14,8 @@ SRC		=	main.cpp	\
 			TextureManager.cpp	\
 			InputManager.cpp	\
 			Skybox.cpp			\
-			EWorld.cpp
+			EWorld.cpp			\
+			Player.cpp
 
 HEAD_DIR	= include
 SRC_DIR		= src

@@ -1,16 +1,17 @@
 #include "InputManager.hpp"
 #include "Camera.hpp"
+#include "Player.hpp"
 
 bool		InputManager::_keys[1024];
 GLfloat		InputManager::_lastX;
 GLfloat		InputManager::_lastY;
 bool		InputManager::_firstMouse = true;
-Camera		*InputManager::_camera;
+Player		*InputManager::_player;
 
-InputManager::InputManager(GLFWwindow* window, Camera *camera) {
+InputManager::InputManager(GLFWwindow* window, Player *player) {
 	glfwSetKeyCallback(window, key_callback);
 	glfwSetCursorPosCallback(window, mouse_callback);
-	_camera = camera;
+	_player = player;
 }
 
 InputManager::~InputManager() {
@@ -45,24 +46,24 @@ void	InputManager::mouse_callback(GLFWwindow* window, double xpos, double ypos) 
 	_lastX = xpos;
 	_lastY = ypos;
 
-	_camera->ProcessMouseMovement(xoffset, yoffset);
+	_player->ProcessMouseMovement(xoffset, yoffset);
 }
 
 void	InputManager::update(GLfloat deltaTime) {
 	if(_keys[GLFW_KEY_W])
-		_camera->ProcessKeyboard(FORWARD, deltaTime);
+		_player->ProcessKeyboard(FORWARD, deltaTime);
 	if(_keys[GLFW_KEY_S])
-		_camera->ProcessKeyboard(BACKWARD, deltaTime);
+		_player->ProcessKeyboard(BACKWARD, deltaTime);
 	if(_keys[GLFW_KEY_A])
-		_camera->ProcessKeyboard(LEFT, deltaTime);
+		_player->ProcessKeyboard(LEFT, deltaTime);
 	if(_keys[GLFW_KEY_D])
-		_camera->ProcessKeyboard(RIGHT, deltaTime);
+		_player->ProcessKeyboard(RIGHT, deltaTime);
 	if(_keys[GLFW_KEY_SPACE])
-		_camera->ProcessKeyboard(UP, deltaTime);
+		_player->ProcessKeyboard(UP, deltaTime);
 	if(_keys[GLFW_KEY_LEFT_SHIFT])
-		_camera->ProcessKeyboard(DOWN, deltaTime);
+		_player->ProcessKeyboard(DOWN, deltaTime);
 	if (_keys[GLFW_KEY_Q])
-		_camera->ProcessKeyboard(BOOST_PLUS, deltaTime);
+		_player->ProcessKeyboard(BOOST_PLUS, deltaTime);
 	if (_keys[GLFW_KEY_E])
-		_camera->ProcessKeyboard(BOOST_MOINS, deltaTime);
+		_player->ProcessKeyboard(BOOST_MOINS, deltaTime);
 }
