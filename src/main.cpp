@@ -64,7 +64,7 @@ int main()
 
     TextureManager textureManager("ressources/tileset.png", 8, 4);
 
-    Camera camera(glm::vec3(10.0f, 10.0f, 10.0f));
+    Camera camera(glm::vec3(10.0f, 20.0f, 10.0f));
 
     InputManager inputManager(window, &camera);
     Skybox skybox;
