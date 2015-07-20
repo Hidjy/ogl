@@ -48,6 +48,7 @@ void	Player::ProcessKeyboard(enum Direction dir, GLfloat dt)
 			_speed--;
 			break;
 	}
+	_pos = _camera._pos;
 }
 
 

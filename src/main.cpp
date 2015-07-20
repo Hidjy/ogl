@@ -139,7 +139,7 @@ int main()
         glUniformMatrix4fv(glGetUniformLocation(blockShader.getProgram(), "view"), 1, GL_FALSE, glm::value_ptr(view));
         world.renderNear(player._pos, blockShader);
         //printf("camera.pos = {%f, %f}\n", camera._pos.x / CHUNK_SIZE, camera._pos.z / CHUNK_SIZE, camera._pos.x % CHUNK_SIZE, camera._pos.z % CHUNK_SIZE);
-        printf("block = %d\n", world.getWorldBlockId(player._pos.x, player._pos.y, player._pos.z));
+        //printf("block = %d\n", world.getWorldBlockId(player._pos.x, player._pos.y, player._pos.z));
         // printf("block = %d\n", world.getChuck(
         //     camera._pos.x / CHUNK_SIZE,
         //     camera._pos.y / CHUNK_SIZE,
