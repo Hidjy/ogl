@@ -15,10 +15,11 @@
 * Color Modification on Textures (Shader)
 * Model Loading
 * Model Animation
+* Worlds : Save and Load
 * Lua ?
 
 ### Performance Improvement
-* /!\ Leaks
+* /!\ Memory Leaks
 * OpenGL Leaks ?
 * Frustum Culling (Chunk)
 * Mesh Simplification
