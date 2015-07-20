@@ -26,4 +26,6 @@ public:
 	Chunk	&getChuck(int x, int y, int z);
 	void	add(Chunk const &chunk);
 	void	renderNear(glm::vec3 pos, Shader shader);
+	GLint	getWorldBlockId(float x, float y, float z);
+
 };

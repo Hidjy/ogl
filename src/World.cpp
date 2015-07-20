@@ -11,13 +11,39 @@
 
 #include "Chunk.hpp"
 #include "Shader.hpp"
-
+#include <iostream>
 #include <vector>
+
+#include "EWorld.hpp"
+# include <cmath>
 
 World::World() {
 }
 
 World::~World() {
+}
+
+GLint	World::getWorldBlockId(float x, float y, float z) {
+	try {
+		printf("chunk = {%d, %d, %d} = {%f, %f, %f}\n",
+			static_cast<int>(floor(x / CHUNK_SIZE)),
+			static_cast<int>(floor(y / CHUNK_SIZE)),
+			static_cast<int>(floor(z / CHUNK_SIZE)),
+			x,
+			y,
+			z
+		);
+		Chunk chunk = getChuck( floor(x / CHUNK_SIZE), floor(y / CHUNK_SIZE), floor(z / CHUNK_SIZE));
+		return chunk.getBlock(
+			static_cast<int>(x) % CHUNK_SIZE,
+			static_cast<int>(y) % CHUNK_SIZE,
+			static_cast<int>(z) % CHUNK_SIZE
+		);
+	}
+	catch (std::exception e) {
+		std::cout << "Pas de chunck" << std::endl;
+		return -1;
+	}
 }
 
 void	World::add(Chunk const &chunk) {
@@ -31,6 +57,7 @@ Chunk	&World::getChuck(int x, int y, int z) {
 		if (it->getPos().x == x && it->getPos().y == y && it->getPos().z == z)
 			return (*it);
 	}
+	throw EWorld("Pas de chunck");
 }
 
 void	World::renderNear(glm::vec3 pos, Shader shader) {

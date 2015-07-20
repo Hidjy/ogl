@@ -139,16 +139,17 @@ int main()
         glUniformMatrix4fv(glGetUniformLocation(blockShader.getProgram(), "view"), 1, GL_FALSE, glm::value_ptr(view));
         world.renderNear(camera._pos, blockShader);
         //printf("camera.pos = {%f, %f}\n", camera._pos.x / CHUNK_SIZE, camera._pos.z / CHUNK_SIZE, camera._pos.x % CHUNK_SIZE, camera._pos.z % CHUNK_SIZE);
-        printf("block = %d\n", world.getChuck(
-            camera._pos.x / CHUNK_SIZE,
-            camera._pos.y / CHUNK_SIZE,
-            camera._pos.z / CHUNK_SIZE
-            ).getBlock(
-                static_cast<int>(camera._pos.x) % CHUNK_SIZE,
-                static_cast<int>(camera._pos.y) % CHUNK_SIZE,
-                static_cast<int>(camera._pos.z) % CHUNK_SIZE
-            )
-        );
+        printf("block = %d\n", world.getWorldBlockId(camera._pos.x, camera._pos.y, camera._pos.z));
+        // printf("block = %d\n", world.getChuck(
+        //     camera._pos.x / CHUNK_SIZE,
+        //     camera._pos.y / CHUNK_SIZE,
+        //     camera._pos.z / CHUNK_SIZE
+        //     ).getBlock(
+        //         static_cast<int>(camera._pos.x) % CHUNK_SIZE,
+        //         static_cast<int>(camera._pos.y) % CHUNK_SIZE,
+        //         static_cast<int>(camera._pos.z) % CHUNK_SIZE
+        //     )
+        // );
 
         // Swap the buffers
         glfwSwapBuffers(window);

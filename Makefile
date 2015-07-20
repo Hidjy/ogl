@@ -13,7 +13,8 @@ SRC		=	main.cpp	\
 			WorldGenerator.cpp	\
 			TextureManager.cpp	\
 			InputManager.cpp	\
-			Skybox.cpp
+			Skybox.cpp			\
+			EWorld.cpp
 
 HEAD_DIR	= include
 SRC_DIR		= src
