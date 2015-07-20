@@ -1,4 +1,6 @@
 #include "Cube.hpp"
+#define GLM_FORCE_RADIANS
+
 #include <glm/glm.hpp>
 
 Cube::Cube() {
