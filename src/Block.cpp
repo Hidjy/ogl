@@ -24,6 +24,10 @@ void 		Block::setActive(bool active) {
 	_active = active;
 }
 
+void 		Block::setType(int type) {
+	_type = type;
+}
+
 Block		&Block::operator=(Block const &src) {
 	_active = src.isActive();
 	_type = src.getType();

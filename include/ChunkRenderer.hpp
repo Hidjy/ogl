@@ -11,13 +11,11 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "Shader.hpp"
-#include "TextureManager.hpp"
+#include "Block.hpp"
 
 #include <vector>
 
-#define SECTION_SIZE 32 // !!! Must be a divisor of CHUNK_SIZE (see Chunk.hpp)
-
-class Section {
+class ChunkRenderer {
 private:
 	GLuint	_VAO;
 	GLuint	_VBO;
@@ -27,9 +25,9 @@ private:
 	glm::vec3	_pos;
 
 public:
-	Section();
-	Section(Section const &src);
-	~Section();
+	ChunkRenderer();
+	ChunkRenderer(ChunkRenderer const &src);
+	~ChunkRenderer();
 
 	GLuint					getVAO() const;
 	GLuint					getVBO() const;
@@ -38,9 +36,9 @@ public:
 
 	void		setPos(glm::vec3 pos);
 
-	void		addQuad(TextureManager &tm, int ID, glm::vec3 pos, int face);
-	void		generateMesh(TextureManager &tm, int cubes[SECTION_SIZE][SECTION_SIZE][SECTION_SIZE]);
+	void		addQuad(Block block, glm::vec3 pos, int face);
+	void		generateMesh(Block ***blocks);
 	void		render(Shader shader);
 
-	Section		&operator=(Section const &src);
+	ChunkRenderer		&operator=(ChunkRenderer const &src);
 };

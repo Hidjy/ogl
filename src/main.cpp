@@ -20,6 +20,7 @@
 #include "WorldGenerator.hpp"
 #include "Chunk.hpp"
 #include "Skybox.hpp"
+#include "Block.hpp"
 
 GLfloat deltaTime = 0.0f;
 GLfloat lastFrame = 0.0f;
@@ -77,9 +78,6 @@ int main()
 
     WorldGenerator::GenerateMap(&perlinNoise, 7);
 
-    int cubes[CHUNK_SIZE][CHUNK_SIZE][CHUNK_SIZE];
-
-
     World world;
     Player player(glm::vec3(10.0f, 20.0f, 10.0f), &world);
     InputManager inputManager(window, &player);
@@ -87,28 +85,34 @@ int main()
     for (int x = 0; x < 10; x++) {
         for (int y = 0; y < 2; y++) {
             for (int z = 0; z < 10; z++) {
-                Chunk chunk(glm::vec3(x, y, z), textureManager);
+                Chunk *chunk = new Chunk();
+                chunk->setPos(glm::vec3(x, y, z));
 
-                for (size_t x1 = 0; x1 < CHUNK_SIZE; x1++) {
-                    for (size_t y1 = 0; y1 < CHUNK_SIZE; y1++) {
-                        for (size_t z1 = 0; z1 < CHUNK_SIZE; z1++) {
-                            if ((y1 + (y * CHUNK_SIZE)) < ((*perlinNoise)[x1 + ((x ) * CHUNK_SIZE)][z1 + ((z ) * CHUNK_SIZE)] * static_cast<float>(CHUNK_SIZE * 3.0f) - 32)) {
-                                if ((y1 + (y * CHUNK_SIZE)) == 9)
-                                    cubes[x1][y1][z1] = 10;
-                                else if (((y1 + (y * CHUNK_SIZE)) + 5 < ((*perlinNoise)[x1 + ((x ) * CHUNK_SIZE)][z1 + ((z ) * CHUNK_SIZE)] * static_cast<float>(CHUNK_SIZE * 3.0f) - 32)))
-                                    cubes[x1][y1][z1] = 1;
+                for (size_t x1 = 0; x1 < Chunk::SIZE; x1++) {
+                    for (size_t y1 = 0; y1 < Chunk::SIZE; y1++) {
+                        for (size_t z1 = 0; z1 < Chunk::SIZE; z1++) {
+                            int block_type;
+                            if ((y1 + (y * Chunk::SIZE)) < ((*perlinNoise)[x1 + ((x ) * Chunk::SIZE)][z1 + ((z ) * Chunk::SIZE)] * static_cast<float>(Chunk::SIZE * 3.0f) - 32)) {
+                                if ((y1 + (y * Chunk::SIZE)) == 9)
+                                    block_type = 10;
+                                else if (((y1 + (y * Chunk::SIZE)) + 5 < ((*perlinNoise)[x1 + ((x ) * Chunk::SIZE)][z1 + ((z ) * Chunk::SIZE)] * static_cast<float>(Chunk::SIZE * 3.0f) - 32)))
+                                    block_type = 1;
                                 else
-                                    cubes[x1][y1][z1] = 3;
+                                    block_type = 3;
                             }
-                            else if ((y1 + (y * CHUNK_SIZE)) < 10)
-                                cubes[x1][y1][z1] = 25;
+                            else if ((y1 + (y * Chunk::SIZE)) < 10)
+                                block_type = 25;
                             else
-                                cubes[x1][y1][z1] = 0;
+                                block_type = 0;
+
+                            if (block_type != 0) {
+                                chunk->getBlock(x1, y1, z1).setActive(true);
+                                chunk->getBlock(x1, y1, z1).setType(block_type);
+                            }
                         }
                     }
                 }
-
-                chunk.fill(&cubes);
+                chunk->generateMesh();
                 world.add(chunk);
             }
         }
@@ -143,16 +147,16 @@ int main()
         blockShader.Use();
         glUniformMatrix4fv(glGetUniformLocation(blockShader.getProgram(), "view"), 1, GL_FALSE, glm::value_ptr(view));
         world.renderNear(player._pos, blockShader);
-        //printf("camera.pos = {%f, %f}\n", camera._pos.x / CHUNK_SIZE, camera._pos.z / CHUNK_SIZE, camera._pos.x % CHUNK_SIZE, camera._pos.z % CHUNK_SIZE);
+        //printf("camera.pos = {%f, %f}\n", camera._pos.x / Chunk::SIZE, camera._pos.z / Chunk::SIZE, camera._pos.x % Chunk::SIZE, camera._pos.z % Chunk::SIZE);
         //printf("block = %d\n", world.getWorldBlockId(player._pos.x, player._pos.y, player._pos.z));
         // printf("block = %d\n", world.getChuck(
-        //     camera._pos.x / CHUNK_SIZE,
-        //     camera._pos.y / CHUNK_SIZE,
-        //     camera._pos.z / CHUNK_SIZE
+        //     camera._pos.x / Chunk::SIZE,
+        //     camera._pos.y / Chunk::SIZE,
+        //     camera._pos.z / Chunk::SIZE
         //     ).getBlock(
-        //         static_cast<int>(camera._pos.x) % CHUNK_SIZE,
-        //         static_cast<int>(camera._pos.y) % CHUNK_SIZE,
-        //         static_cast<int>(camera._pos.z) % CHUNK_SIZE
+        //         static_cast<int>(camera._pos.x) % Chunk::SIZE,
+        //         static_cast<int>(camera._pos.y) % Chunk::SIZE,
+        //         static_cast<int>(camera._pos.z) % Chunk::SIZE
         //     )
         // );
 

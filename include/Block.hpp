@@ -17,6 +17,7 @@ public:
 	int			getType() const;
 
 	void 		setActive(bool active);
+	void 		setType(int type);
 
 	Block	&operator=(Block const &src);
 };

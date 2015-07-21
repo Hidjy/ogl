@@ -7,11 +7,11 @@ SRC		=	main.cpp	\
 			TextManager.cpp	\
 			MessageManager.cpp	\
 			WorldGenerator.cpp	\
+			ChunkRenderer.cpp	\
 			Shader.cpp	\
 			Camera.cpp	\
 			Skybox.cpp	\
 			Block.cpp	\
-			Section.cpp	\
 			Chunk.cpp	\
 			World.cpp	\
 			EWorld.cpp	\

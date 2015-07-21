@@ -17,15 +17,14 @@
 
 class World {
 public:
-	std::vector<glm::vec3>	_chunkPos;
-	std::vector<Chunk>		_chunks;
+	std::vector<Chunk *>	_chunks;
 
 public:
 	World();
 	~World();
 
 	Chunk	&getChuck(int x, int y, int z);
-	void	add(Chunk const &chunk);
+	void	add(Chunk *chunk);
 	void	renderNear(glm::vec3 pos, Shader shader);
 	GLint	getWorldBlockId(float x, float y, float z);
 	GLint	getWorldBlockId(glm::vec3 const &v);

@@ -10,42 +10,41 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "Section.hpp"
+#include "ChunkRenderer.hpp"
 #include "Shader.hpp"
-#include "TextureManager.hpp"
+#include "Block.hpp"
 
 #include <vector>
 
-#define CHUNK_SIZE 32 // !!! Must be a Multiple of SECTION_SIZE (see Section.hpp)
-#define CHUNK_RATIO (CHUNK_SIZE / SECTION_SIZE)
+//TODO: Block counter (for accurate _empty)
 
 class Chunk {
 private:
 	glm::vec3		_pos;
-	TextureManager	&_textureManager;
-	Section			*_sections;
 	bool			_empty;
-	bool			_sectionsLoaded;
-	bool			_sectionsGenerated;
-
-	int				_blocks[CHUNK_SIZE][CHUNK_SIZE][CHUNK_SIZE];
-
-	// Chunk();
+	Block			***_blocks;
+	ChunkRenderer	_chunkRenderer;
 
 public:
-	Chunk(glm::vec3 pos, TextureManager &t);
-	// Chunk(Chunk const &src);
+	static const int SIZE = 32;
+
+public:
+	Chunk();
+	Chunk(Chunk const &src);
 	~Chunk();
 
 	bool		empty() const;
 	glm::vec3	getPos() const;
-	int			getBlock(int x, int y, int z) const;
+	Block		getBlock(int x, int y, int z) const;
 
-	void	fill(int (*data)[CHUNK_SIZE][CHUNK_SIZE][CHUNK_SIZE]);
-	void	loadSections();
-	void	getSectionData(int (*data)[SECTION_SIZE][SECTION_SIZE][SECTION_SIZE], int x, int y, int z);
-	void	generateSections();
+	Block		&getBlock(int x, int y, int z);
+
+	void		setPos(glm::vec3 pos);
+	void		setBlock(int x, int y, int z, Block block);
+
+	void	generateMesh();
+	void	update(float dt);
 	void	render(Shader shader);
 
-	// Chunk	&operator=(Chunk const &src);
+	Chunk	&operator=(Chunk const &src);
 };

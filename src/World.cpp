@@ -19,6 +19,8 @@
 #include "EWorld.hpp"
 # include <cmath>
 
+#include "Block.hpp"
+
 World::World() {
 }
 
@@ -28,22 +30,22 @@ World::~World() {
 GLint	World::getWorldBlockId(float x, float y, float z) {
 	try {
 		printf("chunk = {%d, %d, %d} = {%f, %f, %f}\n",
-			static_cast<int>(floor(x / CHUNK_SIZE)),
-			static_cast<int>(floor(y / CHUNK_SIZE)),
-			static_cast<int>(floor(z / CHUNK_SIZE)),
+			static_cast<int>(floor(x / Chunk::SIZE)),
+			static_cast<int>(floor(y / Chunk::SIZE)),
+			static_cast<int>(floor(z / Chunk::SIZE)),
 			x,
 			y,
 			z
 		);
-		Chunk chunk = getChuck( floor(x / CHUNK_SIZE), floor(y / CHUNK_SIZE), floor(z / CHUNK_SIZE));
+		Chunk chunk = getChuck( floor(x / Chunk::SIZE), floor(y / Chunk::SIZE), floor(z / Chunk::SIZE));
 		return chunk.getBlock(
-			static_cast<int>(x) % CHUNK_SIZE,
-			static_cast<int>(y) % CHUNK_SIZE,
-			static_cast<int>(z) % CHUNK_SIZE
-		);
+			static_cast<int>(x) % Chunk::SIZE,
+			static_cast<int>(y) % Chunk::SIZE,
+			static_cast<int>(z) % Chunk::SIZE
+		).getType();
 	}
 	catch (std::exception e) {
-		std::cout << "Pas de chunck" << std::endl;
+		std::cout << "Pas de chunk" << std::endl;
 		return -1;
 	}
 }
@@ -52,25 +54,25 @@ GLint	World::getWorldBlockId(glm::vec3 const &v) {
 	return getWorldBlockId(v.x, v.y, v.z);
 }
 
-void	World::add(Chunk const &chunk) {
-	_chunkPos.push_back(chunk.getPos());
+void	World::add(Chunk *chunk) {
 	_chunks.push_back(chunk);
 }
 
 
 Chunk	&World::getChuck(int x, int y, int z) {
-	for (std::vector<Chunk>::iterator it = _chunks.begin() ; it != _chunks.end(); ++it) {
-		if (it->getPos().x == x && it->getPos().y == y && it->getPos().z == z)
-			return (*it);
+	for (std::vector<Chunk *>::iterator it = _chunks.begin() ; it != _chunks.end(); ++it) {
+		glm::vec3 pos = (**it).getPos();
+		if (pos.x == x && pos.y == y && pos.z == z)
+			return (**it);
 	}
-	throw EWorld("Pas de chunck");
+	throw EWorld("No Chunk.");
 }
 
 void	World::renderNear(glm::vec3 pos, Shader shader) {
 	for (size_t i = 0; i < _chunks.size(); i++) {
-		glm::vec3 temp = glm::vec3(pos.x / CHUNK_SIZE + 0.5f, pos.y / CHUNK_SIZE + 0.5f, pos.z / CHUNK_SIZE + 0.5f) - _chunkPos[i];
+		glm::vec3 temp = glm::vec3(pos.x / Chunk::SIZE + 0.5f, pos.y / Chunk::SIZE + 0.5f, pos.z / Chunk::SIZE + 0.5f) - _chunks[i]->getPos();
 		GLfloat distSqr = glm::dot(temp, temp);
 		if (sqrt(distSqr) < 5)
-			_chunks[i].render(shader);
+			_chunks[i]->render(shader);
 	}
 }
