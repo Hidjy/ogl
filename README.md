@@ -7,14 +7,22 @@
 ## To Do List
 
 ### Features
-* World System
-* Atlas Generator
 * Simplified Context/Engine (Engine init, close...)
+* Chunk Management
+* Block Class
+* Better BlockType Management
+* Use libnoise : http://libnoise.sourceforge.net/tutorials/tutorial3.html
+* Color Modification on Textures (Shader)
+* Model Loading
+* Model Animation
+* Lua ?
 
 ### Performance Improvement
+* /!\ Leaks
+* OpenGL Leaks ?
 * Frustum Culling (Chunk)
 * Mesh Simplification
-* Messaging System for Mesh Calculation
+* Messaging System for Mesh (Re)Calculation
 
 ## Ressources
 * http://0fps.net/category/programming/voxels/
