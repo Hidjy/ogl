@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-void GenerateWhiteNoise(float (*noise)[GENERATOR_SIZE][GENERATOR_SIZE])
+void WorldGenerator::GenerateWhiteNoise(float (*noise)[GENERATOR_SIZE][GENERATOR_SIZE])
 {
     for (int i = 0; i < GENERATOR_SIZE; i++)
     {
@@ -13,7 +13,7 @@ void GenerateWhiteNoise(float (*noise)[GENERATOR_SIZE][GENERATOR_SIZE])
     }
 }
 
-void GenerateSmoothNoise(float (*smoothNoise)[GENERATOR_SIZE][GENERATOR_SIZE], float (*baseNoise)[GENERATOR_SIZE][GENERATOR_SIZE], int octave)
+void WorldGenerator::GenerateSmoothNoise(float (*smoothNoise)[GENERATOR_SIZE][GENERATOR_SIZE], float (*baseNoise)[GENERATOR_SIZE][GENERATOR_SIZE], int octave)
 {
    int width = GENERATOR_SIZE;
    int height = GENERATOR_SIZE;
@@ -55,12 +55,12 @@ void GenerateSmoothNoise(float (*smoothNoise)[GENERATOR_SIZE][GENERATOR_SIZE], f
    }
 }
 
-float Interpolate(float x0, float x1, float alpha)
+float WorldGenerator::Interpolate(float x0, float x1, float alpha)
 {
    return x0 * (1 - alpha) + alpha * x1;
 }
 
-void GeneratePerlinNoise(float (*perlinNoise)[GENERATOR_SIZE][GENERATOR_SIZE], float (*baseNoise)[GENERATOR_SIZE][GENERATOR_SIZE], int octaveCount)
+void WorldGenerator::GeneratePerlinNoise(float (*perlinNoise)[GENERATOR_SIZE][GENERATOR_SIZE], float (*baseNoise)[GENERATOR_SIZE][GENERATOR_SIZE], int octaveCount)
 {
    int width = GENERATOR_SIZE;
    int height = GENERATOR_SIZE;
@@ -71,7 +71,7 @@ void GeneratePerlinNoise(float (*perlinNoise)[GENERATOR_SIZE][GENERATOR_SIZE], f
    //generate smooth noise
    for (int i = 0; i < octaveCount; i++)
    {
-       GenerateSmoothNoise(&smoothNoise[i], baseNoise, i);
+       WorldGenerator::GenerateSmoothNoise(&smoothNoise[i], baseNoise, i);
    }
 
     float amplitude = 1.0f;
@@ -100,4 +100,12 @@ void GeneratePerlinNoise(float (*perlinNoise)[GENERATOR_SIZE][GENERATOR_SIZE], f
          (*perlinNoise)[i][j] /= totalAmplitude;
       }
    }
+}
+
+
+void  WorldGenerator::GenerateMap(float(**ret)[GENERATOR_SIZE][GENERATOR_SIZE], int octaveCount) {
+    float (*noise)[GENERATOR_SIZE][GENERATOR_SIZE] = (float (*)[GENERATOR_SIZE][GENERATOR_SIZE]) new float[GENERATOR_SIZE][GENERATOR_SIZE];
+    WorldGenerator::GenerateWhiteNoise(noise);
+    *ret = (float (*)[GENERATOR_SIZE][GENERATOR_SIZE]) new float[GENERATOR_SIZE][GENERATOR_SIZE];
+    WorldGenerator::GeneratePerlinNoise(*ret, noise, 7);
 }
