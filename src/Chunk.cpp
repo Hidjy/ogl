@@ -12,7 +12,6 @@
 #include "Chunk.hpp"
 #include "Section.hpp"
 #include "Shader.hpp"
-#include "Cube.hpp"
 
 #include <vector>
 

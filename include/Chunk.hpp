@@ -12,7 +12,6 @@
 
 #include "Section.hpp"
 #include "Shader.hpp"
-#include "Cube.hpp"
 #include "TextureManager.hpp"
 
 #include <vector>
