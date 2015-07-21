@@ -10,6 +10,7 @@
 * Renderer Class (Shaders, Window...)
 * Simplified Context/Engine (Engine init, close...)
 * Chunk Management
+* Section -> ChunkRenderer (1 per Chunk)
 * Block Class
 * Better BlockType Management
 * Use libnoise : http://libnoise.sourceforge.net/tutorials/tutorial3.html
