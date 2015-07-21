@@ -7,6 +7,7 @@
 ## To Do List
 
 ### Features
+* Renderer Class (Shaders, Window...)
 * Simplified Context/Engine (Engine init, close...)
 * Chunk Management
 * Block Class
