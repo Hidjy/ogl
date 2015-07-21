@@ -68,10 +68,14 @@ int main()
 
     Skybox skybox;
 
-    float noise[GENERATOR_SIZE][GENERATOR_SIZE];
-    GenerateWhiteNoise(&noise);
-    float perlinNoise[GENERATOR_SIZE][GENERATOR_SIZE];
-    GeneratePerlinNoise(&perlinNoise, &noise, 7);
+    // float noise[GENERATOR_SIZE][GENERATOR_SIZE];
+    // GenerateWhiteNoise(&noise);
+    // float perlinNoise[GENERATOR_SIZE][GENERATOR_SIZE];
+    // GeneratePerlinNoise(&perlinNoise, &noise, 7);
+
+    float (*perlinNoise)[GENERATOR_SIZE][GENERATOR_SIZE] = NULL;
+
+    WorldGenerator::GenerateMap(&perlinNoise, 7);
 
     int cubes[CHUNK_SIZE][CHUNK_SIZE][CHUNK_SIZE];
 
@@ -88,10 +92,10 @@ int main()
                 for (size_t x1 = 0; x1 < CHUNK_SIZE; x1++) {
                     for (size_t y1 = 0; y1 < CHUNK_SIZE; y1++) {
                         for (size_t z1 = 0; z1 < CHUNK_SIZE; z1++) {
-                            if ((y1 + (y * CHUNK_SIZE)) < (perlinNoise[x1 + ((x ) * CHUNK_SIZE)][z1 + ((z ) * CHUNK_SIZE)] * static_cast<float>(CHUNK_SIZE * 3.0f) - 32)) {
+                            if ((y1 + (y * CHUNK_SIZE)) < ((*perlinNoise)[x1 + ((x ) * CHUNK_SIZE)][z1 + ((z ) * CHUNK_SIZE)] * static_cast<float>(CHUNK_SIZE * 3.0f) - 32)) {
                                 if ((y1 + (y * CHUNK_SIZE)) == 9)
                                     cubes[x1][y1][z1] = 10;
-                                else if (((y1 + (y * CHUNK_SIZE)) + 5 < (perlinNoise[x1 + ((x ) * CHUNK_SIZE)][z1 + ((z ) * CHUNK_SIZE)] * static_cast<float>(CHUNK_SIZE * 3.0f) - 32)))
+                                else if (((y1 + (y * CHUNK_SIZE)) + 5 < ((*perlinNoise)[x1 + ((x ) * CHUNK_SIZE)][z1 + ((z ) * CHUNK_SIZE)] * static_cast<float>(CHUNK_SIZE * 3.0f) - 32)))
                                     cubes[x1][y1][z1] = 1;
                                 else
                                     cubes[x1][y1][z1] = 3;
