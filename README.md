@@ -12,6 +12,7 @@
 * Better BlockType Management
 * Use libnoise : http://libnoise.sourceforge.net/tutorials/tutorial3.html
 * Color Modification on Textures (Shader)
+* Ambient Occlusion
 * Model Loading
 * Model Animation
 * Worlds : Save and Load
@@ -23,7 +24,7 @@
 * OpenGL Leaks ?
 * Frustum Culling (Chunk)
 * Occlusion Culling (Chunk)
-* Mesh Simplification
+* Mesh Simplification (aka LOD)
 * Messaging System for Mesh (Re)Calculation
 
 ## Ressources
