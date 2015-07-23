@@ -13,19 +13,25 @@
 #include "Chunk.hpp"
 #include "Shader.hpp"
 
+#include "ChunkManager.hpp"
+
 #include <vector>
 
 class World {
 public:
-	std::vector<Chunk *>	_chunks;
+	ChunkManager	_chunkManager;
+	//TODO: Must contain Player
 
 public:
 	World();
 	~World();
 
-	Chunk	&getChuck(int x, int y, int z);
-	void	add(Chunk *chunk);
-	void	renderNear(glm::vec3 pos, Shader shader);
+	void	update(float dt);
+	void	render(glm::vec3 pos, Shader shader);
+
+	Chunk	&getChunk(int x, int y, int z);
+	void	addChunk(Chunk *chunk);
+
 	GLint	getWorldBlockId(float x, float y, float z);
 	GLint	getWorldBlockId(glm::vec3 const &v);
 };

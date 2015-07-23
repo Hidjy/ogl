@@ -16,7 +16,7 @@
 #include <vector>
 
 
-Chunk::Chunk() : _pos(glm::vec3(0, 0, 0)), _empty(false) //FIXME
+Chunk::Chunk() : _pos(glm::vec3(0, 0, 0)), _empty(false), _loaded(false), _setup(false), _needRebuild(false) //FIXME
 {
 	_blocks = new Block**[SIZE];
 	for(int i = 0; i < SIZE; i++)
@@ -28,9 +28,6 @@ Chunk::Chunk() : _pos(glm::vec3(0, 0, 0)), _empty(false) //FIXME
 			_blocks[i][j] = new Block[SIZE];
 		}
 	}
-
-	_chunkRenderer.setPos(glm::vec3(_pos.x * SIZE, _pos.y * SIZE, _pos.z * SIZE));
-	// _chunkRenderer.generateMesh(_blocks);
 }
 
 Chunk::Chunk(Chunk const &src) : Chunk() {
@@ -63,6 +60,18 @@ bool	Chunk::empty() const {
 	return _empty;
 }
 
+bool		Chunk::isLoaded() const {
+	return _loaded;
+}
+
+bool		Chunk::isSetup() const {
+	return _setup;
+}
+
+bool		Chunk::needRebuild() const {
+	return _setup;
+}
+
 glm::vec3	Chunk::getPos() const {
 	return _pos;
 }
@@ -72,23 +81,27 @@ Block 	Chunk::getBlock(int x, int y, int z) const {
 }
 
 Block 	&Chunk::getBlock(int x, int y, int z) {
+	_needRebuild = true;
 	return _blocks[x][y][z];
 }
 
 void	Chunk::setPos(glm::vec3 pos) {
 	_pos = pos;
 	_chunkRenderer.setPos(glm::vec3(_pos.x * SIZE, _pos.y * SIZE, _pos.z * SIZE));
+	_needRebuild = true;
 }
 
 void	Chunk::setBlock(int x, int y, int z, Block block) {
 	_blocks[x][y][z] = block;
 	_empty = false; //Not accurate, see Chunk.hpp
+	_needRebuild = true;
 }
 
 
 void	Chunk::generateMesh() {
 	if (_empty == false)
 		_chunkRenderer.generateMesh(_blocks);
+	_needRebuild = false;
 }
 
 void	Chunk::render(Shader shader) {
@@ -96,6 +109,21 @@ void	Chunk::render(Shader shader) {
 		return;
 	_chunkRenderer.render(shader);
 }
+
+void	Chunk::load() {
+	_loaded = true;
+}
+
+void	Chunk::unload() {
+	_loaded = false;
+	_needRebuild = false;
+}
+
+void	Chunk::setup() {
+	generateMesh();
+	_setup = true;
+}
+
 
 Chunk	&Chunk::operator=(Chunk const &src) {
 	_pos = src.getPos();

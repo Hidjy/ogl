@@ -2,20 +2,21 @@ NAME		= ogl
 NAME_DEBUG	= ogl_debug
 
 SRC		=	main.cpp	\
+			ChunkManager.cpp	\
 			InputManager.cpp	\
+			MessageManager.cpp	\
 			TextureManager.cpp	\
 			TextManager.cpp	\
-			MessageManager.cpp	\
 			WorldGenerator.cpp	\
 			ChunkRenderer.cpp	\
-			Shader.cpp	\
-			Camera.cpp	\
-			Skybox.cpp	\
 			Block.cpp	\
+			Camera.cpp	\
 			Chunk.cpp	\
-			World.cpp	\
 			EWorld.cpp	\
-			Player.cpp
+			Player.cpp	\
+			Shader.cpp	\
+			Skybox.cpp	\
+			World.cpp	\
 
 HEAD_DIR	= include
 SRC_DIR		= src

@@ -9,19 +9,20 @@
 ### Features
 * Renderer Class (Shaders, Window...)
 * Simplified Context/Engine (Engine init, close...)
-* Chunk Management
 * Better BlockType Management
 * Use libnoise : http://libnoise.sourceforge.net/tutorials/tutorial3.html
 * Color Modification on Textures (Shader)
 * Model Loading
 * Model Animation
 * Worlds : Save and Load
+* Tick system ?
 * Lua ?
 
 ### Performance Improvement
 * /!\ Memory Leaks
 * OpenGL Leaks ?
 * Frustum Culling (Chunk)
+* Occlusion Culling (Chunk)
 * Mesh Simplification
 * Messaging System for Mesh (Re)Calculation
 

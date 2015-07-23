@@ -3,8 +3,8 @@
 
 class EWorld: public std::exception {
 private:
-    const char* msg;
+	const char* msg;
 public:
-    EWorld(const std::string message);
-    virtual const char* what() const throw();
+	EWorld(const std::string message);
+	virtual const char* what() const throw();
 };

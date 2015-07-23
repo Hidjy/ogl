@@ -9,6 +9,9 @@ private:
 	int			_type;
 
 public:
+	static const int RENDER_SIZE = 1;
+
+public:
 	Block();
 	Block(Block const &src);
 	~Block();

@@ -19,6 +19,7 @@
 #include "EWorld.hpp"
 # include <cmath>
 
+#include "ChunkManager.hpp"
 #include "Block.hpp"
 
 World::World() {
@@ -27,17 +28,27 @@ World::World() {
 World::~World() {
 }
 
+void	World::update(float dt) {
+	_chunkManager.update(dt);
+}
+
+void	World::render(glm::vec3 pos, Shader shader) {
+	_chunkManager.setCamera(pos, glm::vec3(0, 0, 0)); //FIXME
+	_chunkManager.render(shader);
+}
+
+
 GLint	World::getWorldBlockId(float x, float y, float z) {
 	try {
-		printf("chunk = {%d, %d, %d} = {%f, %f, %f}\n",
-			static_cast<int>(floor(x / Chunk::SIZE)),
-			static_cast<int>(floor(y / Chunk::SIZE)),
-			static_cast<int>(floor(z / Chunk::SIZE)),
-			x,
-			y,
-			z
-		);
-		Chunk chunk = getChuck( floor(x / Chunk::SIZE), floor(y / Chunk::SIZE), floor(z / Chunk::SIZE));
+		// printf("chunk = {%d, %d, %d} = {%f, %f, %f}\n",
+		// 	static_cast<int>(floor(x / Chunk::SIZE)),
+		// 	static_cast<int>(floor(y / Chunk::SIZE)),
+		// 	static_cast<int>(floor(z / Chunk::SIZE)),
+		// 	x,
+		// 	y,
+		// 	z
+		// );
+		Chunk chunk = getChunk( floor(x / Chunk::SIZE), floor(y / Chunk::SIZE), floor(z / Chunk::SIZE));
 		return chunk.getBlock(
 			static_cast<int>(x) % Chunk::SIZE,
 			static_cast<int>(y) % Chunk::SIZE,
@@ -45,7 +56,7 @@ GLint	World::getWorldBlockId(float x, float y, float z) {
 		).getType();
 	}
 	catch (std::exception e) {
-		std::cout << "Pas de chunk" << std::endl;
+		// std::cout << "Pas de chunk" << std::endl;
 		return -1;
 	}
 }
@@ -54,25 +65,11 @@ GLint	World::getWorldBlockId(glm::vec3 const &v) {
 	return getWorldBlockId(v.x, v.y, v.z);
 }
 
-void	World::add(Chunk *chunk) {
-	_chunks.push_back(chunk);
+void	World::addChunk(Chunk *chunk) {
+	_chunkManager.addChunk(chunk);
 }
 
 
-Chunk	&World::getChuck(int x, int y, int z) {
-	for (std::vector<Chunk *>::iterator it = _chunks.begin() ; it != _chunks.end(); ++it) {
-		glm::vec3 pos = (**it).getPos();
-		if (pos.x == x && pos.y == y && pos.z == z)
-			return (**it);
-	}
-	throw EWorld("No Chunk.");
-}
-
-void	World::renderNear(glm::vec3 pos, Shader shader) {
-	for (size_t i = 0; i < _chunks.size(); i++) {
-		glm::vec3 temp = glm::vec3(pos.x / Chunk::SIZE + 0.5f, pos.y / Chunk::SIZE + 0.5f, pos.z / Chunk::SIZE + 0.5f) - _chunks[i]->getPos();
-		GLfloat distSqr = glm::dot(temp, temp);
-		if (sqrt(distSqr) < 5)
-			_chunks[i]->render(shader);
-	}
+Chunk	&World::getChunk(int x, int y, int z) {
+	return _chunkManager.getChunk(glm::vec3(x, y, z));
 }

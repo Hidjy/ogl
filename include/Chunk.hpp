@@ -21,7 +21,12 @@
 class Chunk {
 private:
 	glm::vec3		_pos;
-	bool			_empty;
+
+	bool			_empty; //FIXME
+	bool			_loaded;
+	bool			_setup;
+	bool			_needRebuild;
+
 	Block			***_blocks;
 	ChunkRenderer	_chunkRenderer;
 
@@ -34,6 +39,10 @@ public:
 	~Chunk();
 
 	bool		empty() const;
+	bool		isLoaded() const;
+	bool		isSetup() const;
+	bool		needRebuild() const;
+
 	glm::vec3	getPos() const;
 	Block		getBlock(int x, int y, int z) const;
 
@@ -45,6 +54,9 @@ public:
 	void	generateMesh();
 	void	update(float dt);
 	void	render(Shader shader);
+	void	load();
+	void	unload();
+	void	setup();
 
 	Chunk	&operator=(Chunk const &src);
 };
