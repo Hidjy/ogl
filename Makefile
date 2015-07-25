@@ -8,6 +8,7 @@ SRC		=	main.cpp	\
 			TextureManager.cpp	\
 			TextManager.cpp	\
 			WorldGenerator.cpp	\
+			Renderer.cpp	\
 			ChunkRenderer.cpp	\
 			Block.cpp	\
 			Camera.cpp	\

@@ -21,6 +21,7 @@
 #include "Chunk.hpp"
 #include "Skybox.hpp"
 #include "Block.hpp"
+#include "Renderer.hpp"
 
 GLfloat deltaTime = 0.0f;
 GLfloat lastFrame = 0.0f;
@@ -42,10 +43,10 @@ int main()
 	glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
 	glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
 
-	GLFWwindow* window = glfwCreateWindow(500,500, "OGL", nullptr, nullptr);
+	GLFWwindow* window = glfwCreateWindow(mode->width, mode->height, "OGL", monitor, nullptr);
 	glfwMakeContextCurrent(window);
 
-	GLuint screenWidth = 500, screenHeight = 500;
+	GLuint screenWidth = mode->width, screenHeight = mode->height;
 
 	srand(1234);
 
@@ -63,19 +64,17 @@ int main()
 
 ////////////////////////////////////////////////////////////////////////////////
 
-	Shader blockShader("shaders/block.vert", "shaders/block.frag");
+	Renderer *renderer = new Renderer();
 
-	TextureManager textureManager("ressources/tileset.png", 8, 4);
+	renderer->setBlockShader(new Shader("shaders/block.vert", "shaders/block.frag"));
+	renderer->setSkyboxShader(new Shader("shaders/skybox.vert", "shaders/skybox.frag"));
+	renderer->setTextShader(new Shader("shaders/text.vert", "shaders/text.frag"));
+
+	renderer->setTextureManager(new TextureManager("ressources/tileset.png", 8, 4));
 
 	Skybox skybox;
 
-	// float noise[GENERATOR_SIZE][GENERATOR_SIZE];
-	// GenerateWhiteNoise(&noise);
-	// float perlinNoise[GENERATOR_SIZE][GENERATOR_SIZE];
-	// GeneratePerlinNoise(&perlinNoise, &noise, 7);
-
 	float (*perlinNoise)[GENERATOR_SIZE][GENERATOR_SIZE] = NULL;
-
 	WorldGenerator::GenerateMap(&perlinNoise, 7);
 
 	World world;
@@ -119,13 +118,13 @@ int main()
 	}
 
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)screenWidth/(GLfloat)screenHeight, 0.1f, 10000.0f);
-	blockShader.Use();
-	glUniformMatrix4fv(glGetUniformLocation(blockShader.getProgram(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+	renderer->getBlockShader()->Use();
+	glUniformMatrix4fv(glGetUniformLocation(renderer->getBlockShader()->getProgram(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
-	blockShader.Use();
+	renderer->getBlockShader()->Use();
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D_ARRAY, textureManager.getTileset());
-	glUniform1i(glGetUniformLocation(blockShader.getProgram(), "ourTexture"), 0);
+	glBindTexture(GL_TEXTURE_2D_ARRAY, renderer->getTextureManager()->getTileset());
+	glUniform1i(glGetUniformLocation(renderer->getBlockShader()->getProgram(), "ourTexture"), 0);
 
 	// Game loop
 	while(!glfwWindowShouldClose(window))
@@ -145,9 +144,9 @@ int main()
 
 		skybox.render(player._camera, projection);
 
-		blockShader.Use();
-		glUniformMatrix4fv(glGetUniformLocation(blockShader.getProgram(), "view"), 1, GL_FALSE, glm::value_ptr(view));
-		world.render(player._pos, blockShader);
+		renderer->getBlockShader()->Use();
+		glUniformMatrix4fv(glGetUniformLocation(renderer->getBlockShader()->getProgram(), "view"), 1, GL_FALSE, glm::value_ptr(view));
+		world.render(player._pos, renderer);
 
 		// Swap the buffers
 		glfwSwapBuffers(window);

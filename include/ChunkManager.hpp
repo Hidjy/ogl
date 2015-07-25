@@ -13,6 +13,7 @@
 #include "Chunk.hpp"
 
 #include "Shader.hpp"
+#include "Renderer.hpp"
 
 #include <vector>
 #include <queue>
@@ -46,7 +47,7 @@ public:
 	Chunk	&getChunk(glm::vec3 pos);
 
 	void 	update(float dt);
-	void 	render(Shader shader);
+	void 	render(Renderer *renderer);
 
 	void	updateAsyncChunker();
 

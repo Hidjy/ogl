@@ -12,6 +12,7 @@
 
 #include "Shader.hpp"
 #include "Block.hpp"
+#include "Renderer.hpp"
 
 #include <vector>
 
@@ -38,7 +39,7 @@ public:
 
 	void		addQuad(Block block, glm::vec3 pos, int face);
 	void		generateMesh(Block ***blocks);
-	void		render(Shader shader);
+	void		render(Renderer *renderer);
 
 	ChunkRenderer		&operator=(ChunkRenderer const &src);
 };

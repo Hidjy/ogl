@@ -12,6 +12,7 @@
 
 #include "Chunk.hpp"
 #include "Shader.hpp"
+#include "Renderer.hpp"
 
 #include "ChunkManager.hpp"
 
@@ -27,7 +28,7 @@ public:
 	~World();
 
 	void	update(float dt);
-	void	render(glm::vec3 pos, Shader shader);
+	void	render(glm::vec3 pos, Renderer *renderer);
 
 	Chunk	&getChunk(int x, int y, int z);
 	void	addChunk(Chunk *chunk);

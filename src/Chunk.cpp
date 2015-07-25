@@ -12,6 +12,7 @@
 #include "Chunk.hpp"
 #include "ChunkRenderer.hpp"
 #include "Shader.hpp"
+#include "Renderer.hpp"
 
 #include <vector>
 
@@ -104,10 +105,10 @@ void	Chunk::generateMesh() {
 	_needRebuild = false;
 }
 
-void	Chunk::render(Shader shader) {
+void	Chunk::render(Renderer *renderer) {
 	if (_empty)
 		return;
-	_chunkRenderer.render(shader);
+	_chunkRenderer.render(renderer);
 }
 
 void	Chunk::load() {

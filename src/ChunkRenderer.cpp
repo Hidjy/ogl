@@ -17,6 +17,7 @@
 #include "Shader.hpp"
 #include "Chunk.hpp"
 #include "Block.hpp"
+#include "Renderer.hpp"
 
 ChunkRenderer::ChunkRenderer() {
 	glGenVertexArrays(1, &(_VAO));
@@ -164,12 +165,12 @@ void	ChunkRenderer::generateMesh(Block ***blocks) {
 	glBindVertexArray(0);
 }
 
-void	ChunkRenderer::render(Shader shader) {
-	shader.Use();
+void	ChunkRenderer::render(Renderer *renderer) {
+	renderer->getBlockShader()->Use();
 
 	glm::mat4 model;
 	model = glm::translate(model, _pos);
-	glUniformMatrix4fv(glGetUniformLocation(shader.getProgram(), "model"), 1, GL_FALSE, glm::value_ptr(model));
+	glUniformMatrix4fv(glGetUniformLocation(renderer->getBlockShader()->getProgram(), "model"), 1, GL_FALSE, glm::value_ptr(model));
 
 	glBindVertexArray(_VAO);
 	glDrawArrays(GL_TRIANGLES, 0, _vertices.size() / 6);

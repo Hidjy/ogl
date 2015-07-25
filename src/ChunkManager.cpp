@@ -11,6 +11,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "Chunk.hpp"
+#include "Renderer.hpp"
 
 #include <vector>
 #include <exception>
@@ -37,9 +38,9 @@ void ChunkManager::update(float dt)
 	// updateChunkList();
 }
 
-void	ChunkManager::render(Shader shader) {
+void	ChunkManager::render(Renderer *renderer) {
 	for (auto it = _renderList.begin(); it != _renderList.end(); ++it) {
-		(*it)->render(shader);
+		(*it)->render(renderer);
 	}
 }
 

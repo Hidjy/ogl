@@ -7,7 +7,6 @@
 ## To Do List
 
 ### Features
-* Renderer Class (Shaders, Window...)
 * Simplified Context/Engine (Engine init, close...)
 * Better BlockType Management
 * Use libnoise : http://libnoise.sourceforge.net/tutorials/tutorial3.html

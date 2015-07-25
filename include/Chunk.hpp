@@ -13,6 +13,7 @@
 #include "ChunkRenderer.hpp"
 #include "Shader.hpp"
 #include "Block.hpp"
+#include "Renderer.hpp"
 
 #include <vector>
 
@@ -53,7 +54,7 @@ public:
 
 	void	generateMesh();
 	void	update(float dt);
-	void	render(Shader shader);
+	void	render(Renderer *renderer);
 	void	load();
 	void	unload();
 	void	setup();
