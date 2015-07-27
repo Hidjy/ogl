@@ -2,6 +2,7 @@ NAME		= ogl
 NAME_DEBUG	= ogl_debug
 
 SRC		=	main.cpp	\
+			Game.cpp	\
 			ChunkManager.cpp	\
 			InputManager.cpp	\
 			MessageManager.cpp	\
