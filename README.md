@@ -7,7 +7,6 @@
 ## To Do List
 
 ### Features
-* Simplified Context/Engine (Engine init, close...)
 * Better BlockType Management
 * Use libnoise : http://libnoise.sourceforge.net/tutorials/tutorial3.html
 * Color Modification on Textures (Shader)
@@ -24,7 +23,6 @@
 * Frustum Culling (Chunk)
 * Occlusion Culling (Chunk)
 * Mesh Simplification (aka LOD)
-* Messaging System for Mesh (Re)Calculation
 
 ## Ressources
 * http://0fps.net/category/programming/voxels/
