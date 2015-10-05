@@ -76,6 +76,5 @@ void	Player::ProcessMouseMovement(GLfloat xoffset, GLfloat yoffset)
 
 glm::mat4	Player::GetViewMatrix()
 {
-	glm::mat4 view = glm::lookAt(_camera._pos, _camera._pos + _camera._front, _camera._up);
-	return view;
+	return _camera.getViewMatrix();
 }

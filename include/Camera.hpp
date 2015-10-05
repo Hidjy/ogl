@@ -20,14 +20,8 @@ public:
 	GLfloat		_pitch;
 	GLfloat		_zoom;
 
-	GLfloat		_speed;
-
 	Camera(glm::vec3 p);
 
-	void	ProcessKeyboard(enum Direction dir, GLfloat dt);
-
-	void	ProcessMouseMovement(GLfloat xoffset, GLfloat yoffset);
-
-	glm::mat4	GetViewMatrix();
+	glm::mat4	getViewMatrix();
 
 };

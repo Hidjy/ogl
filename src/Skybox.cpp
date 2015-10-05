@@ -105,7 +105,7 @@ void Skybox::render(Camera &camera, glm::mat4 &projection) {
 
 	glDepthMask(GL_FALSE);;  // Change depth function so depth test passes when values are equal to depth buffer's content
 	_skyboxShader.Use();
-	glm::mat4 view2 = glm::mat4(glm::mat3(camera.GetViewMatrix()));	// Remove-any translation component of the view matrix
+	glm::mat4 view2 = glm::mat4(glm::mat3(camera.getViewMatrix()));	// Remove-any translation component of the view matrix
 	glUniformMatrix4fv(glGetUniformLocation(_skyboxShader.getProgram(), "view"), 1, GL_FALSE, glm::value_ptr(view2));
 	glUniformMatrix4fv(glGetUniformLocation(_skyboxShader.getProgram(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 	// skybox cube

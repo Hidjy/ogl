@@ -70,8 +70,6 @@ void	Game::initGLFW()
 	window = glfwCreateWindow(mode->width, mode->height, "OGL", monitor, nullptr);
 	glfwMakeContextCurrent(window);
 
-	GLuint screenWidth = mode->width, screenHeight = mode->height;
-
 	windowWidth = mode->width;
 	windowHeight = mode->height;
 
@@ -82,7 +80,7 @@ void	Game::initGLFW()
 	glewExperimental = GL_TRUE;
 	glewInit();
 
-	glViewport(0, 0, screenWidth, screenHeight);
+	glViewport(0, 0, windowWidth, windowHeight);
 
 }
 
