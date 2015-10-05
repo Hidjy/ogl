@@ -1,21 +1,11 @@
 #define GLEW_STATIC
 #include <GL/glew.h>
 
-#include <GLFW/glfw3.h>
-
 #define GLM_FORCE_RADIANS
-
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 
 #include "Chunk.hpp"
-#include "ChunkRenderer.hpp"
-#include "Shader.hpp"
 #include "Renderer.hpp"
-
-#include <vector>
-
 
 Chunk::Chunk() : _pos(glm::vec3(0, 0, 0)), _empty(false), _loaded(false), _setup(false), _needRebuild(false) //FIXME
 {

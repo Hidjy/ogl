@@ -1,12 +1,9 @@
-
-
-#ifndef SHADER_HPP
-#define SHADER_HPP
+#pragma once
 
 #define GLEW_STATIC
 #include <GL/glew.h>
-#include "Shader.hpp"
 
+#include "Shader.hpp"
 
 class Shader
 {
@@ -18,5 +15,3 @@ public:
 	GLuint getProgram();
 	void Use();
 };
-
-#endif

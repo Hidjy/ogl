@@ -1,6 +1,5 @@
 #pragma once
 
- #define GLM_FORCE_RADIANS
 // Std. Includes
 #include <iostream>
 #include <map>

@@ -1,13 +1,7 @@
-
-
-#ifndef CAMERA_HPP
-#define CAMERA_HPP
+#pragma once
 
 #define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>
-#include <string>
-#include <vector>
-#include <SOIL/SOIL.h>
 
 #include <GL/glew.h>
 
@@ -37,5 +31,3 @@ public:
 	glm::mat4	GetViewMatrix();
 
 };
-
-#endif

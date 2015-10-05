@@ -1,7 +1,4 @@
 #include "Block.hpp"
-#define GLM_FORCE_RADIANS
-
-#include <glm/glm.hpp>
 
 Block::Block() : _active(false), _type(0) {
 }

@@ -1,5 +1,9 @@
 #include "Skybox.hpp"
 
+#define GLM_FORCE_RADIANS
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 #include <SOIL/SOIL.h>
 
 GLuint Skybox::loadCubemap(std::vector<const GLchar*> faces)
