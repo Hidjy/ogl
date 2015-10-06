@@ -14,6 +14,10 @@
 #include "TextureManager.hpp"
 
 Renderer::Renderer() {
+	_blockShader = nullptr;
+	_skyboxShader = nullptr;
+	_textShader = nullptr;
+	_textureManager = nullptr;
 }
 
 Renderer::~Renderer() {
