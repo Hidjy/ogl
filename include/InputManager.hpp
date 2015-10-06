@@ -5,7 +5,9 @@
 
 #include <GLFW/glfw3.h>
 
-#include "Player.hpp"
+enum Input {UP, DOWN, FORWARD, BACKWARD, LEFT, RIGHT, BOOST_PLUS, BOOST_MOINS};
+
+class	Player;
 
 class InputManager {
 private:

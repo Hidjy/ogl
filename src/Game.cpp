@@ -36,6 +36,7 @@ Renderer 		*Game::renderer;
 Skybox 			*Game::skybox;
 World	 		*Game::world;
 Player 			*Game::player;
+Camera 			*Game::camera;
 InputManager 	*Game::inputManager;
 
 glm::mat4		Game::projection;
@@ -96,6 +97,8 @@ void	Game::initOGL() {
 void	Game::initRenderer() {
 
 	renderer = new Renderer();
+
+	camera = new Camera(glm::vec3(20.0f, 20.0f, 20.0f));
 
 	Shader *blockShader = new Shader();
 	blockShader->loadFromFile(GL_VERTEX_SHADER,"shaders/block.vert");
@@ -192,7 +195,7 @@ void	Game::update() {
 void	Game::draw() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	view = player->GetViewMatrix();
+	view = camera->getViewMatrix();
 
 	renderer->getShader("Skybox")->use();
 	skybox->render(renderer);

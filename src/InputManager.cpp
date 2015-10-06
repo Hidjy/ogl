@@ -46,24 +46,24 @@ void	InputManager::mouse_callback(GLFWwindow* window, double xpos, double ypos) 
 	_lastX = xpos;
 	_lastY = ypos;
 
-	_player->ProcessMouseMovement(xoffset, yoffset);
+	_player->rotate(xoffset, yoffset);
 }
 
 void	InputManager::update(GLfloat deltaTime) {
 	if(_keys[GLFW_KEY_W])
-		_player->ProcessKeyboard(FORWARD, deltaTime);
+		_player->move(FORWARD, deltaTime);
 	if(_keys[GLFW_KEY_S])
-		_player->ProcessKeyboard(BACKWARD, deltaTime);
+		_player->move(BACKWARD, deltaTime);
 	if(_keys[GLFW_KEY_A])
-		_player->ProcessKeyboard(LEFT, deltaTime);
+		_player->move(LEFT, deltaTime);
 	if(_keys[GLFW_KEY_D])
-		_player->ProcessKeyboard(RIGHT, deltaTime);
+		_player->move(RIGHT, deltaTime);
 	if(_keys[GLFW_KEY_SPACE])
-		_player->ProcessKeyboard(UP, deltaTime);
+		_player->move(UP, deltaTime);
 	if(_keys[GLFW_KEY_LEFT_SHIFT])
-		_player->ProcessKeyboard(DOWN, deltaTime);
+		_player->move(DOWN, deltaTime);
 	if (_keys[GLFW_KEY_Q])
-		_player->ProcessKeyboard(BOOST_PLUS, deltaTime);
+		_player->move(BOOST_PLUS, deltaTime);
 	if (_keys[GLFW_KEY_E])
-		_player->ProcessKeyboard(BOOST_MOINS, deltaTime);
+		_player->move(BOOST_MOINS, deltaTime);
 }

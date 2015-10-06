@@ -33,6 +33,7 @@ namespace Game {
 	extern Skybox 			*skybox;
 	extern World	 		*world;
 	extern Player 			*player;
+	extern Camera 			*camera;
 	extern InputManager 	*inputManager;
 
 	extern glm::mat4		projection;

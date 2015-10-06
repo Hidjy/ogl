@@ -8,18 +8,23 @@
 #include "World.hpp"
 #include "Camera.hpp"
 
+#include "InputManager.hpp"
 
 class	Player
 {
-public:
+private:
 	glm::vec3	_pos;
-	Camera		_camera;
-	World		*_world;
+
+	glm::vec3	_front;
+	glm::vec3	_left;
+	glm::vec3	_up;
+
 	GLfloat		_speed;
 
+public:
 	Player(glm::vec3 p, World *w);
-	void	ProcessKeyboard(enum Direction dir, GLfloat dt);
-	void	ProcessMouseMovement(GLfloat xoffset, GLfloat yoffset);
-	glm::mat4	GetViewMatrix();
-
+	void	move(Input input, GLfloat dt);
+	void	rotate(GLfloat xoffset, GLfloat yoffset);
+	//TODO: update();
+	//TODO: render();
 };
