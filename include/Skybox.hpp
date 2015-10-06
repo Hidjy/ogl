@@ -3,8 +3,8 @@
 #define GLEW_STATIC
 #include <GL/glew.h>
 
+#include "Renderer.hpp"
 #include "Shader.hpp"
-#include "Camera.hpp"
 
 #include <vector>
 
@@ -16,11 +16,10 @@ private:
 	GLuint	_cubemapTexture;
 	GLuint	_skyboxVAO;
 	GLuint	_skyboxVBO;
-	Shader _skyboxShader;
 
 public:
 	Skybox();
 	~Skybox();
-	void	render(Camera &camera, glm::mat4 &projection);
+	void	render(Renderer *renderer);
 
 };

@@ -23,7 +23,7 @@ public:
 	~World();
 
 	void	update(float dt);
-	void	render(glm::vec3 pos, Renderer *renderer);
+	void	render(Renderer *renderer);
 
 	Chunk	&getChunk(int x, int y, int z);
 	void	addChunk(Chunk *chunk);

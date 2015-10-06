@@ -194,10 +194,13 @@ void	Game::draw() {
 
 	view = player->GetViewMatrix();
 
-	//skybox->render(player->_camera, projection);
+	renderer->getShader("Skybox")->use();
+	skybox->render(renderer);
+	renderer->getShader("Skybox")->unUse();
 
 	renderer->getShader("Block")->use();
-	world->render(player->_pos, renderer);
+	world->render(renderer);
+	renderer->getShader("Block")->unUse();
 
 	// Swap the buffers
 	glfwSwapBuffers(window);

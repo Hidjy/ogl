@@ -26,8 +26,7 @@ void	World::update(float dt) {
 	_chunkManager.update(dt);
 }
 
-void	World::render(glm::vec3 pos, Renderer *renderer) {
-	_chunkManager.setCamera(pos, glm::vec3(0, 0, 0)); //FIXME
+void	World::render(Renderer *renderer) {
 	_chunkManager.render(renderer);
 }
 
