@@ -1,13 +1,14 @@
 #pragma once
 
+#include <map>
+#include <string>
+
 #include "Shader.hpp"
 #include "TextureManager.hpp"
 
 class Renderer {
 private:
-	Shader		*_blockShader;
-	Shader		*_skyboxShader;
-	Shader		*_textShader;
+	std::map<std::string, Shader *>	_shaders;
 
 	TextureManager *_textureManager;
 
@@ -15,16 +16,11 @@ public:
 	Renderer();
 	~Renderer();
 
-	Shader *getBlockShader();
-	Shader *getSkyboxShader();
-	Shader *getTextShader();
+	Shader *getShader(std::string name);
 
 	TextureManager *getTextureManager();
 
-
-	void	setBlockShader(Shader *shader);
-	void	setSkyboxShader(Shader *shader);
-	void	setTextShader(Shader *shader);
+	void	setShader(std::string name, Shader *shader);
 
 	void	setTextureManager(TextureManager *TextureManager);
 

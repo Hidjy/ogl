@@ -11,7 +11,6 @@
 
 #include "Player.hpp"
 #include "Camera.hpp"
-#include "TextManager.hpp"
 #include "TextureManager.hpp"
 #include "InputManager.hpp"
 #include "World.hpp"
@@ -39,16 +38,16 @@ namespace Game {
 	extern glm::mat4		projection;
 	extern glm::mat4		view;
 
-	extern bool    shouldClose();
+	extern bool		shouldClose();
 
-	extern void    init();
-	extern void    initGLFW();
-	extern void    initOGL();
-	extern void    initRenderer();
-	extern void    initWorld();
-	extern void    initProjection();
-	extern void    initTextures();
-	extern void    update();
-	extern void    draw();
-	extern void    deinit();
+	extern void		init();
+	extern void		initGLFW();
+	extern void		initOGL();
+	extern void		initRenderer();
+	extern void		initWorld();
+	extern void		initProjection();
+	extern void		initTextures();
+	extern void		update();
+	extern void		draw();
+	extern void		deinit();
 }

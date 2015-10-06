@@ -10,53 +10,36 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include <map>
+#include <string>
+
 #include "Shader.hpp"
 #include "TextureManager.hpp"
 
 Renderer::Renderer() {
-	_blockShader = nullptr;
-	_skyboxShader = nullptr;
-	_textShader = nullptr;
-	_textureManager = nullptr;
+	_shaders.clear();
 }
 
 Renderer::~Renderer() {
-	if (_blockShader != nullptr)
-		delete _blockShader;
-	if (_skyboxShader != nullptr)
-		delete _skyboxShader;
-	if (_textShader != nullptr)
-		delete _textShader;
-	if (_textureManager != nullptr)
-		delete _textureManager;
+	for (auto it = _shaders.begin(); it != _shaders.end(); ++it)
+	{
+		delete it->second;
+	}
 }
 
-Shader *Renderer::getBlockShader() {
-	return _blockShader;
-}
-
-Shader *Renderer::getSkyboxShader() {
-	return _skyboxShader;
-}
-
-Shader *Renderer::getTextShader() {
-	return _textShader;
+Shader *Renderer::getShader(std::string name) {
+	auto it = _shaders.find(name);
+	if (it != _shaders.end())
+		return it->second;
+	return nullptr;
 }
 
 TextureManager *Renderer::getTextureManager() {
 	return _textureManager;
 }
 
-void	Renderer::setBlockShader(Shader *shader) {
-	_blockShader = shader;
-}
-
-void	Renderer::setSkyboxShader(Shader *shader) {
-	_skyboxShader = shader;
-}
-
-void	Renderer::setTextShader(Shader *shader) {
-	_textShader = shader;
+void	Renderer::setShader(std::string name, Shader *shader) {
+	_shaders[name] = shader;
 }
 
 void	Renderer::setTextureManager(TextureManager *tm) {

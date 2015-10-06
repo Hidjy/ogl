@@ -15,7 +15,6 @@
 #include <vector>
 #include "Player.hpp"
 #include "Camera.hpp"
-#include "TextManager.hpp"
 #include "TextureManager.hpp"
 #include "InputManager.hpp"
 #include "World.hpp"
@@ -102,13 +101,13 @@ void	Game::initRenderer() {
 	blockShader->loadFromFile(GL_VERTEX_SHADER,"shaders/block.vert");
 	blockShader->loadFromFile(GL_FRAGMENT_SHADER,"shaders/block.frag");
 	blockShader->createAndLinkProgram();
-	renderer->setBlockShader(blockShader);
+	renderer->setShader("Block", blockShader);
 
 	Shader *skyboxShader = new Shader();
 	skyboxShader->loadFromFile(GL_VERTEX_SHADER,"shaders/skybox.vert");
 	skyboxShader->loadFromFile(GL_FRAGMENT_SHADER,"shaders/skybox.frag");
 	skyboxShader->createAndLinkProgram();
-	renderer->setSkyboxShader(skyboxShader);
+	renderer->setShader("Skybox", skyboxShader);
 
 	renderer->setTextureManager(new TextureManager("ressources/tileset.png", 8, 4));
 }
@@ -169,10 +168,10 @@ void	Game::initProjection() {
 }
 
 void	Game::initTextures() {
-	renderer->getBlockShader()->use();
+	renderer->getShader("Block")->use();
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D_ARRAY, renderer->getTextureManager()->getTileset());
-	glUniform1i(glGetUniformLocation(renderer->getBlockShader()->getProgram(), "ourTexture"), 0);
+	glUniform1i(glGetUniformLocation(renderer->getShader("Block")->getProgram(), "ourTexture"), 0);
 
 }
 
@@ -197,7 +196,7 @@ void	Game::draw() {
 
 	//skybox->render(player->_camera, projection);
 
-	renderer->getBlockShader()->use();
+	renderer->getShader("Block")->use();
 	world->render(player->_pos, renderer);
 
 	// Swap the buffers
