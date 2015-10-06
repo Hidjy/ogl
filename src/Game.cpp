@@ -40,6 +40,7 @@ Player 			*Game::player;
 InputManager 	*Game::inputManager;
 
 glm::mat4		Game::projection;
+glm::mat4		Game::view;
 
 void    Game::init() {
 	initGLFW();
@@ -164,8 +165,6 @@ void	Game::initWorld() {
 void	Game::initProjection() {
 
 	projection = glm::perspective(45.0f, (GLfloat)windowWidth/(GLfloat)windowHeight, 0.01f, 10000.0f);
-	renderer->getBlockShader()->use();
-	glUniformMatrix4fv(glGetUniformLocation(renderer->getBlockShader()->getProgram(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
 }
 
@@ -194,12 +193,11 @@ void	Game::update() {
 void	Game::draw() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glm::mat4 view = player->GetViewMatrix();
+	view = player->GetViewMatrix();
 
-	skybox->render(player->_camera, projection);
+	//skybox->render(player->_camera, projection);
 
 	renderer->getBlockShader()->use();
-	glUniformMatrix4fv(glGetUniformLocation(renderer->getBlockShader()->getProgram(), "view"), 1, GL_FALSE, glm::value_ptr(view));
 	world->render(player->_pos, renderer);
 
 	// Swap the buffers

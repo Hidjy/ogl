@@ -164,12 +164,6 @@ void	ChunkRenderer::generateMesh(Block ***blocks) {
 }
 
 void	ChunkRenderer::render(Renderer *renderer) {
-	renderer->getBlockShader()->use();
-
-	glm::mat4 model;
-	model = glm::translate(model, _pos);
-	glUniformMatrix4fv(glGetUniformLocation(renderer->getBlockShader()->getProgram(), "model"), 1, GL_FALSE, glm::value_ptr(model));
-
 	glBindVertexArray(_VAO);
 	glDrawArrays(GL_TRIANGLES, 0, _vertices.size() / 6);
 	glBindVertexArray(0);

@@ -6,6 +6,7 @@
 #define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>
 
+#include "Game.hpp"
 #include "Chunk.hpp"
 #include "Renderer.hpp"
 
@@ -34,7 +35,14 @@ void ChunkManager::update(float dt)
 }
 
 void	ChunkManager::render(Renderer *renderer) {
+	renderer->getBlockShader()->use();
+
 	for (auto it = _renderList.begin(); it != _renderList.end(); ++it) {
+		glm::mat4 MVP;
+		glm::vec3 pos = (*it)->getPos();
+		MVP = glm::translate(MVP, glm::vec3(pos.x * Chunk::SIZE, pos.y * Chunk::SIZE, pos.z * Chunk::SIZE));
+		MVP = Game::projection * Game::view * MVP;
+		glUniformMatrix4fv(glGetUniformLocation(renderer->getBlockShader()->getProgram(), "MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
 		(*it)->render(renderer);
 	}
 }

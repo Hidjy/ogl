@@ -37,6 +37,7 @@ namespace Game {
 	extern InputManager 	*inputManager;
 
 	extern glm::mat4		projection;
+	extern glm::mat4		view;
 
 	extern bool    shouldClose();
 
