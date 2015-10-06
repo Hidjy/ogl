@@ -97,9 +97,17 @@ void	Game::initRenderer() {
 
 	renderer = new Renderer();
 
-	renderer->setBlockShader(new Shader("shaders/block.vert", "shaders/block.frag"));
-	renderer->setSkyboxShader(new Shader("shaders/skybox.vert", "shaders/skybox.frag"));
-	renderer->setTextShader(new Shader("shaders/text.vert", "shaders/text.frag"));
+	Shader *blockShader = new Shader();
+	blockShader->loadFromFile(GL_VERTEX_SHADER,"shaders/block.vert");
+	blockShader->loadFromFile(GL_FRAGMENT_SHADER,"shaders/block.frag");
+	blockShader->createAndLinkProgram();
+	renderer->setBlockShader(blockShader);
+
+	Shader *skyboxShader = new Shader();
+	skyboxShader->loadFromFile(GL_VERTEX_SHADER,"shaders/skybox.vert");
+	skyboxShader->loadFromFile(GL_FRAGMENT_SHADER,"shaders/skybox.frag");
+	skyboxShader->createAndLinkProgram();
+	renderer->setSkyboxShader(skyboxShader);
 
 	renderer->setTextureManager(new TextureManager("ressources/tileset.png", 8, 4));
 }
@@ -156,13 +164,13 @@ void	Game::initWorld() {
 void	Game::initProjection() {
 
 	projection = glm::perspective(45.0f, (GLfloat)windowWidth/(GLfloat)windowHeight, 0.01f, 10000.0f);
-	renderer->getBlockShader()->Use();
+	renderer->getBlockShader()->use();
 	glUniformMatrix4fv(glGetUniformLocation(renderer->getBlockShader()->getProgram(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
 }
 
 void	Game::initTextures() {
-	renderer->getBlockShader()->Use();
+	renderer->getBlockShader()->use();
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D_ARRAY, renderer->getTextureManager()->getTileset());
 	glUniform1i(glGetUniformLocation(renderer->getBlockShader()->getProgram(), "ourTexture"), 0);
@@ -190,7 +198,7 @@ void	Game::draw() {
 
 	skybox->render(player->_camera, projection);
 
-	renderer->getBlockShader()->Use();
+	renderer->getBlockShader()->use();
 	glUniformMatrix4fv(glGetUniformLocation(renderer->getBlockShader()->getProgram(), "view"), 1, GL_FALSE, glm::value_ptr(view));
 	world->render(player->_pos, renderer);
 

@@ -7,7 +7,6 @@ SRC		=	main.cpp	\
 			InputManager.cpp	\
 			MessageManager.cpp	\
 			TextureManager.cpp	\
-			TextManager.cpp	\
 			WorldGenerator.cpp	\
 			Renderer.cpp	\
 			ChunkRenderer.cpp	\

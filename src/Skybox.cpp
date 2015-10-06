@@ -34,7 +34,7 @@ GLuint Skybox::loadCubemap(std::vector<const GLchar*> faces)
 	return textureID;
 }
 
-Skybox::Skybox() : _skyboxShader("shaders/skybox.vert", "shaders/skybox.frag"){
+Skybox::Skybox() {
 	GLfloat skyboxVertices[] = {
 	-1.0f,  1.0f, -1.0f,
 	-1.0f, -1.0f, -1.0f,
@@ -79,6 +79,10 @@ Skybox::Skybox() : _skyboxShader("shaders/skybox.vert", "shaders/skybox.frag"){
 	1.0f, -1.0f,  1.0f
 };
 
+	_skyboxShader.loadFromFile(GL_VERTEX_SHADER,"shaders/skybox.vert");
+	_skyboxShader.loadFromFile(GL_FRAGMENT_SHADER,"shaders/skybox.frag");
+	_skyboxShader.createAndLinkProgram();
+
 	glGenVertexArrays(1, &_skyboxVAO);
 	glGenBuffers(1, &_skyboxVBO);
 	glBindVertexArray(_skyboxVAO);
@@ -104,7 +108,7 @@ void Skybox::render(Camera &camera, glm::mat4 &projection) {
 	glBindTexture(GL_TEXTURE_CUBE_MAP, _cubemapTexture);
 
 	glDepthMask(GL_FALSE);;  // Change depth function so depth test passes when values are equal to depth buffer's content
-	_skyboxShader.Use();
+	_skyboxShader.use();
 	glm::mat4 view2 = glm::mat4(glm::mat3(camera.getViewMatrix()));	// Remove-any translation component of the view matrix
 	glUniformMatrix4fv(glGetUniformLocation(_skyboxShader.getProgram(), "view"), 1, GL_FALSE, glm::value_ptr(view2));
 	glUniformMatrix4fv(glGetUniformLocation(_skyboxShader.getProgram(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));

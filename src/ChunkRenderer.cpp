@@ -4,8 +4,6 @@
 #define GLEW_STATIC
 #include <GL/glew.h>
 
-#include <GLFW/glfw3.h>
-
 #define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -166,7 +164,7 @@ void	ChunkRenderer::generateMesh(Block ***blocks) {
 }
 
 void	ChunkRenderer::render(Renderer *renderer) {
-	renderer->getBlockShader()->Use();
+	renderer->getBlockShader()->use();
 
 	glm::mat4 model;
 	model = glm::translate(model, _pos);
