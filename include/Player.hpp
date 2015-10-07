@@ -19,6 +19,9 @@ private:
 	glm::vec3	_left;
 	glm::vec3	_up;
 
+	GLfloat		_pitch;
+	GLfloat		_yaw;
+
 	GLfloat		_speed;
 
 public:

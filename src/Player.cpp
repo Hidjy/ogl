@@ -16,7 +16,11 @@ Player::Player(glm::vec3 p, World *w){
 	_pos = p;
 	_front = glm::vec3(0.0f, 0.0f, 1.0f);
 	_up = glm::vec3(0.0f, 1.0f,  0.0f);
-	_left = glm::vec3(-1.0f, 0.0f,  0.0f);
+	_left = glm::normalize(glm::cross(_up, _front));
+
+	_pitch = 0.0f;
+	_yaw = 90.0f;
+
 	_speed = 20.0f;
 
 	Game::camera->_pos = _pos;
@@ -43,11 +47,11 @@ void	Player::move(Input input, GLfloat dt)
 			break;
 		case LEFT:
 			if (Game::world->getWorldBlockId(Game::camera->_pos - (glm::normalize(glm::cross(Game::camera->_front, Game::camera->_up)) * dt * _speed)) == 0)
-				_pos -= _left * _speed * dt;
+				_pos += _left * _speed * dt;
 			break;
 		case RIGHT:
 			if (Game::world->getWorldBlockId(Game::camera->_pos + (glm::normalize(glm::cross(Game::camera->_front, Game::camera->_up)) * dt * _speed)) == 0)
-				_pos += _left * _speed * dt;
+				_pos -= _left * _speed * dt;
 			break;
 		case BOOST_PLUS:
 			_speed += 10.0f * dt;
@@ -66,17 +70,21 @@ void	Player::rotate(GLfloat xoffset, GLfloat yoffset)
 	xoffset *= sensitivity;
 	yoffset *= sensitivity;
 
-	_front = glm::rotate(_front, glm::radians(-xoffset), _up);
-	_left = glm::rotate(_left, glm::radians(-xoffset), _up);
+	_yaw   += xoffset;
+	_pitch += yoffset;
 
-	_front = glm::rotate(_front, glm::radians(yoffset), _left);
+	if(_pitch > 89.0f)
+		_pitch = 89.0f;
+	if(_pitch < -89.0f)
+		_pitch = -89.0f;
 
-	float pitch = glm::orientedAngle(_up, _front, -_left);
+	glm::vec3 tmp;
+	tmp.x = cos(glm::radians(_yaw)) * cos(glm::radians(_pitch));
+	tmp.y = sin(glm::radians(_pitch));
+	tmp.z = sin(glm::radians(_yaw)) * cos(glm::radians(_pitch));
+	_front = glm::normalize(tmp);
 
-	if(pitch > glm::radians(180.0f))
-		_front = glm::rotate(_front, glm::radians(179.0f), _up);
-	if(pitch < 0)
-		_front = glm::rotate(_front, glm::radians(1.0f), _up);
+	_left = glm::normalize(glm::cross(_up, _front));
 
 	Game::camera->_front = _front;
 	Game::camera->_left= _left;
