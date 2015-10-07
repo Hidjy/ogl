@@ -79,7 +79,6 @@ Block 	&Chunk::getBlock(int x, int y, int z) {
 void	Chunk::setPos(glm::vec3 pos) {
 	_pos = pos;
 	_chunkRenderer.setPos(glm::vec3(_pos.x * SIZE, _pos.y * SIZE, _pos.z * SIZE));
-	_needRebuild = true;
 }
 
 void	Chunk::setBlock(int x, int y, int z, Block block) {
