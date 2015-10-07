@@ -6,7 +6,6 @@ SRC		=	main.cpp	\
 			ChunkManager.cpp	\
 			InputManager.cpp	\
 			MessageManager.cpp	\
-			TextureManager.cpp	\
 			WorldGenerator.cpp	\
 			Renderer.cpp	\
 			ChunkRenderer.cpp	\
@@ -18,6 +17,7 @@ SRC		=	main.cpp	\
 			Shader.cpp	\
 			Skybox.cpp	\
 			World.cpp	\
+			Mesh.cpp
 
 HEAD_DIR	= include
 SRC_DIR		= src

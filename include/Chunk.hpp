@@ -6,24 +6,25 @@
 #define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>
 
-#include "ChunkRenderer.hpp"
-#include "Shader.hpp"
 #include "Block.hpp"
 #include "Renderer.hpp"
+#include "Mesh.hpp"
 
 //TODO: Block counter (for accurate _empty)
 
 class Chunk {
 private:
-	glm::vec3		_pos;
+	glm::vec3	_pos;
 
-	bool			_empty; //FIXME
-	bool			_loaded;
-	bool			_setup;
-	bool			_needRebuild;
+	bool		_empty;
+	bool		_loaded;
+	bool		_setup;
+	bool		_needRebuild;
 
-	Block			***_blocks;
-	ChunkRenderer	_chunkRenderer;
+	GLuint		_blockCount;
+
+	Block		***_blocks;
+	Mesh		_mesh;
 
 public:
 	static const int SIZE = 32;
@@ -37,6 +38,8 @@ public:
 	bool		isLoaded() const;
 	bool		isSetup() const;
 	bool		needRebuild() const;
+
+	GLuint	countBlocks();
 
 	glm::vec3	getPos() const;
 	Block		getBlock(int x, int y, int z) const;

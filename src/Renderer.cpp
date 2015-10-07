@@ -14,7 +14,6 @@
 #include <string>
 
 #include "Shader.hpp"
-#include "TextureManager.hpp"
 
 Renderer::Renderer() {
 	_shaders.clear();
@@ -34,14 +33,7 @@ Shader *Renderer::getShader(std::string name) {
 	return nullptr;
 }
 
-TextureManager *Renderer::getTextureManager() {
-	return _textureManager;
-}
 
 void	Renderer::setShader(std::string name, Shader *shader) {
 	_shaders[name] = shader;
-}
-
-void	Renderer::setTextureManager(TextureManager *tm) {
-	_textureManager = tm;
 }

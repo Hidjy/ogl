@@ -15,7 +15,6 @@
 #include <vector>
 #include "Player.hpp"
 #include "Camera.hpp"
-#include "TextureManager.hpp"
 #include "InputManager.hpp"
 #include "World.hpp"
 #include "WorldGenerator.hpp"
@@ -48,7 +47,6 @@ void    Game::init() {
 	initRenderer();
 	initWorld();
 	initProjection();
-	initTextures();
 }
 
 void	Game::initGLFW()
@@ -111,8 +109,6 @@ void	Game::initRenderer() {
 	skyboxShader->loadFromFile(GL_FRAGMENT_SHADER,"shaders/skybox.frag");
 	skyboxShader->createAndLinkProgram();
 	renderer->setShader("Skybox", skyboxShader);
-
-	renderer->setTextureManager(new TextureManager("ressources/tileset.png", 8, 4));
 }
 
 void	Game::initWorld() {
@@ -167,14 +163,6 @@ void	Game::initWorld() {
 void	Game::initProjection() {
 
 	projection = glm::perspective(45.0f, (GLfloat)windowWidth/(GLfloat)windowHeight, 0.01f, 10000.0f);
-
-}
-
-void	Game::initTextures() {
-	renderer->getShader("Block")->use();
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D_ARRAY, renderer->getTextureManager()->getTileset());
-	glUniform1i(glGetUniformLocation(renderer->getShader("Block")->getProgram(), "ourTexture"), 0);
 
 }
 

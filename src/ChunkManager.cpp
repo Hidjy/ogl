@@ -159,7 +159,7 @@ void ChunkManager::updateRenderList()
 		{
 			if(pChunk->isLoaded() && pChunk->isSetup())
 			{
-				//TODO: Frustum Culling
+				//Frustum Culling
 				_renderList.push_back(pChunk);
 			}
 		}

@@ -19,8 +19,6 @@ private:
 
 	std::vector<GLfloat>	_vertices;
 
-	glm::vec3	_pos;
-
 public:
 	ChunkRenderer();
 	ChunkRenderer(ChunkRenderer const &src);
@@ -29,11 +27,7 @@ public:
 	GLuint					getVAO() const;
 	GLuint					getVBO() const;
 	std::vector<GLfloat>	getVertices() const;
-	glm::vec3				getPos() const;
 
-	void		setPos(glm::vec3 pos);
-
-	void		addQuad(Block block, glm::vec3 pos, int face);
 	void		generateMesh(Block ***blocks);
 	void		render(Renderer *renderer);
 

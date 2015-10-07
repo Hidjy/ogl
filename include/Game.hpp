@@ -11,7 +11,6 @@
 
 #include "Player.hpp"
 #include "Camera.hpp"
-#include "TextureManager.hpp"
 #include "InputManager.hpp"
 #include "World.hpp"
 #include "WorldGenerator.hpp"
@@ -47,7 +46,6 @@ namespace Game {
 	extern void		initRenderer();
 	extern void		initWorld();
 	extern void		initProjection();
-	extern void		initTextures();
 	extern void		update();
 	extern void		draw();
 	extern void		deinit();

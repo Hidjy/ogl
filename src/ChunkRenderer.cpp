@@ -27,18 +27,16 @@ ChunkRenderer::ChunkRenderer() {
 	//glBufferData(GL_ARRAY_BUFFER, sizeof(CubeRenderer::_vertices), CubeRenderer::_vertices, GL_STATIC_DRAW);
 
 	// Position attribute
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(0);
 	// TexCoord attribute
-	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
-	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 7 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(1);
 
 	glBindVertexArray(0);
-
-	_pos = glm::vec3(0,0,0);
 }
 
-ChunkRenderer::ChunkRenderer(ChunkRenderer const &src) : _VAO(src.getVAO()), _VBO(src.getVBO()), _vertices(src.getVertices()), _pos(src.getPos()) {}
+ChunkRenderer::ChunkRenderer(ChunkRenderer const &src) : _VAO(src.getVAO()), _VBO(src.getVBO()), _vertices(src.getVertices()) {}
 
 ChunkRenderer::~ChunkRenderer() {
 	//TODO:Delete Buffers
@@ -56,78 +54,10 @@ std::vector<GLfloat>	ChunkRenderer::getVertices() const {
 	return _vertices;
 }
 
-glm::vec3				ChunkRenderer::getPos() const {
-	return _pos;
-}
-
-
-void ChunkRenderer::setPos(glm::vec3 pos) {
-	_pos = pos;
-}
-
 static void multipush(std::vector<GLfloat> &target, std::vector<GLfloat> src)
 {
 	for (std::vector<GLfloat>::iterator it = src.begin(); it < src.end(); ++it) {
 		target.push_back(*it);
-	}
-}
-
-void ChunkRenderer::addQuad(Block block, glm::vec3 pos, int face) {
-	// float layer = static_cast<float>( textureManager.getTexturePos(block.getType(), face) );
-	float layer = static_cast<float>( block.getType() );
-	if (face == 0) {
-		multipush(_vertices, {0.5f + pos.x, -0.5f + pos.y, -0.5f + pos.z,  1.0f, 0.0f, layer});
-		multipush(_vertices, {0.5f + pos.x, 0.5f + pos.y,  -0.5f + pos.z,  1.0f, 1.0f, layer});
-		multipush(_vertices, {0.5f + pos.x, 0.5f + pos.y,  0.5f + pos.z,  0.0f, 1.0f, layer});
-
-		multipush(_vertices, {0.5f + pos.x,  0.5f + pos.y,  0.5f + pos.z,  0.0f, 1.0f, layer});
-		multipush(_vertices, {0.5f + pos.x, -0.5f + pos.y,  0.5f + pos.z,  0.0f, 0.0f, layer});
-		multipush(_vertices, {0.5f + pos.x, -0.5f + pos.y,  -0.5f + pos.z,  1.0f, 0.0f, layer});
-	}
-	else if (face == 1) {
-		multipush(_vertices, {-0.5f + pos.x, -0.5f + pos.y, -0.5f + pos.z,  0.0f, 0.0f, layer});
-		multipush(_vertices, {-0.5f + pos.x, 0.5f + pos.y,  0.5f + pos.z,  1.0f, 1.0f, layer});
-		multipush(_vertices, {-0.5f + pos.x, 0.5f + pos.y,  -0.5f + pos.z,  0.0f, 1.0f, layer});
-
-		multipush(_vertices, {-0.5f + pos.x,  0.5f + pos.y,  0.5f + pos.z,  1.0f, 1.0f, layer});
-		multipush(_vertices, {-0.5f + pos.x, -0.5f + pos.y,  -0.5f + pos.z, 0.0f, 0.0f, layer});
-		multipush(_vertices, {-0.5f + pos.x, -0.5f + pos.y,  0.5f + pos.z,  1.0f, 0.0f, layer});
-	}
-	else if (face == 2) {
-		multipush(_vertices, {-0.5f + pos.x, 0.5f + pos.y, -0.5f + pos.z,  1.0f, 0.0f, layer});
-		multipush(_vertices, {0.5f + pos.x, 0.5f + pos.y,  0.5f + pos.z,  0.0f, 1.0f, layer});
-		multipush(_vertices, {0.5f + pos.x, 0.5f + pos.y,  -0.5f + pos.z,  0.0f, 0.0f, layer});
-
-		multipush(_vertices, {0.5f + pos.x,  0.5f + pos.y,  0.5f + pos.z,  0.0f, 1.0f, layer});
-		multipush(_vertices, {-0.5f + pos.x, 0.5f + pos.y,  -0.5f + pos.z,  1.0f, 0.0f, layer});
-		multipush(_vertices, {-0.5f + pos.x, 0.5f + pos.y,  0.5f + pos.z,  1.0f, 1.0f, layer});
-	}
-	else if (face == 3) {
-		multipush(_vertices, {-0.5f + pos.x, -0.5f + pos.y, -0.5f + pos.z,  1.0f, 0.0f, layer});
-		multipush(_vertices, {0.5f + pos.x, -0.5f + pos.y,  -0.5f + pos.z,  0.0f, 0.0f, layer});
-		multipush(_vertices, {0.5f + pos.x, -0.5f + pos.y,  0.5f + pos.z,  0.0f, 1.0f, layer});
-
-		multipush(_vertices, {0.5f + pos.x,  -0.5f + pos.y,  0.5f + pos.z,  0.0f, 1.0f, layer});
-		multipush(_vertices, {-0.5f + pos.x, -0.5f + pos.y,  0.5f + pos.z,  1.0f, 1.0f, layer});
-		multipush(_vertices, {-0.5f + pos.x, -0.5f + pos.y,  -0.5f + pos.z, 1.0f, 0.0f, layer});
-	}
-	else if (face == 4) {
-		multipush(_vertices, {-0.5f + pos.x, -0.5f + pos.y, 0.5f + pos.z,  0.0f, 0.0f, layer});
-		multipush(_vertices, {0.5f + pos.x, -0.5f + pos.y,  0.5f + pos.z,  1.0f, 0.0f, layer});
-		multipush(_vertices, {0.5f + pos.x, 0.5f + pos.y,  0.5f + pos.z,  1.0f, 1.0f, layer});
-
-		multipush(_vertices, {0.5f + pos.x,  0.5f + pos.y, 0.5f + pos.z,  1.0f, 1.0f, layer});
-		multipush(_vertices, {-0.5f + pos.x, 0.5f + pos.y, 0.5f + pos.z,  0.0f, 1.0f, layer});
-		multipush(_vertices, {-0.5f + pos.x, -0.5f + pos.y, 0.5f + pos.z, 0.0f, 0.0f, layer});
-	}
-	else if (face == 5) {
-		multipush(_vertices, {-0.5f + pos.x, -0.5f + pos.y, -0.5f + pos.z,  1.0f, 0.0f, layer});
-		multipush(_vertices, {0.5f + pos.x, 0.5f + pos.y,  -0.5f + pos.z,  0.0f, 1.0f, layer});
-		multipush(_vertices, {0.5f + pos.x, -0.5f + pos.y,  -0.5f + pos.z,  0.0f, 0.0f, layer});
-
-		multipush(_vertices, {0.5f + pos.x,  0.5f + pos.y, -0.5f + pos.z,  0.0f, 1.0f, layer});
-		multipush(_vertices, {-0.5f + pos.x, -0.5f + pos.y, -0.5f + pos.z, 1.0f, 0.0f, layer});
-		multipush(_vertices, {-0.5f + pos.x, 0.5f + pos.y, -0.5f + pos.z,  1.0f, 1.0f, layer});
 	}
 }
 
@@ -139,18 +69,19 @@ void	ChunkRenderer::generateMesh(Block ***blocks) {
 			for (int z = 0; z < Chunk::SIZE; z++) {
 				Block current = blocks[x][y][z];
 				if (current.isActive()) {
-					if (x == 0 or blocks[x - 1][y][z].isActive() == false)
-						addQuad(current, glm::vec3(x, y, z), 1);
-					if (y == 0 or blocks[x][y - 1][z].isActive() == false)
-						addQuad(current, glm::vec3(x, y, z), 3);
-					if (z == 0 or blocks[x][y][z - 1].isActive() == false)
-						addQuad(current, glm::vec3(x, y, z), 5);
-					if (x == Chunk::SIZE - 1 or blocks[x + 1][y][z].isActive() == false)
-						addQuad(current, glm::vec3(x, y, z), 0);
-					if (y == Chunk::SIZE - 1 or blocks[x][y + 1][z].isActive() == false)
-						addQuad(current, glm::vec3(x, y, z), 2);
-					if (z == Chunk::SIZE - 1 or blocks[x][y][z + 1].isActive() == false)
-						addQuad(current, glm::vec3(x, y, z), 4);
+					multipush(_vertices, {static_cast<float>(x), static_cast<float>(y), static_cast<float>(z), 1.0f, 1.0f, 1.0f, 1.0f});
+					// if (x == 0 or blocks[x - 1][y][z].isActive() == false)
+					// 	addQuad(current, glm::vec3(x, y, z), 1);
+					// if (y == 0 or blocks[x][y - 1][z].isActive() == false)
+					// 	addQuad(current, glm::vec3(x, y, z), 3);
+					// if (z == 0 or blocks[x][y][z - 1].isActive() == false)
+					// 	addQuad(current, glm::vec3(x, y, z), 5);
+					// if (x == Chunk::SIZE - 1 or blocks[x + 1][y][z].isActive() == false)
+					// 	addQuad(current, glm::vec3(x, y, z), 0);
+					// if (y == Chunk::SIZE - 1 or blocks[x][y + 1][z].isActive() == false)
+					// 	addQuad(current, glm::vec3(x, y, z), 2);
+					// if (z == Chunk::SIZE - 1 or blocks[x][y][z + 1].isActive() == false)
+					// 	addQuad(current, glm::vec3(x, y, z), 4);
 				}
 			}
 		}
@@ -165,7 +96,7 @@ void	ChunkRenderer::generateMesh(Block ***blocks) {
 
 void	ChunkRenderer::render(Renderer *renderer) {
 	glBindVertexArray(_VAO);
-	glDrawArrays(GL_TRIANGLES, 0, _vertices.size() / 6);
+	glDrawArrays(GL_POINTS, 0, _vertices.size() / 7);
 	glBindVertexArray(0);
 }
 
@@ -173,6 +104,5 @@ ChunkRenderer		&ChunkRenderer::operator=(ChunkRenderer const &src) {
 	_VAO = src.getVAO();
 	_VBO = src.getVBO();
 	_vertices = src.getVertices();
-	_pos = src.getPos();
 	return *this;
 }
