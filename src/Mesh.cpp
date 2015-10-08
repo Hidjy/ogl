@@ -97,7 +97,7 @@ void	Mesh::render(Renderer *renderer, unsigned int instances) {
 
 	glBindVertexArray(_VAO);
 	if (_elementBuffer == nullptr)
-		glDrawArraysInstanced(_mode, 0, _vertexBufferSize / 6, instances);
+		glDrawArraysInstanced(_mode, 0, _vertexBufferSize / 7, instances);
 	else
 		glDrawElementsInstanced(_mode, _elementBufferSize, GL_UNSIGNED_INT, (void*)0, instances);
 	glBindVertexArray(0);

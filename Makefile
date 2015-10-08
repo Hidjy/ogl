@@ -8,7 +8,6 @@ SRC		=	main.cpp	\
 			MessageManager.cpp	\
 			WorldGenerator.cpp	\
 			Renderer.cpp	\
-			ChunkRenderer.cpp	\
 			Block.cpp	\
 			Camera.cpp	\
 			Chunk.cpp	\

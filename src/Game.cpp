@@ -99,14 +99,15 @@ void	Game::initRenderer() {
 	camera = new Camera(glm::vec3(20.0f, 20.0f, 20.0f));
 
 	Shader *blockShader = new Shader();
-	blockShader->loadFromFile(GL_VERTEX_SHADER,"shaders/block.vert");
-	blockShader->loadFromFile(GL_FRAGMENT_SHADER,"shaders/block.frag");
+	blockShader->loadFromFile(GL_VERTEX_SHADER,"shaders/block.vs");
+	blockShader->loadFromFile(GL_GEOMETRY_SHADER,"shaders/block.gs");
+	blockShader->loadFromFile(GL_FRAGMENT_SHADER,"shaders/block.fs");
 	blockShader->createAndLinkProgram();
 	renderer->setShader("Block", blockShader);
 
 	Shader *skyboxShader = new Shader();
-	skyboxShader->loadFromFile(GL_VERTEX_SHADER,"shaders/skybox.vert");
-	skyboxShader->loadFromFile(GL_FRAGMENT_SHADER,"shaders/skybox.frag");
+	skyboxShader->loadFromFile(GL_VERTEX_SHADER,"shaders/skybox.vs");
+	skyboxShader->loadFromFile(GL_FRAGMENT_SHADER,"shaders/skybox.fs");
 	skyboxShader->createAndLinkProgram();
 	renderer->setShader("Skybox", skyboxShader);
 }
@@ -134,14 +135,14 @@ void	Game::initWorld() {
 							int block_type;
 							if ((y1 + (y * Chunk::SIZE)) < ((*perlinNoise)[x1 + ((x ) * Chunk::SIZE)][z1 + ((z ) * Chunk::SIZE)] * static_cast<float>(Chunk::SIZE * 3.0f) - 32)) {
 								if ((y1 + (y * Chunk::SIZE)) == 9)
-									block_type = 10;
+									block_type = 3;
 								else if (((y1 + (y * Chunk::SIZE)) + 5 < ((*perlinNoise)[x1 + ((x ) * Chunk::SIZE)][z1 + ((z ) * Chunk::SIZE)] * static_cast<float>(Chunk::SIZE * 3.0f) - 32)))
 									block_type = 1;
 								else
-									block_type = 3;
+									block_type = 2;
 							}
 							else if ((y1 + (y * Chunk::SIZE)) < 10)
-								block_type = 25;
+								block_type = 4;
 							else
 								block_type = 0;
 

@@ -107,6 +107,15 @@ GLuint	Chunk::countBlocks()
 	return _blockCount;
 }
 
+static void getRGBA(int type, float &r, float &g, float &b, float &a)
+{
+	float color[] = {1.0f, 0.5f, 0.2f, 0.0f};
+	r = color[type];
+	g = 1.0f - color[type];
+	b = 0.5f + color[type] * 2.0f;
+	a = 1.0f;
+}
+
 void	Chunk::generateMesh() {
 	_needRebuild = false;
 
@@ -123,16 +132,31 @@ void	Chunk::generateMesh() {
 		for (int y = 0; y < Chunk::SIZE; y++) {
 			for (int z = 0; z < Chunk::SIZE; z++) {
 				Block current = _blocks[x][y][z];
-				if (current.isActive()
-						and ((x == 0 or not _blocks[x - 1][y][z].isActive()) or (y == 0 or not _blocks[x][y - 1][z].isActive()) or (z == 0 or not _blocks[x][y][z - 1].isActive())
-						or (x == Chunk::SIZE - 1 or not _blocks[x + 1][y][z].isActive()) or (y == Chunk::SIZE - 1 or not _blocks[x][y + 1][z].isActive()) or (z == Chunk::SIZE - 1 or not _blocks[x][y][z + 1].isActive()))) {
-					vertexBuffer[i++] = static_cast<float>(x);
-					vertexBuffer[i++] = static_cast<float>(y);
-					vertexBuffer[i++] = static_cast<float>(z);
-					vertexBuffer[i++] = 1.0f;
-					vertexBuffer[i++] = 1.0f;
-					vertexBuffer[i++] = 1.0f;
-					vertexBuffer[i++] = 1.0f;
+				if (current.isActive()) {
+					int mask = 0;
+					float r, g, b, a;
+					getRGBA(current.getType() - 1, r, g, b, a);
+					if (x == 0 or not _blocks[x - 1][y][z].isActive())
+						mask |= 1 << 4;
+					if (y == 0 or not _blocks[x][y - 1][z].isActive())
+						mask |= 1 << 6;
+					if (z == 0 or not _blocks[x][y][z - 1].isActive())
+						mask |= 1 << 5;
+					if (x == Chunk::SIZE - 1 or not _blocks[x + 1][y][z].isActive())
+						mask |= 1 << 3;
+					if (y == Chunk::SIZE - 1 or not _blocks[x][y + 1][z].isActive())
+						mask |= 1 << 1;
+					if (z == Chunk::SIZE - 1 or not _blocks[x][y][z + 1].isActive())
+						mask |= 1 << 2;
+					if (mask != 0) {
+						vertexBuffer[i++] = static_cast<float>(x);
+						vertexBuffer[i++] = static_cast<float>(y);
+						vertexBuffer[i++] = static_cast<float>(z);
+						vertexBuffer[i++] = r;
+						vertexBuffer[i++] = g;
+						vertexBuffer[i++] = b;
+						vertexBuffer[i++] = a;
+					}
 				}
 			}
 		}
