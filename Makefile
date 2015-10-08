@@ -6,11 +6,14 @@ SRC		=	main.cpp	\
 			ChunkManager.cpp	\
 			InputManager.cpp	\
 			MessageManager.cpp	\
+			BlockTypeManager.cpp	\
 			WorldGenerator.cpp	\
 			Renderer.cpp	\
 			Block.cpp	\
+			BlockType.cpp	\
 			Camera.cpp	\
 			Chunk.cpp	\
+			Color.cpp	\
 			EWorld.cpp	\
 			Player.cpp	\
 			Shader.cpp	\

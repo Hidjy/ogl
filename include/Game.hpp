@@ -18,6 +18,8 @@
 #include "Skybox.hpp"
 #include "Block.hpp"
 #include "Renderer.hpp"
+#include "BlockType.hpp"
+#include "BlockTypeManager.hpp"
 
 namespace Game {
 	extern float	deltaTime;
@@ -33,7 +35,9 @@ namespace Game {
 	extern World	 		*world;
 	extern Player 			*player;
 	extern Camera 			*camera;
+
 	extern InputManager 	*inputManager;
+	extern BlockTypeManager	*blockTypeManager;
 
 	extern glm::mat4		projection;
 	extern glm::mat4		view;

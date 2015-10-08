@@ -8,6 +8,8 @@
 
 #include "Chunk.hpp"
 #include "Renderer.hpp"
+#include "BlockType.hpp"
+#include "Color.hpp"
 
 Chunk::Chunk() : _pos(glm::vec3(0, 0, 0)), _empty(false), _loaded(false), _setup(false), _needRebuild(false) //FIXME
 {
@@ -110,15 +112,6 @@ GLuint	Chunk::countBlocks()
 	return _blockCount;
 }
 
-static void getRGBA(int type, float &r, float &g, float &b, float &a)
-{
-	float color[] = {1.0f, 0.5f, 0.2f, 0.0f};
-	r = color[type];
-	g = 1.0f - color[type];
-	b = 0.5f + color[type] * 2.0f;
-	a = 1.0f;
-}
-
 template <typename T>
 static void multipush(std::vector<T> &target, std::vector<T> src)
 {
@@ -152,11 +145,11 @@ void	Chunk::generateMesh() {
 			for (int z = 0; z < Chunk::SIZE; z++) {
 				Block current = _blocks[x][y][z];
 				if (current.isActive()) {
-					float vx, vy, vz, r, g, b, a;
+					float vx, vy, vz;
 					vx = static_cast<float>(x);
 					vy = static_cast<float>(y);
 					vz = static_cast<float>(z);
-					getRGBA(current.getType() - 1, r, g, b, a);
+					Color c = current.getType()->getColor();
 
 					GLfloat ao[8] = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
 
@@ -212,53 +205,53 @@ void	Chunk::generateMesh() {
 						ao[7] *= AO_COEFF;
 
 					if (x == 0 or not _blocks[x - 1][y][z].isActive()) {
-						multipush(vertices, {vx + 0.0f, vy + 0.0f, vz + 0.0f, r * ao[0], g * ao[0], b * ao[0], a});
-						multipush(vertices, {vx + 0.0f, vy + 0.0f, vz + 1.0f, r * ao[1], g * ao[1], b * ao[1], a});
-						multipush(vertices, {vx + 0.0f, vy + 1.0f, vz + 0.0f, r * ao[2], g * ao[2], b * ao[2], a});
-						multipush(vertices, {vx + 0.0f, vy + 1.0f, vz + 0.0f, r * ao[2], g * ao[2], b * ao[2], a});
-						multipush(vertices, {vx + 0.0f, vy + 0.0f, vz + 1.0f, r * ao[1], g * ao[1], b * ao[1], a});
-						multipush(vertices, {vx + 0.0f, vy + 1.0f, vz + 1.0f, r * ao[3], g * ao[3], b * ao[3], a});
+						multipush(vertices, {vx + 0.0f, vy + 0.0f, vz + 0.0f, c.r * ao[0], c.g * ao[0], c.b * ao[0], c.a});
+						multipush(vertices, {vx + 0.0f, vy + 0.0f, vz + 1.0f, c.r * ao[1], c.g * ao[1], c.b * ao[1], c.a});
+						multipush(vertices, {vx + 0.0f, vy + 1.0f, vz + 0.0f, c.r * ao[2], c.g * ao[2], c.b * ao[2], c.a});
+						multipush(vertices, {vx + 0.0f, vy + 1.0f, vz + 0.0f, c.r * ao[2], c.g * ao[2], c.b * ao[2], c.a});
+						multipush(vertices, {vx + 0.0f, vy + 0.0f, vz + 1.0f, c.r * ao[1], c.g * ao[1], c.b * ao[1], c.a});
+						multipush(vertices, {vx + 0.0f, vy + 1.0f, vz + 1.0f, c.r * ao[3], c.g * ao[3], c.b * ao[3], c.a});
 					}
 					if (y == 0 or not _blocks[x][y - 1][z].isActive()) {
 
-						multipush(vertices, {vx + 0.0f, vy + 0.0f, vz + 0.0f, r * ao[0], g * ao[0], b * ao[0], a});
-						multipush(vertices, {vx + 1.0f, vy + 0.0f, vz + 1.0f, r * ao[5], g * ao[5], b * ao[5], a});
-						multipush(vertices, {vx + 0.0f, vy + 0.0f, vz + 1.0f, r * ao[1], g * ao[1], b * ao[1], a});
-						multipush(vertices, {vx + 0.0f, vy + 0.0f, vz + 0.0f, r * ao[0], g * ao[0], b * ao[0], a});
-						multipush(vertices, {vx + 1.0f, vy + 0.0f, vz + 0.0f, r * ao[4], g * ao[4], b * ao[4], a});
-						multipush(vertices, {vx + 1.0f, vy + 0.0f, vz + 1.0f, r * ao[5], g * ao[5], b * ao[5], a});
+						multipush(vertices, {vx + 0.0f, vy + 0.0f, vz + 0.0f, c.r * ao[0], c.g * ao[0], c.b * ao[0], c.a});
+						multipush(vertices, {vx + 1.0f, vy + 0.0f, vz + 1.0f, c.r * ao[5], c.g * ao[5], c.b * ao[5], c.a});
+						multipush(vertices, {vx + 0.0f, vy + 0.0f, vz + 1.0f, c.r * ao[1], c.g * ao[1], c.b * ao[1], c.a});
+						multipush(vertices, {vx + 0.0f, vy + 0.0f, vz + 0.0f, c.r * ao[0], c.g * ao[0], c.b * ao[0], c.a});
+						multipush(vertices, {vx + 1.0f, vy + 0.0f, vz + 0.0f, c.r * ao[4], c.g * ao[4], c.b * ao[4], c.a});
+						multipush(vertices, {vx + 1.0f, vy + 0.0f, vz + 1.0f, c.r * ao[5], c.g * ao[5], c.b * ao[5], c.a});
 					}
 					if (z == 0 or not _blocks[x][y][z - 1].isActive()) {
-						multipush(vertices, {vx + 0.0f, vy + 0.0f, vz + 0.0f, r * ao[0], g * ao[0], b * ao[0], a});
-						multipush(vertices, {vx + 0.0f, vy + 1.0f, vz + 0.0f, r * ao[2], g * ao[2], b * ao[2], a});
-						multipush(vertices, {vx + 1.0f, vy + 0.0f, vz + 0.0f, r * ao[4], g * ao[4], b * ao[4], a});
-						multipush(vertices, {vx + 1.0f, vy + 0.0f, vz + 0.0f, r * ao[4], g * ao[4], b * ao[4], a});
-						multipush(vertices, {vx + 0.0f, vy + 1.0f, vz + 0.0f, r * ao[2], g * ao[2], b * ao[2], a});
-						multipush(vertices, {vx + 1.0f, vy + 1.0f, vz + 0.0f, r * ao[6], g * ao[6], b * ao[6], a});
+						multipush(vertices, {vx + 0.0f, vy + 0.0f, vz + 0.0f, c.r * ao[0], c.g * ao[0], c.b * ao[0], c.a});
+						multipush(vertices, {vx + 0.0f, vy + 1.0f, vz + 0.0f, c.r * ao[2], c.g * ao[2], c.b * ao[2], c.a});
+						multipush(vertices, {vx + 1.0f, vy + 0.0f, vz + 0.0f, c.r * ao[4], c.g * ao[4], c.b * ao[4], c.a});
+						multipush(vertices, {vx + 1.0f, vy + 0.0f, vz + 0.0f, c.r * ao[4], c.g * ao[4], c.b * ao[4], c.a});
+						multipush(vertices, {vx + 0.0f, vy + 1.0f, vz + 0.0f, c.r * ao[2], c.g * ao[2], c.b * ao[2], c.a});
+						multipush(vertices, {vx + 1.0f, vy + 1.0f, vz + 0.0f, c.r * ao[6], c.g * ao[6], c.b * ao[6], c.a});
 					}
 					if (x == Chunk::SIZE - 1 or not _blocks[x + 1][y][z].isActive()) {
-						multipush(vertices, {vx + 1.0f, vy + 1.0f, vz + 1.0f, r * ao[7], g * ao[7], b * ao[7], a});
-						multipush(vertices, {vx + 1.0f, vy + 0.0f, vz + 1.0f, r * ao[5], g * ao[5], b * ao[5], a});
-						multipush(vertices, {vx + 1.0f, vy + 1.0f, vz + 0.0f, r * ao[6], g * ao[6], b * ao[6], a});
-						multipush(vertices, {vx + 1.0f, vy + 0.0f, vz + 0.0f, r * ao[4], g * ao[4], b * ao[4], a});
-						multipush(vertices, {vx + 1.0f, vy + 1.0f, vz + 0.0f, r * ao[6], g * ao[6], b * ao[6], a});
-						multipush(vertices, {vx + 1.0f, vy + 0.0f, vz + 1.0f, r * ao[5], g * ao[5], b * ao[5], a});
+						multipush(vertices, {vx + 1.0f, vy + 1.0f, vz + 1.0f, c.r * ao[7], c.g * ao[7], c.b * ao[7], c.a});
+						multipush(vertices, {vx + 1.0f, vy + 0.0f, vz + 1.0f, c.r * ao[5], c.g * ao[5], c.b * ao[5], c.a});
+						multipush(vertices, {vx + 1.0f, vy + 1.0f, vz + 0.0f, c.r * ao[6], c.g * ao[6], c.b * ao[6], c.a});
+						multipush(vertices, {vx + 1.0f, vy + 0.0f, vz + 0.0f, c.r * ao[4], c.g * ao[4], c.b * ao[4], c.a});
+						multipush(vertices, {vx + 1.0f, vy + 1.0f, vz + 0.0f, c.r * ao[6], c.g * ao[6], c.b * ao[6], c.a});
+						multipush(vertices, {vx + 1.0f, vy + 0.0f, vz + 1.0f, c.r * ao[5], c.g * ao[5], c.b * ao[5], c.a});
 					}
 					if (y == Chunk::SIZE - 1 or not _blocks[x][y + 1][z].isActive()) {
-						multipush(vertices, {vx + 1.0f, vy + 1.0f, vz + 1.0f, r * ao[7], g * ao[7], b * ao[7], a});
-						multipush(vertices, {vx + 0.0f, vy + 1.0f, vz + 0.0f, r * ao[2], g * ao[2], b * ao[2], a});
-						multipush(vertices, {vx + 0.0f, vy + 1.0f, vz + 1.0f, r * ao[3], g * ao[3], b * ao[3], a});
-						multipush(vertices, {vx + 1.0f, vy + 1.0f, vz + 1.0f, r * ao[7], g * ao[7], b * ao[7], a});
-						multipush(vertices, {vx + 1.0f, vy + 1.0f, vz + 0.0f, r * ao[6], g * ao[6], b * ao[6], a});
-						multipush(vertices, {vx + 0.0f, vy + 1.0f, vz + 0.0f, r * ao[2], g * ao[2], b * ao[2], a});
+						multipush(vertices, {vx + 1.0f, vy + 1.0f, vz + 1.0f, c.r * ao[7], c.g * ao[7], c.b * ao[7], c.a});
+						multipush(vertices, {vx + 0.0f, vy + 1.0f, vz + 0.0f, c.r * ao[2], c.g * ao[2], c.b * ao[2], c.a});
+						multipush(vertices, {vx + 0.0f, vy + 1.0f, vz + 1.0f, c.r * ao[3], c.g * ao[3], c.b * ao[3], c.a});
+						multipush(vertices, {vx + 1.0f, vy + 1.0f, vz + 1.0f, c.r * ao[7], c.g * ao[7], c.b * ao[7], c.a});
+						multipush(vertices, {vx + 1.0f, vy + 1.0f, vz + 0.0f, c.r * ao[6], c.g * ao[6], c.b * ao[6], c.a});
+						multipush(vertices, {vx + 0.0f, vy + 1.0f, vz + 0.0f, c.r * ao[2], c.g * ao[2], c.b * ao[2], c.a});
 					}
 					if (z == Chunk::SIZE - 1 or not _blocks[x][y][z + 1].isActive()) {
-						multipush(vertices, {vx + 1.0f, vy + 1.0f, vz + 1.0f, r * ao[7], g * ao[7], b * ao[7], a});
-						multipush(vertices, {vx + 0.0f, vy + 1.0f, vz + 1.0f, r * ao[3], g * ao[3], b * ao[3], a});
-						multipush(vertices, {vx + 1.0f, vy + 0.0f, vz + 1.0f, r * ao[5], g * ao[5], b * ao[5], a});
-						multipush(vertices, {vx + 0.0f, vy + 0.0f, vz + 1.0f, r * ao[1], g * ao[1], b * ao[1], a});
-						multipush(vertices, {vx + 1.0f, vy + 0.0f, vz + 1.0f, r * ao[5], g * ao[5], b * ao[5], a});
-						multipush(vertices, {vx + 0.0f, vy + 1.0f, vz + 1.0f, r * ao[3], g * ao[3], b * ao[3], a});
+						multipush(vertices, {vx + 1.0f, vy + 1.0f, vz + 1.0f, c.r * ao[7], c.g * ao[7], c.b * ao[7], c.a});
+						multipush(vertices, {vx + 0.0f, vy + 1.0f, vz + 1.0f, c.r * ao[3], c.g * ao[3], c.b * ao[3], c.a});
+						multipush(vertices, {vx + 1.0f, vy + 0.0f, vz + 1.0f, c.r * ao[5], c.g * ao[5], c.b * ao[5], c.a});
+						multipush(vertices, {vx + 0.0f, vy + 0.0f, vz + 1.0f, c.r * ao[1], c.g * ao[1], c.b * ao[1], c.a});
+						multipush(vertices, {vx + 1.0f, vy + 0.0f, vz + 1.0f, c.r * ao[5], c.g * ao[5], c.b * ao[5], c.a});
+						multipush(vertices, {vx + 0.0f, vy + 1.0f, vz + 1.0f, c.r * ao[3], c.g * ao[3], c.b * ao[3], c.a});
 					}
 				}
 			}

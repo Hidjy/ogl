@@ -22,6 +22,8 @@
 #include "Skybox.hpp"
 #include "Block.hpp"
 #include "Renderer.hpp"
+#include "BlockType.hpp"
+#include "BlockTypeManager.hpp"
 
 float	Game::deltaTime = 0.0f;
 float	Game::lastFrame = 0.0f;
@@ -36,7 +38,9 @@ Skybox 			*Game::skybox;
 World	 		*Game::world;
 Player 			*Game::player;
 Camera 			*Game::camera;
-InputManager 	*Game::inputManager;
+
+InputManager 		*Game::inputManager;
+BlockTypeManager 	*Game::blockTypeManager;
 
 glm::mat4		Game::projection;
 glm::mat4		Game::view;
@@ -123,6 +127,17 @@ void	Game::initWorld() {
 	player = new Player(glm::vec3(10.0f, 20.0f, 10.0f), world);
 	inputManager = new InputManager(window, player);
 
+	blockTypeManager = new BlockTypeManager();
+	blockTypeManager->add("Stone", new BlockType());
+	blockTypeManager->add("Dirt", new BlockType());
+	blockTypeManager->add("Sand", new BlockType());
+	blockTypeManager->add("Water", new BlockType());
+
+	blockTypeManager[0]["Stone"]->setColor(Color(0.5f, 0.5f, 0.5f));
+	blockTypeManager[0]["Dirt"]->setColor(Color(0.5f, 0.25f, 0.0f));
+	blockTypeManager[0]["Sand"]->setColor(Color(0.75f, 0.75f, 0.0f));
+	blockTypeManager[0]["Water"]->setColor(Color(0.0f, 0.75f, 0.75f));
+
 	for (int x = 0; x < 10; x++) {
 		for (int y = 0; y < 2; y++) {
 			for (int z = 0; z < 10; z++) {
@@ -132,23 +147,21 @@ void	Game::initWorld() {
 				for (size_t x1 = 0; x1 < Chunk::SIZE; x1++) {
 					for (size_t y1 = 0; y1 < Chunk::SIZE; y1++) {
 						for (size_t z1 = 0; z1 < Chunk::SIZE; z1++) {
-							int block_type;
+							std::string block_type("");
 							if ((y1 + (y * Chunk::SIZE)) < ((*perlinNoise)[x1 + ((x ) * Chunk::SIZE)][z1 + ((z ) * Chunk::SIZE)] * static_cast<float>(Chunk::SIZE * 3.0f) - 32)) {
 								if ((y1 + (y * Chunk::SIZE)) == 9)
-									block_type = 3;
+									block_type = "Sand";
 								else if (((y1 + (y * Chunk::SIZE)) + 5 < ((*perlinNoise)[x1 + ((x ) * Chunk::SIZE)][z1 + ((z ) * Chunk::SIZE)] * static_cast<float>(Chunk::SIZE * 3.0f) - 32)))
-									block_type = 1;
+									block_type = "Stone";
 								else
-									block_type = 2;
+									block_type = "Dirt";
 							}
 							else if ((y1 + (y * Chunk::SIZE)) < 10)
-								block_type = 4;
-							else
-								block_type = 0;
+								block_type = "Water";
 
-							if (block_type != 0) {
+							if (block_type != "") {
 								chunk->getBlock(x1, y1, z1).setActive(true);
-								chunk->getBlock(x1, y1, z1).setType(block_type);
+								chunk->getBlock(x1, y1, z1).setType(blockTypeManager[0][block_type]);
 							}
 						}
 					}

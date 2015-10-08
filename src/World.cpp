@@ -46,7 +46,7 @@ GLint	World::getWorldBlockId(float x, float y, float z) {
 			static_cast<int>(x) % Chunk::SIZE,
 			static_cast<int>(y) % Chunk::SIZE,
 			static_cast<int>(z) % Chunk::SIZE
-		).getType();
+		).getType() != nullptr; //FIXME: BlockType::getID() ?
 	}
 	catch (std::exception e) {
 		// std::cout << "Pas de chunk" << std::endl;
