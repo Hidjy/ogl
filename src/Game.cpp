@@ -100,7 +100,7 @@ void	Game::initRenderer() {
 
 	Shader *blockShader = new Shader();
 	blockShader->loadFromFile(GL_VERTEX_SHADER,"shaders/block.vs");
-	blockShader->loadFromFile(GL_GEOMETRY_SHADER,"shaders/block.gs");
+	// blockShader->loadFromFile(GL_GEOMETRY_SHADER,"shaders/block.gs");
 	blockShader->loadFromFile(GL_FRAGMENT_SHADER,"shaders/block.fs");
 	blockShader->createAndLinkProgram();
 	renderer->setShader("Block", blockShader);

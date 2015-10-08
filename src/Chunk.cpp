@@ -4,6 +4,8 @@
 #define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>
 
+#include <vector>
+
 #include "Chunk.hpp"
 #include "Renderer.hpp"
 
@@ -19,6 +21,7 @@ Chunk::Chunk() : _pos(glm::vec3(0, 0, 0)), _empty(false), _loaded(false), _setup
 			_blocks[i][j] = new Block[SIZE];
 		}
 	}
+	_mesh.setMode(GL_TRIANGLES);
 }
 
 Chunk::Chunk(Chunk const &src) : Chunk() {
@@ -116,46 +119,78 @@ static void getRGBA(int type, float &r, float &g, float &b, float &a)
 	a = 1.0f;
 }
 
+// template <typename T>
+static void multipush(std::vector<float> &target, std::vector<float> src)
+{
+	for (auto it = src.begin(); it != src.end(); ++it)
+		target.push_back(*it);
+}
+
 void	Chunk::generateMesh() {
 	_needRebuild = false;
-
-	countBlocks();
 
 	if (_empty)
 		return;
 
-	GLuint vertexBufferSize = _blockCount * 7;
-	GLfloat *vertexBuffer = new GLfloat[vertexBufferSize];
+	std::vector<GLfloat> vertices;
 
-	GLuint i = 0;
 	for (int x = 0; x < Chunk::SIZE; x++) {
 		for (int y = 0; y < Chunk::SIZE; y++) {
 			for (int z = 0; z < Chunk::SIZE; z++) {
 				Block current = _blocks[x][y][z];
 				if (current.isActive()) {
-					int mask = 0;
-					float r, g, b, a;
+					float vx, vy, vz, r, g, b, a;
+					vx = static_cast<float>(x);
+					vy = static_cast<float>(y);
+					vz = static_cast<float>(z);
 					getRGBA(current.getType() - 1, r, g, b, a);
-					if (x == 0 or not _blocks[x - 1][y][z].isActive())
-						mask |= 1 << 4;
-					if (y == 0 or not _blocks[x][y - 1][z].isActive())
-						mask |= 1 << 6;
-					if (z == 0 or not _blocks[x][y][z - 1].isActive())
-						mask |= 1 << 5;
-					if (x == Chunk::SIZE - 1 or not _blocks[x + 1][y][z].isActive())
-						mask |= 1 << 3;
-					if (y == Chunk::SIZE - 1 or not _blocks[x][y + 1][z].isActive())
-						mask |= 1 << 1;
-					if (z == Chunk::SIZE - 1 or not _blocks[x][y][z + 1].isActive())
-						mask |= 1 << 2;
-					if (mask != 0) {
-						vertexBuffer[i++] = static_cast<float>(x);
-						vertexBuffer[i++] = static_cast<float>(y);
-						vertexBuffer[i++] = static_cast<float>(z);
-						vertexBuffer[i++] = r;
-						vertexBuffer[i++] = g;
-						vertexBuffer[i++] = b;
-						vertexBuffer[i++] = a;
+					if (x == 0 or not _blocks[x - 1][y][z].isActive()) {
+						multipush(vertices, {vx + 0.0f, vy + 0.0f, vz + 0.0f, r, g, b, a});
+						multipush(vertices, {vx + 0.0f, vy + 0.0f, vz + 1.0f, r, g, b, a});
+						multipush(vertices, {vx + 0.0f, vy + 1.0f, vz + 0.0f, r, g, b, a});
+						multipush(vertices, {vx + 0.0f, vy + 1.0f, vz + 0.0f, r, g, b, a});
+						multipush(vertices, {vx + 0.0f, vy + 0.0f, vz + 1.0f, r, g, b, a});
+						multipush(vertices, {vx + 0.0f, vy + 1.0f, vz + 1.0f, r, g, b, a});
+					}
+					if (y == 0 or not _blocks[x][y - 1][z].isActive()) {
+						multipush(vertices, {vx + 0.0f, vy + 0.0f, vz + 0.0f, r, g, b, a});
+						multipush(vertices, {vx + 1.0f, vy + 0.0f, vz + 1.0f, r, g, b, a});
+						multipush(vertices, {vx + 0.0f, vy + 0.0f, vz + 1.0f, r, g, b, a});
+						multipush(vertices, {vx + 0.0f, vy + 0.0f, vz + 0.0f, r, g, b, a});
+						multipush(vertices, {vx + 1.0f, vy + 0.0f, vz + 0.0f, r, g, b, a});
+						multipush(vertices, {vx + 1.0f, vy + 0.0f, vz + 1.0f, r, g, b, a});
+					}
+					if (z == 0 or not _blocks[x][y][z - 1].isActive()) {
+						multipush(vertices, {vx + 0.0f, vy + 0.0f, vz + 0.0f, r, g, b, a});
+						multipush(vertices, {vx + 0.0f, vy + 1.0f, vz + 0.0f, r, g, b, a});
+						multipush(vertices, {vx + 1.0f, vy + 0.0f, vz + 0.0f, r, g, b, a});
+						multipush(vertices, {vx + 1.0f, vy + 0.0f, vz + 0.0f, r, g, b, a});
+						multipush(vertices, {vx + 0.0f, vy + 1.0f, vz + 0.0f, r, g, b, a});
+						multipush(vertices, {vx + 1.0f, vy + 1.0f, vz + 0.0f, r, g, b, a});
+					}
+					if (x == Chunk::SIZE - 1 or not _blocks[x + 1][y][z].isActive()) {
+						multipush(vertices, {vx + 1.0f, vy + 1.0f, vz + 1.0f, r, g, b, a});
+						multipush(vertices, {vx + 1.0f, vy + 0.0f, vz + 1.0f, r, g, b, a});
+						multipush(vertices, {vx + 1.0f, vy + 1.0f, vz + 0.0f, r, g, b, a});
+						multipush(vertices, {vx + 1.0f, vy + 0.0f, vz + 0.0f, r, g, b, a});
+						multipush(vertices, {vx + 1.0f, vy + 1.0f, vz + 0.0f, r, g, b, a});
+						multipush(vertices, {vx + 1.0f, vy + 0.0f, vz + 1.0f, r, g, b, a});
+					}
+					if (y == Chunk::SIZE - 1 or not _blocks[x][y + 1][z].isActive()) {
+						multipush(vertices, {vx + 1.0f, vy + 1.0f, vz + 1.0f, r, g, b, a});
+						multipush(vertices, {vx + 0.0f, vy + 1.0f, vz + 0.0f, r, g, b, a});
+						multipush(vertices, {vx + 0.0f, vy + 1.0f, vz + 1.0f, r, g, b, a});
+						multipush(vertices, {vx + 1.0f, vy + 1.0f, vz + 1.0f, r, g, b, a});
+						multipush(vertices, {vx + 1.0f, vy + 1.0f, vz + 0.0f, r, g, b, a});
+						multipush(vertices, {vx + 0.0f, vy + 1.0f, vz + 0.0f, r, g, b, a});
+					}
+					if (z == Chunk::SIZE - 1 or not _blocks[x][y][z + 1].isActive()) {
+						multipush(vertices, {vx + 1.0f, vy + 1.0f, vz + 1.0f, r, g, b, a});
+						multipush(vertices, {vx + 0.0f, vy + 1.0f, vz + 1.0f, r, g, b, a});
+						multipush(vertices, {vx + 1.0f, vy + 0.0f, vz + 1.0f, r, g, b, a});
+						multipush(vertices, {vx + 0.0f, vy + 0.0f, vz + 1.0f, r, g, b, a});
+						multipush(vertices, {vx + 1.0f, vy + 0.0f, vz + 1.0f, r, g, b, a});
+						multipush(vertices, {vx + 0.0f, vy + 1.0f, vz + 1.0f, r, g, b, a});
 					}
 				}
 			}
@@ -166,7 +201,15 @@ void	Chunk::generateMesh() {
 	if (tmp != nullptr)
 		delete tmp;
 
-	_mesh.setVertexBuffer(vertexBuffer, i+1);
+	GLuint vertexBufferSize = vertices.size();
+	GLfloat *vertexBuffer = new GLfloat[vertexBufferSize];
+
+	int i = 0;
+	for (auto it = vertices.begin() ; it != vertices.end() ; ++it) {
+		vertexBuffer[i++] = *it;
+	}
+
+	_mesh.setVertexBuffer(vertexBuffer, vertexBufferSize);
 }
 
 void	Chunk::render(Renderer *renderer) {

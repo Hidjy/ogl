@@ -4,28 +4,6 @@
 ![alt tag](screenshot/screen1.png)
 ![alt tag](screenshot/screen2.png)
 
-## To Do List
+## Work Progress
 
-### Features
-* Better BlockType Management
-* Use libnoise : http://libnoise.sourceforge.net/tutorials/tutorial3.html
-* Color Modification on Textures (Shader)
-* Ambient Occlusion
-* Model Loading
-* Model Animation
-* Worlds : Save and Load
-* Tick system ?
-* Lua ?
-
-### Performance Improvement
-* /!\ Memory Leaks
-* OpenGL Leaks ?
-* Frustum Culling (Chunk)
-* Occlusion Culling (Chunk)
-* Mesh Simplification (aka LOD)
-
-## Ressources
-* http://0fps.net/category/programming/voxels/
-* https://sites.google.com/site/letsmakeavoxelengine/
-
-* http://www.reddit.com/r/VoxelGameDev/comments/win15/the_big_list_of_block_engines_resources_continued/
+see https://trello.com/b/ENJNSbn8/
