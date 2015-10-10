@@ -1,9 +1,10 @@
 #pragma once
 
+#define GLEW_STATIC
+#include <GL/glew.h>
+
 #define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>
-
-#include <GL/glew.h>
 
 #define CAMERA_SPEED 20
 
@@ -18,7 +19,7 @@ public:
 
 	GLfloat		_zoom;
 
-	Camera(glm::vec3 p);
+	Camera();
 
 	glm::mat4	getViewMatrix();
 

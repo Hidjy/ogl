@@ -1,56 +1,36 @@
 #pragma once
 
-#define GLEW_STATIC
-#include <GL/glew.h>
-
-#include <GLFW/glfw3.h>
-
-#define GLM_FORCE_RADIANS
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+#include "IUserInterface.hpp"
 
 #include "Player.hpp"
 #include "Camera.hpp"
-#include "InputManager.hpp"
 #include "World.hpp"
-#include "WorldGenerator.hpp"
-#include "Chunk.hpp"
 #include "Skybox.hpp"
-#include "Block.hpp"
-#include "Renderer.hpp"
-#include "BlockType.hpp"
-#include "BlockTypeManager.hpp"
 
-namespace Game {
-	extern float	deltaTime;
-	extern float	lastFrame;
+#include "RenderContext.hpp"
 
-	extern GLFWwindow* window;
+class Game : public IUserInterface
+{
+private:
+	RenderContext *_renderContext;
 
-	extern int		windowWidth;
-	extern int		windowHeight;
+	World	 	*_world;
+	Skybox 		*_skybox;//TODO: Sky Class ?
+	Player 		*_player;
+	Camera 		*_camera;
 
-	extern Renderer 		*renderer;
-	extern Skybox 			*skybox;
-	extern World	 		*world;
-	extern Player 			*player;
-	extern Camera 			*camera;
+public:
+	Game();
+	~Game();
 
-	extern InputManager 	*inputManager;
-	extern BlockTypeManager	*blockTypeManager;
+	World	*getWorld();
+	Skybox	*getSkybox();
+	Player	*getPlayer();
+	Camera	*getCamera();
 
-	extern glm::mat4		projection;
-	extern glm::mat4		view;
+	void	setRenderContext(RenderContext *renderContext);
 
-	extern bool		shouldClose();
-
-	extern void		init();
-	extern void		initGLFW();
-	extern void		initOGL();
-	extern void		initRenderer();
-	extern void		initWorld();
-	extern void		initProjection();
-	extern void		update();
-	extern void		draw();
-	extern void		deinit();
-}
+	void	initWorld();
+	void	update(float dt);
+	void	render();
+};

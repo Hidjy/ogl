@@ -12,11 +12,61 @@
 #include "EWorld.hpp"
 #include "ChunkManager.hpp"
 #include "Block.hpp"
-#include "Renderer.hpp"
+#include "ShaderManager.hpp"
+#include "RenderContext.hpp"
+
+#include "WorldGenerator.hpp"
 
 # include <cmath>
 
 World::World() {
+	float (*perlinNoise)[GENERATOR_SIZE][GENERATOR_SIZE] = NULL;
+	WorldGenerator::GenerateMap(&perlinNoise, 7);
+
+	_blockTypeManager = new BlockTypeManager();
+	_blockTypeManager->add("Stone", new BlockType());
+	_blockTypeManager->add("Dirt", new BlockType());
+	_blockTypeManager->add("Sand", new BlockType());
+	_blockTypeManager->add("Water", new BlockType());
+
+	_blockTypeManager[0]["Stone"]->setColor(Color(0.5f, 0.5f, 0.5f));
+	_blockTypeManager[0]["Dirt"]->setColor(Color(0.5f, 0.25f, 0.0f));
+	_blockTypeManager[0]["Sand"]->setColor(Color(0.75f, 0.75f, 0.0f));
+	_blockTypeManager[0]["Water"]->setColor(Color(0.0f, 0.75f, 0.75f));
+
+	for (int x = 0; x < 10; x++) {
+		for (int y = 0; y < 2; y++) {
+			for (int z = 0; z < 10; z++) {
+				Chunk *chunk = new Chunk();
+				chunk->setPos(glm::vec3(x, y, z));
+
+				for (size_t x1 = 0; x1 < Chunk::SIZE; x1++) {
+					for (size_t y1 = 0; y1 < Chunk::SIZE; y1++) {
+						for (size_t z1 = 0; z1 < Chunk::SIZE; z1++) {
+							std::string block_type("");
+							if ((y1 + (y * Chunk::SIZE)) < ((*perlinNoise)[x1 + ((x ) * Chunk::SIZE)][z1 + ((z ) * Chunk::SIZE)] * static_cast<float>(Chunk::SIZE * 3.0f) - 32)) {
+								if ((y1 + (y * Chunk::SIZE)) == 9)
+									block_type = "Sand";
+								else if (((y1 + (y * Chunk::SIZE)) + 5 < ((*perlinNoise)[x1 + ((x ) * Chunk::SIZE)][z1 + ((z ) * Chunk::SIZE)] * static_cast<float>(Chunk::SIZE * 3.0f) - 32)))
+									block_type = "Stone";
+								else
+									block_type = "Dirt";
+							}
+							else if ((y1 + (y * Chunk::SIZE)) < 10)
+								block_type = "Water";
+
+							if (block_type != "") {
+								chunk->getBlock(x1, y1, z1).setActive(true);
+								chunk->getBlock(x1, y1, z1).setType(_blockTypeManager[0][block_type]);
+							}
+						}
+					}
+				}
+				chunk->generateMesh();
+				addChunk(chunk);
+			}
+		}
+	}
 }
 
 World::~World() {
@@ -26,8 +76,8 @@ void	World::update(float dt) {
 	_chunkManager.update(dt);
 }
 
-void	World::render(Renderer *renderer) {
-	_chunkManager.render(renderer);
+void	World::render(RenderContext *renderContext) {
+	_chunkManager.render(renderContext);
 }
 
 

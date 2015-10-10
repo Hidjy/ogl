@@ -7,15 +7,18 @@
 #include <glm/glm.hpp>
 
 #include "Chunk.hpp"
-#include "Renderer.hpp"
-
+#include "ShaderManager.hpp"
+#include "RenderContext.hpp"
 #include "ChunkManager.hpp"
+
+#include "BlockTypeManager.hpp"
 
 #include <vector>
 
 class World {
 public:
 	ChunkManager	_chunkManager;
+	BlockTypeManager *_blockTypeManager;
 	//TODO: Must contain Player
 
 public:
@@ -23,7 +26,7 @@ public:
 	~World();
 
 	void	update(float dt);
-	void	render(Renderer *renderer);
+	void	render(RenderContext *renderContext);
 
 	Chunk	&getChunk(int x, int y, int z);
 	void	addChunk(Chunk *chunk);

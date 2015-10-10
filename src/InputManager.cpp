@@ -5,13 +5,15 @@
 bool		InputManager::_keys[1024];
 GLfloat		InputManager::_lastX;
 GLfloat		InputManager::_lastY;
+GLfloat		InputManager::_moveX = 0.0f;
+GLfloat		InputManager::_moveY = 0.0f;
 bool		InputManager::_firstMouse = true;
-Player		*InputManager::_player;
 
-InputManager::InputManager(GLFWwindow* window, Player *player) {
+//TODO: Observer pattern
+
+InputManager::InputManager(GLFWwindow* window) {
 	glfwSetKeyCallback(window, key_callback);
 	glfwSetCursorPosCallback(window, mouse_callback);
-	_player = player;
 }
 
 InputManager::~InputManager() {
@@ -40,30 +42,38 @@ void	InputManager::mouse_callback(GLFWwindow* window, double xpos, double ypos) 
 		_firstMouse = false;
 	}
 
-	GLfloat xoffset = xpos - _lastX;
-	GLfloat yoffset = _lastY - ypos;  // Reversed since y-coordinates go from bottom to left
+	_moveX = xpos - _lastX;
+	_moveY = _lastY - ypos;  // Reversed since y-coordinates go from bottom to left
 
 	_lastX = xpos;
 	_lastY = ypos;
-
-	_player->rotate(xoffset, yoffset);
 }
 
+bool InputManager::isKeyDown(int key) {
+	return _keys[key];
+}
+
+void InputManager::getMouseMove(GLfloat &x, GLfloat &y) {
+	x = _moveX;
+	y = _moveY;
+}
+
+
 void	InputManager::update(GLfloat deltaTime) {
-	if(_keys[GLFW_KEY_W])
-		_player->move(FORWARD, deltaTime);
-	if(_keys[GLFW_KEY_S])
-		_player->move(BACKWARD, deltaTime);
-	if(_keys[GLFW_KEY_A])
-		_player->move(LEFT, deltaTime);
-	if(_keys[GLFW_KEY_D])
-		_player->move(RIGHT, deltaTime);
-	if(_keys[GLFW_KEY_SPACE])
-		_player->move(UP, deltaTime);
-	if(_keys[GLFW_KEY_LEFT_SHIFT])
-		_player->move(DOWN, deltaTime);
-	if (_keys[GLFW_KEY_Q])
-		_player->move(BOOST_PLUS, deltaTime);
-	if (_keys[GLFW_KEY_E])
-		_player->move(BOOST_MOINS, deltaTime);
+	// if(_keys[GLFW_KEY_W])
+	// 	_player->move(FORWARD, deltaTime);
+	// if(_keys[GLFW_KEY_S])
+	// 	_player->move(BACKWARD, deltaTime);
+	// if(_keys[GLFW_KEY_A])
+	// 	_player->move(LEFT, deltaTime);
+	// if(_keys[GLFW_KEY_D])
+	// 	_player->move(RIGHT, deltaTime);
+	// if(_keys[GLFW_KEY_SPACE])
+	// 	_player->move(UP, deltaTime);
+	// if(_keys[GLFW_KEY_LEFT_SHIFT])
+	// 	_player->move(DOWN, deltaTime);
+	// if (_keys[GLFW_KEY_Q])
+	// 	_player->move(BOOST_PLUS, deltaTime);
+	// if (_keys[GLFW_KEY_E])
+	// 	_player->move(BOOST_MOINS, deltaTime);
 }

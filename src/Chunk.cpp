@@ -7,9 +7,10 @@
 #include <vector>
 
 #include "Chunk.hpp"
-#include "Renderer.hpp"
+#include "ShaderManager.hpp"
 #include "BlockType.hpp"
 #include "Color.hpp"
+#include "RenderContext.hpp"
 
 Chunk::Chunk() : _pos(glm::vec3(0, 0, 0)), _empty(false), _loaded(false), _setup(false), _needRebuild(false) //FIXME
 {
@@ -273,10 +274,10 @@ void	Chunk::generateMesh() {
 	_mesh.setVertexBuffer(vertexBuffer, vertexBufferSize);
 }
 
-void	Chunk::render(Renderer *renderer) {
+void	Chunk::render(RenderContext *renderContext) {
 	if (_empty)
 		return;
-	_mesh.render(renderer);
+	_mesh.render(renderContext);
 }
 
 void	Chunk::load() {

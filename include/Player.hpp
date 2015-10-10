@@ -1,9 +1,10 @@
 #pragma once
 
+#define GLEW_STATIC
+#include <GL/glew.h>
+
 #define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>
-
-#include <GL/glew.h>
 
 #include "World.hpp"
 #include "Camera.hpp"
@@ -24,10 +25,17 @@ private:
 
 	GLfloat		_speed;
 
+	World		*_world;
+	Camera		*_camera;
+
 public:
-	Player(glm::vec3 p, World *w);
+	Player();
+
+	void	setWorld(World *w);
+	void	setCamera(Camera *c);
+
 	void	move(Input input, GLfloat dt);
 	void	rotate(GLfloat xoffset, GLfloat yoffset);
-	//TODO: update();
+	void	update(float dt);
 	//TODO: render();
 };

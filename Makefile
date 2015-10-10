@@ -2,13 +2,15 @@ NAME		= ogl
 NAME_DEBUG	= ogl_debug
 
 SRC		=	main.cpp	\
+			GUI.cpp	\
 			Game.cpp	\
+			RenderContext.cpp	\
 			ChunkManager.cpp	\
 			InputManager.cpp	\
 			MessageManager.cpp	\
 			BlockTypeManager.cpp	\
 			WorldGenerator.cpp	\
-			Renderer.cpp	\
+			ShaderManager.cpp	\
 			Block.cpp	\
 			BlockType.cpp	\
 			Camera.cpp	\

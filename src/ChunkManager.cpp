@@ -9,7 +9,8 @@
 
 #include "Game.hpp"
 #include "Chunk.hpp"
-#include "Renderer.hpp"
+#include "ShaderManager.hpp"
+#include "RenderContext.hpp"
 
 #include <exception>
 
@@ -35,16 +36,16 @@ void ChunkManager::update(float dt)
 	// updateChunkList();
 }
 
-void	ChunkManager::render(Renderer *renderer) {
-	renderer->getShader("Block")->use();
+void	ChunkManager::render(RenderContext *renderContext) {
+	renderContext->getShaderManager()->getShader("Block")->use();
 
 	for (auto it = _renderList.begin(); it != _renderList.end(); ++it) {
 		glm::mat4 MVP;
 		glm::vec3 pos = (*it)->getPos();
 		MVP = glm::translate(MVP, glm::vec3(pos.x * Chunk::SIZE, pos.y * Chunk::SIZE, pos.z * Chunk::SIZE));
-		MVP = Game::projection * Game::view * MVP;
-		glUniformMatrix4fv(glGetUniformLocation(renderer->getShader("Block")->getProgram(), "MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
-		(*it)->render(renderer);
+		MVP = renderContext->getProjectionMatrix() * renderContext->getViewMatrix() * MVP;
+		glUniformMatrix4fv(glGetUniformLocation(renderContext->getShaderManager()->getShader("Block")->getProgram(), "MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
+		(*it)->render(renderContext);
 	}
 }
 

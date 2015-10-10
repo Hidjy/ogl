@@ -5,13 +5,13 @@
 
 #include "Shader.hpp"
 
-class Renderer {
+class ShaderManager {
 private:
 	std::map<std::string, Shader *>	_shaders;
 
 public:
-	Renderer();
-	~Renderer();
+	ShaderManager();
+	~ShaderManager();
 
 	Shader *getShader(std::string name);
 

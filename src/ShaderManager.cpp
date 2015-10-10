@@ -1,4 +1,4 @@
-#include "Renderer.hpp"
+#include "ShaderManager.hpp"
 
 #define GLEW_STATIC
 #include <GL/glew.h>
@@ -15,18 +15,18 @@
 
 #include "Shader.hpp"
 
-Renderer::Renderer() {
+ShaderManager::ShaderManager() {
 	_shaders.clear();
 }
 
-Renderer::~Renderer() {
+ShaderManager::~ShaderManager() {
 	for (auto it = _shaders.begin(); it != _shaders.end(); ++it)
 	{
 		delete it->second;
 	}
 }
 
-Shader *Renderer::getShader(std::string name) {
+Shader *ShaderManager::getShader(std::string name) {
 	auto it = _shaders.find(name);
 	if (it != _shaders.end())
 		return it->second;
@@ -34,6 +34,6 @@ Shader *Renderer::getShader(std::string name) {
 }
 
 
-void	Renderer::setShader(std::string name, Shader *shader) {
+void	ShaderManager::setShader(std::string name, Shader *shader) {
 	_shaders[name] = shader;
 }

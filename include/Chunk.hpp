@@ -7,8 +7,9 @@
 #include <glm/glm.hpp>
 
 #include "Block.hpp"
-#include "Renderer.hpp"
+#include "ShaderManager.hpp"
 #include "Mesh.hpp"
+#include "RenderContext.hpp"
 
 //TODO: Block counter (for accurate _empty)
 
@@ -51,7 +52,7 @@ public:
 
 	void	generateMesh();
 	void	update(float dt);
-	void	render(Renderer *renderer);
+	void	render(RenderContext *renderContext);
 	void	load();
 	void	unload();
 	void	setup();

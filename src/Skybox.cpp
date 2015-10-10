@@ -73,24 +73,22 @@ Skybox::Skybox() {
 
 Skybox::~Skybox() {}
 
-void Skybox::render(Renderer *renderer) {
-	//glActiveTexture(GL_TEXTURE3);
+void Skybox::render(RenderContext *renderContext) {
 	glBindTexture(GL_TEXTURE_CUBE_MAP, _cubemapTexture);
 
 	glDepthMask(GL_FALSE);;  // Change depth function so depth test passes when values are equal to depth buffer's content
 
-	glm::mat4 MVP = Game::projection * glm::mat4(glm::mat3(Game::view));
-	glUniformMatrix4fv(glGetUniformLocation(renderer->getShader("Skybox")->getProgram(), "MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
+	glm::mat4 MVP = renderContext->getProjectionMatrix() * glm::mat4(glm::mat3(renderContext->getViewMatrix()));
+	glUniformMatrix4fv(glGetUniformLocation(renderContext->getShaderManager()->getShader("Skybox")->getProgram(), "MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
 
 	// skybox cube
 	glBindVertexArray(_skyboxVAO);
-	glUniform1i(glGetUniformLocation(renderer->getShader("Skybox")->getProgram(), "skybox"), 0);
+	glUniform1i(glGetUniformLocation(renderContext->getShaderManager()->getShader("Skybox")->getProgram(), "skybox"), 0);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, _cubemapTexture);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 	glBindVertexArray(0);
 
 	glDepthMask(GL_TRUE); // Set depth function back to default
-
 }
 
 GLuint Skybox::loadCubemap(std::vector<const GLchar*> faces)

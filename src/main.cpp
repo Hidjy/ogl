@@ -1,15 +1,16 @@
+#include "GUI.hpp"
 #include "Game.hpp"
 
 int main()
 {
-	Game::init();
+	GUI *gui = GUI::instance();
+	Game game;
 
-	while(!Game::shouldClose())
+	while(gui->shouldClose() == false)
 	{
-		Game::update();
-		Game::draw();
+		gui->doUpdate(game);
+		gui->doRender(game);
 	}
 
-	Game::deinit();
 	return 0;
 }
