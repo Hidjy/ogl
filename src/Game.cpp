@@ -8,6 +8,7 @@
 #include "RenderContext.hpp"
 
 Game::Game() {
+	_gui = GUI::instance();
 	_skybox = new Skybox();
 	_world = new World();
 	_player = new Player();
@@ -17,7 +18,7 @@ Game::Game() {
 	_player->setCamera(_camera);
 
 	_renderContext = new RenderContext();
-	_renderContext->setProjectionMatrix(glm::perspective(45.0f, 16.0f/9.0f, 0.01f, 10000.0f));//FIXME: Aspect Ratio getter from GUI or renderContext
+	_renderContext->setProjectionMatrix(glm::perspective(45.0f, _gui->getAspectRatio(), 0.01f, 10000.0f));
 	_renderContext->setViewMatrix(_camera->getViewMatrix());
 
 	Shader *blockShader = new Shader();
@@ -31,6 +32,11 @@ Game::Game() {
 	skyboxShader->loadFromFile(GL_FRAGMENT_SHADER,"shaders/skybox.fs");
 	skyboxShader->createAndLinkProgram();
 	_renderContext->getShaderManager()->setShader("Skybox", skyboxShader);
+
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
+	glEnable(GL_CULL_FACE);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 }
 

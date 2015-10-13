@@ -2,18 +2,25 @@
 #include "Camera.hpp"
 #include "Player.hpp"
 
+#include "IInputReceiver.hpp"
+
+#include <string>
+#include <vector>
+
 bool		InputManager::_keys[1024];
 GLfloat		InputManager::_lastX;
 GLfloat		InputManager::_lastY;
-GLfloat		InputManager::_moveX = 0.0f;
-GLfloat		InputManager::_moveY = 0.0f;
 bool		InputManager::_firstMouse = true;
+
+std::vector<IInputReceiver *> InputManager::_mouseCallbackList;
 
 //TODO: Observer pattern
 
 InputManager::InputManager(GLFWwindow* window) {
 	glfwSetKeyCallback(window, key_callback);
 	glfwSetCursorPosCallback(window, mouse_callback);
+
+	_mouseCallbackList.clear();
 }
 
 InputManager::~InputManager() {
@@ -42,20 +49,28 @@ void	InputManager::mouse_callback(GLFWwindow* window, double xpos, double ypos) 
 		_firstMouse = false;
 	}
 
-	_moveX = xpos - _lastX;
-	_moveY = _lastY - ypos;  // Reversed since y-coordinates go from bottom to left
+	float moveX = xpos - _lastX;
+	float moveY = _lastY - ypos;  // Reversed since y-coordinates go from bottom to left
+
+	for (auto it = _mouseCallbackList.begin(); it != _mouseCallbackList.end(); ++it)
+		(*it)->onMouseMove(moveX, moveY);
 
 	_lastX = xpos;
 	_lastY = ypos;
+}
+
+void	InputManager::addCallback(std::string name, IInputReceiver *ir) {
+	if (name == "MouseMove")
+		_mouseCallbackList.push_back(ir);
 }
 
 bool InputManager::isKeyDown(int key) {
 	return _keys[key];
 }
 
-void InputManager::getMouseMove(GLfloat &x, GLfloat &y) {
-	x = _moveX;
-	y = _moveY;
+void InputManager::getMousePos(GLfloat &x, GLfloat &y) {
+	x = _lastX;
+	y = _lastY;
 }
 
 

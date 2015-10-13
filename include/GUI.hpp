@@ -33,6 +33,11 @@ public:
 
 	bool	shouldClose();
 
+	int		getWindowWidth();
+	int		getWindowHeigh();
+
+	float	getAspectRatio();
+
 	void	doUpdate(IUserInterface &ui);
 	void	doRender(IUserInterface &ui);
 };

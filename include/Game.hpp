@@ -2,6 +2,7 @@
 
 #include "IUserInterface.hpp"
 
+#include "GUI.hpp"
 #include "Player.hpp"
 #include "Camera.hpp"
 #include "World.hpp"
@@ -12,7 +13,8 @@
 class Game : public IUserInterface
 {
 private:
-	RenderContext *_renderContext;
+	GUI				*_gui;
+	RenderContext	*_renderContext;
 
 	World	 	*_world;
 	Skybox 		*_skybox;//TODO: Sky Class ?

@@ -10,8 +10,9 @@
 #include "Camera.hpp"
 
 #include "InputManager.hpp"
+#include "IInputReceiver.hpp"
 
-class	Player
+class	Player : public IInputReceiver
 {
 private:
 	glm::vec3	_pos;
@@ -30,12 +31,13 @@ private:
 
 public:
 	Player();
+	~Player();
 
 	void	setWorld(World *w);
 	void	setCamera(Camera *c);
 
 	void	move(Input input, GLfloat dt);
-	void	rotate(GLfloat xoffset, GLfloat yoffset);
+	void	onMouseMove(GLfloat xoffset, GLfloat yoffset);
 	void	update(float dt);
 	//TODO: render();
 };

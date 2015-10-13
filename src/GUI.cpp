@@ -63,6 +63,18 @@ bool	GUI::shouldClose() {
 	return glfwWindowShouldClose(_window);
 }
 
+int		GUI::getWindowWidth() {
+	return _windowWidth;
+}
+
+int		GUI::getWindowHeigh() {
+	return _windowHeight;
+}
+
+float	GUI::getAspectRatio() {
+	return (static_cast<float>(_windowWidth) / static_cast<float>(_windowHeight));
+}
+
 void	GUI::doUpdate(IUserInterface &ui) {
 	float newTime = glfwGetTime();
 	_dt = _time - newTime;
@@ -70,9 +82,13 @@ void	GUI::doUpdate(IUserInterface &ui) {
 
 	glfwPollEvents();
 
+	_inputManager->update(_dt);
 	ui.update(_dt);
 }
 
 void	GUI::doRender(IUserInterface &ui) {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 	ui.render();
+	glfwSwapBuffers(_window);
 }

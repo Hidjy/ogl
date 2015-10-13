@@ -2,6 +2,7 @@
 #include "Camera.hpp"
 #include "Game.hpp"
 #include "InputManager.hpp"
+#include "IInputReceiver.hpp"
 
 #define GLEW_STATIC
 #include <GL/glew.h>
@@ -27,6 +28,11 @@ Player::Player(){
 
 	_camera = nullptr;
 	_world = nullptr;
+
+	InputManager::addCallback("MouseMove", this);
+}
+
+Player::~Player() {
 }
 
 void	Player::setWorld(World *w) {
@@ -54,10 +60,6 @@ void	Player::update(float dt) {
 		move(BOOST_PLUS, dt);
 	if (InputManager::isKeyDown(GLFW_KEY_E))
 		move(BOOST_MOINS, dt);
-
-	GLfloat x, y;
-	InputManager::getMouseMove(x, y);
-	rotate(x, y);
 }
 
 void	Player::move(Input input, GLfloat dt)
@@ -73,19 +75,19 @@ void	Player::move(Input input, GLfloat dt)
 			break;
 		case FORWARD:
 			if (_world->getWorldBlockId(_camera->_pos + (dt * _speed * _camera->_front)) == 0)
-				_pos += _front * _speed * dt;
+				_pos -= _front * _speed * dt;
 			break;
 		case BACKWARD:
 			if (_world->getWorldBlockId(_camera->_pos - (dt * _speed * _camera->_front)) == 0)
-				_pos -= _front * _speed * dt;
+				_pos += _front * _speed * dt;
 			break;
 		case LEFT:
 			if (_world->getWorldBlockId(_camera->_pos - (glm::normalize(glm::cross(_camera->_front, _camera->_up)) * dt * _speed)) == 0)
-				_pos += _left * _speed * dt;
+				_pos -= _left * _speed * dt;
 			break;
 		case RIGHT:
 			if (_world->getWorldBlockId(_camera->_pos + (glm::normalize(glm::cross(_camera->_front, _camera->_up)) * dt * _speed)) == 0)
-				_pos -= _left * _speed * dt;
+				_pos += _left * _speed * dt;
 			break;
 		case BOOST_PLUS:
 			_speed += 10.0f * dt;
@@ -98,7 +100,7 @@ void	Player::move(Input input, GLfloat dt)
 }
 
 
-void	Player::rotate(GLfloat xoffset, GLfloat yoffset)
+void	Player::onMouseMove(GLfloat xoffset, GLfloat yoffset)
 {
 	GLfloat sensitivity = 0.05;
 	xoffset *= sensitivity;
