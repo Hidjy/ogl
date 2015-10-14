@@ -1,6 +1,6 @@
 #include "Block.hpp"
 
-#include "BlockType.hpp"
+#include "IBlockType.hpp"
 
 Block::Block() : _active(false), _type(0) {
 }
@@ -15,7 +15,7 @@ bool 		Block::isActive() const {
 	return _active;
 }
 
-BlockType	*Block::getType() const {
+IBlockType	*Block::getType() const {
 	return _type;
 }
 
@@ -23,7 +23,7 @@ void 		Block::setActive(bool active) {
 	_active = active;
 }
 
-void 		Block::setType(BlockType *type) {
+void 		Block::setType(IBlockType *type) {
 	_type = type;
 }
 

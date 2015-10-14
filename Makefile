@@ -8,11 +8,14 @@ SRC		=	main.cpp	\
 			ChunkManager.cpp	\
 			InputManager.cpp	\
 			MessageManager.cpp	\
-			BlockTypeManager.cpp	\
+			BlockTypeFactory.cpp	\
 			WorldGenerator.cpp	\
 			ShaderManager.cpp	\
 			Block.cpp	\
-			BlockType.cpp	\
+			StoneType.cpp	\
+			DirtType.cpp	\
+			WaterType.cpp	\
+			SandType.cpp	\
 			Camera.cpp	\
 			Chunk.cpp	\
 			Color.cpp	\

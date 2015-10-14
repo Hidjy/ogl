@@ -17,22 +17,15 @@
 
 #include "WorldGenerator.hpp"
 
+#include "BlockTypeFactory.hpp"
+
 # include <cmath>
 
 World::World() {
 	float (*perlinNoise)[GENERATOR_SIZE][GENERATOR_SIZE] = NULL;
 	WorldGenerator::GenerateMap(&perlinNoise, 7);
 
-	_blockTypeManager = new BlockTypeManager();
-	_blockTypeManager->add("Stone", new BlockType());
-	_blockTypeManager->add("Dirt", new BlockType());
-	_blockTypeManager->add("Sand", new BlockType());
-	_blockTypeManager->add("Water", new BlockType());
-
-	_blockTypeManager[0]["Stone"]->setColor(Color(0.5f, 0.5f, 0.5f));
-	_blockTypeManager[0]["Dirt"]->setColor(Color(0.5f, 0.25f, 0.0f));
-	_blockTypeManager[0]["Sand"]->setColor(Color(0.75f, 0.75f, 0.0f));
-	_blockTypeManager[0]["Water"]->setColor(Color(0.0f, 0.75f, 0.75f));
+	_blockTypeFactory = new BlockTypeFactory();
 
 	for (int x = 0; x < 10; x++) {
 		for (int y = 0; y < 2; y++) {
@@ -57,7 +50,7 @@ World::World() {
 
 							if (block_type != "") {
 								chunk->getBlock(x1, y1, z1).setActive(true);
-								chunk->getBlock(x1, y1, z1).setType(_blockTypeManager[0][block_type]);
+								chunk->getBlock(x1, y1, z1).setType(_blockTypeFactory->create(block_type));
 							}
 						}
 					}

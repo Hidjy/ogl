@@ -11,14 +11,14 @@
 #include "RenderContext.hpp"
 #include "ChunkManager.hpp"
 
-#include "BlockTypeManager.hpp"
+#include "BlockTypeFactory.hpp"
 
 #include <vector>
 
 class World {
 public:
 	ChunkManager	_chunkManager;
-	BlockTypeManager *_blockTypeManager;
+	BlockTypeFactory *_blockTypeFactory;
 	//TODO: Must contain Player
 
 public:
