@@ -1,6 +1,6 @@
 #include "Mesh.hpp"
 
-#include "RenderContext.hpp"
+#include "IRenderContext.hpp"
 
 Mesh::Mesh() {
 	glGenVertexArrays(1, &_VAO);
@@ -89,11 +89,11 @@ GLuint		*Mesh::getElementBuffer(void) {
 }
 
 
-void	Mesh::render(RenderContext *renderContext) {
+void	Mesh::render(IRenderContext *renderContext) {
 	render(renderContext, 1);
 }
 
-void	Mesh::render(RenderContext *renderContext, unsigned int instances) {
+void	Mesh::render(IRenderContext *renderContext, unsigned int instances) {
 	if (_vertexBuffer == nullptr or _instanceBuffer == nullptr)
 		return;
 

@@ -5,6 +5,7 @@
 #include "World.hpp"
 #include "Skybox.hpp"
 
+#include "IRenderContext.hpp"
 #include "RenderContext.hpp"
 
 Game::Game() {
@@ -64,7 +65,7 @@ Camera	*Game::getCamera() {
 	return _camera;
 }
 
-void	Game::setRenderContext(RenderContext *renderContext) {
+void	Game::setRenderContext(IRenderContext *renderContext) {
 	_renderContext = renderContext;
 }
 

@@ -13,7 +13,7 @@
 #include "ChunkManager.hpp"
 #include "Block.hpp"
 #include "ShaderManager.hpp"
-#include "RenderContext.hpp"
+#include "IRenderContext.hpp"
 
 #include "WorldGenerator.hpp"
 
@@ -69,7 +69,7 @@ void	World::update(float dt) {
 	_chunkManager.update(dt);
 }
 
-void	World::render(RenderContext *renderContext) {
+void	World::render(IRenderContext *renderContext) {
 	_chunkManager.render(renderContext);
 }
 

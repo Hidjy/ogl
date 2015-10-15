@@ -12,7 +12,7 @@
 
 #include <vector>
 
-#include "RenderContext.hpp"
+#include "IRenderContext.hpp"
 
 class		Mesh {
 private:
@@ -46,6 +46,6 @@ public:
 	GLfloat		*getInstanceBuffer(void);
 	GLuint		*getElementBuffer(void);
 
-	void	render(RenderContext *renderContext);
-	void	render(RenderContext *renderContext, unsigned int instances);
+	void	render(IRenderContext *renderContext);
+	void	render(IRenderContext *renderContext, unsigned int instances);
 };

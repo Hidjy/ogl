@@ -3,7 +3,7 @@
 #define GLEW_STATIC
 #include <GL/glew.h>
 
-#include "RenderContext.hpp"
+#include "IRenderContext.hpp"
 
 #include <vector>
 
@@ -19,6 +19,6 @@ private:
 public:
 	Skybox();
 	~Skybox();
-	void	render(RenderContext *renderContext);
+	void	render(IRenderContext *renderContext);
 
 };

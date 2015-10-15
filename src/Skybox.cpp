@@ -73,7 +73,7 @@ Skybox::Skybox() {
 
 Skybox::~Skybox() {}
 
-void Skybox::render(RenderContext *renderContext) {
+void Skybox::render(IRenderContext *renderContext) {
 	glBindTexture(GL_TEXTURE_CUBE_MAP, _cubemapTexture);
 
 	glDepthMask(GL_FALSE);;  // Change depth function so depth test passes when values are equal to depth buffer's content

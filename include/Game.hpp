@@ -8,13 +8,13 @@
 #include "World.hpp"
 #include "Skybox.hpp"
 
-#include "RenderContext.hpp"
+#include "IRenderContext.hpp"
 
 class Game : public IUserInterface
 {
 private:
 	GUI				*_gui;
-	RenderContext	*_renderContext;
+	IRenderContext	*_renderContext;
 
 	World	 	*_world;
 	Skybox 		*_skybox;//TODO: Sky Class ?
@@ -30,7 +30,7 @@ public:
 	Player	*getPlayer();
 	Camera	*getCamera();
 
-	void	setRenderContext(RenderContext *renderContext);
+	void	setRenderContext(IRenderContext *renderContext);
 
 	void	initWorld();
 	void	update(float dt);

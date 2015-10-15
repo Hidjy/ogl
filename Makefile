@@ -6,6 +6,7 @@ SRC		=	main.cpp	\
 			Game.cpp	\
 			RenderContext.cpp	\
 			ChunkManager.cpp	\
+			ChunkRenderer.cpp	\
 			InputManager.cpp	\
 			MessageManager.cpp	\
 			BlockTypeFactory.cpp	\

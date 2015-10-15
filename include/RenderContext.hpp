@@ -1,5 +1,7 @@
 #pragma once
 
+#include "IRenderContext.hpp"
+
 #define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -7,7 +9,7 @@
 #include "ShaderManager.hpp"
 #include "RenderContext.hpp"
 
-class RenderContext {
+class RenderContext : public IRenderContext {
 private:
 	ShaderManager *_shaderManager;
 

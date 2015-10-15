@@ -10,7 +10,7 @@
 #include "Game.hpp"
 #include "Chunk.hpp"
 #include "ShaderManager.hpp"
-#include "RenderContext.hpp"
+#include "IRenderContext.hpp"
 
 #include <exception>
 
@@ -36,7 +36,7 @@ void ChunkManager::update(float dt)
 	// updateChunkList();
 }
 
-void	ChunkManager::render(RenderContext *renderContext) {
+void	ChunkManager::render(IRenderContext *renderContext) {
 	renderContext->getShaderManager()->getShader("Block")->use();
 
 	for (auto it = _renderList.begin(); it != _renderList.end(); ++it) {

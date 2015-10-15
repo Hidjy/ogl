@@ -8,7 +8,7 @@
 
 #include "Chunk.hpp"
 #include "ShaderManager.hpp"
-#include "RenderContext.hpp"
+#include "IRenderContext.hpp"
 #include "ChunkManager.hpp"
 
 #include "BlockTypeFactory.hpp"
@@ -26,7 +26,7 @@ public:
 	~World();
 
 	void	update(float dt);
-	void	render(RenderContext *renderContext);
+	void	render(IRenderContext *renderContext);
 
 	Chunk	&getChunk(int x, int y, int z);
 	void	addChunk(Chunk *chunk);

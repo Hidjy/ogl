@@ -8,14 +8,18 @@
 
 #include "Block.hpp"
 #include "ShaderManager.hpp"
-#include "Mesh.hpp"
-#include "RenderContext.hpp"
+#include "ChunkRenderer.hpp"
+#include "IRenderContext.hpp"
 
 //TODO: Block counter (for accurate _empty)
+
+class ChunkRenderer;
 
 class Chunk {
 private:
 	glm::vec3	_pos;
+
+	ChunkRenderer	*_chunkRenderer;
 
 	bool		_empty;
 	bool		_loaded;
@@ -25,7 +29,6 @@ private:
 	GLuint		_blockCount;
 
 	Block		***_blocks;
-	Mesh		_mesh;
 
 public:
 	static const int SIZE = 32;
@@ -52,7 +55,7 @@ public:
 
 	void	generateMesh();
 	void	update(float dt);
-	void	render(RenderContext *renderContext);
+	void	render(IRenderContext *renderContext);
 	void	load();
 	void	unload();
 	void	setup();
