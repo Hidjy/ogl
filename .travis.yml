@@ -2,18 +2,15 @@ sudo: false
 language: cpp
 
 compiler:
-  - g++
-  #- clang++
+  - g++-5
 
 addons:
   apt:
     sources:
     - ubuntu-toolchain-r-test
-    - h-rayflood/-llvm
 
     packages:
-    - g++
-    - clang++
+    - g++-5
     - cmake
     - libsoil-dev
     - xorg-dev
@@ -21,6 +18,16 @@ addons:
     - libglew-dev
     - libglm-dev
     - libglfw3-dev
+
+
+install:
+  - git clone https://github.com/glfw/glfw.git
+  - cd glfw
+  - git checkout 3.1.2
+  - cmake . && make && make install
+  - export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/src
+  - export CPATH=$CPATH:$PWD/include
+  - cd ..
 
 script:
   - make
