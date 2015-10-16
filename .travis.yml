@@ -12,29 +12,15 @@ addons:
     - h-rayflood/-llvm
 
     packages:
-    - g++-4.8
-    - clang++-3.4
+    - g++
+    - clang++
     - cmake
     - libsoil-dev
     - xorg-dev
     - libglu1-mesa-dev
     - libglew-dev
     - libglm-dev
-
-install:
-  # g++4.8.1
-  - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8"; fi
-
-  # clang 3.4
-  - if [ "$CXX" == "clang++" ]; then export CXX="clang++-3.4"; fi
-
-  - git clone https://github.com/glfw/glfw.git
-  - cd glfw
-  - git checkout 3.1.1
-  - wget http://www.cmake.org/files/v3.3/cmake-3.3.0-rc4-Linux-x86_64.tar.gz
-  - tar xzvf cmake-3.3.0-rc4-Linux-x86_64.tar.gz
-  - ./cmake-3.3.0-rc4-Linux-x86_64/bin/cmake . && make && make install
-  - cd ..
+    - libglfw3-dev
 
 script:
   - make
