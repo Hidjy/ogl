@@ -42,7 +42,7 @@ OBJ_DEBUG		= $(patsubst %.cpp,$(DEBUG_DIR)/%.o,$(SRC))
 DEPS			= $(patsubst %.cpp,$(DEP_DIR)/%.d,$(SRC))
 
 OPTI		= -O3
-CXXFLAGS	= -std=c++11 -Wall #-Wextra -Wno-unused-result
+CXXFLAGS	= -std=c++11 -pg -Wall #-Wextra -Wno-unused-result
 DEPENDS 	= -MT $@ -MD -MP -MF $(subst .o,.d,$@)
 
 
