@@ -21,7 +21,7 @@ addons:
 install:
   - git clone https://github.com/glfw/glfw.git
   - cd glfw
-  - git checkout 3.1.2
+  - git checkout 3.1.1
   - cmake . && make && make install
   - export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/src
   - export CPATH=$CPATH:$PWD/include
