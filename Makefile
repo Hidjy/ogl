@@ -34,7 +34,7 @@ DEP_DIR		= dep
 
 
 INCLUDES	=
-LIBS		= -lGL -lglfw3 -lGLEW -lSOIL -lX11 -lXi -lXrandr -lXxf86vm -lXinerama -lXcursor -lrt -lm -pthread \
+LIBS		= -lGL -lglfw3 -lGLEW -lX11 -lXi -lXrandr -lXxf86vm -lXinerama -lXcursor -lrt -lm -pthread \
 				-lz -lpng12  -ldl
 
 OBJ				= $(patsubst %.cpp,$(STATIC_DIR)/%.o,$(SRC))
