@@ -75,19 +75,19 @@ void	Player::move(Input input, GLfloat dt)
 			break;
 		case FORWARD:
 			if (_world->getWorldBlockId(_camera->_pos + (dt * _speed * _camera->_front)) == 0)
-				_pos -= _front * _speed * dt;
+				_pos += _front * _speed * dt;
 			break;
 		case BACKWARD:
 			if (_world->getWorldBlockId(_camera->_pos - (dt * _speed * _camera->_front)) == 0)
-				_pos += _front * _speed * dt;
+				_pos -= _front * _speed * dt;
 			break;
 		case LEFT:
 			if (_world->getWorldBlockId(_camera->_pos - (glm::normalize(glm::cross(_camera->_front, _camera->_up)) * dt * _speed)) == 0)
-				_pos -= _left * _speed * dt;
+				_pos += _left * _speed * dt;
 			break;
 		case RIGHT:
 			if (_world->getWorldBlockId(_camera->_pos + (glm::normalize(glm::cross(_camera->_front, _camera->_up)) * dt * _speed)) == 0)
-				_pos += _left * _speed * dt;
+				_pos -= _left * _speed * dt;
 			break;
 		case BOOST_PLUS:
 			_speed += 10.0f * dt;

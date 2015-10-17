@@ -6,7 +6,6 @@
 #include "Player.hpp"
 #include "Camera.hpp"
 #include "World.hpp"
-#include "Skybox.hpp"
 
 #include "IRenderContext.hpp"
 
@@ -17,7 +16,7 @@ private:
 	IRenderContext	*_renderContext;
 
 	World	 	*_world;
-	Skybox 		*_skybox;//TODO: Sky Class ?
+
 	Player 		*_player;
 	Camera 		*_camera;
 
@@ -26,7 +25,6 @@ public:
 	~Game();
 
 	World	*getWorld();
-	Skybox	*getSkybox();
 	Player	*getPlayer();
 	Camera	*getCamera();
 

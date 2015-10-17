@@ -23,7 +23,6 @@ SRC		=	main.cpp	\
 			EWorld.cpp	\
 			Player.cpp	\
 			Shader.cpp	\
-			Skybox.cpp	\
 			World.cpp	\
 			Mesh.cpp
 
@@ -34,9 +33,9 @@ STATIC_DIR	= static
 DEP_DIR		= dep
 
 
-INCLUDES	= -I/usr/include/freetype2
+INCLUDES	=
 LIBS		= -lGL -lglfw3 -lGLEW -lSOIL -lX11 -lXi -lXrandr -lXxf86vm -lXinerama -lXcursor -lrt -lm -pthread \
-				-lfreetype -lz -lpng12  -ldl
+				-lz -lpng12  -ldl
 
 OBJ				= $(patsubst %.cpp,$(STATIC_DIR)/%.o,$(SRC))
 OBJ_DEBUG		= $(patsubst %.cpp,$(DEBUG_DIR)/%.o,$(SRC))

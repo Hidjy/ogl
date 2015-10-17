@@ -12,12 +12,10 @@ addons:
     packages:
     - g++-5
     - cmake
-    - libsoil-dev
     - xorg-dev
     - libglu1-mesa-dev
     - libglew-dev
     - libglm-dev
-    - libglfw3-dev
 
 
 install:

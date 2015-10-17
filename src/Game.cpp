@@ -3,14 +3,13 @@
 #include "Player.hpp"
 #include "Camera.hpp"
 #include "World.hpp"
-#include "Skybox.hpp"
 
 #include "IRenderContext.hpp"
 #include "RenderContext.hpp"
 
 Game::Game() {
 	_gui = GUI::instance();
-	_skybox = new Skybox();
+
 	_world = new World();
 	_player = new Player();
 	_camera = new Camera();
@@ -28,12 +27,6 @@ Game::Game() {
 	blockShader->createAndLinkProgram();
 	_renderContext->getShaderManager()->setShader("Block", blockShader);
 
-	Shader *skyboxShader = new Shader();
-	skyboxShader->loadFromFile(GL_VERTEX_SHADER,"shaders/skybox.vs");
-	skyboxShader->loadFromFile(GL_FRAGMENT_SHADER,"shaders/skybox.fs");
-	skyboxShader->createAndLinkProgram();
-	_renderContext->getShaderManager()->setShader("Skybox", skyboxShader);
-
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	glEnable(GL_CULL_FACE);
@@ -42,7 +35,6 @@ Game::Game() {
 }
 
 Game::~Game() {
-	delete _skybox;
 	delete _world;
 	delete _player;
 	delete _camera;
@@ -51,10 +43,6 @@ Game::~Game() {
 
 World	*Game::getWorld() {
 	return _world;
-}
-
-Skybox	*Game::getSkybox() {
-	return _skybox;
 }
 
 Player	*Game::getPlayer() {
@@ -80,10 +68,6 @@ void	Game::update(float dt) {
 
 void	Game::render() {
 	_renderContext->setViewMatrix(_camera->getViewMatrix());
-
-	_renderContext->getShaderManager()->getShader("Skybox")->use();
-	_skybox->render(_renderContext);
-	_renderContext->getShaderManager()->getShader("Skybox")->unUse();
 
 	_renderContext->getShaderManager()->getShader("Block")->use();
 	_world->render(_renderContext);
