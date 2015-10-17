@@ -2,7 +2,7 @@ sudo: false
 language: cpp
 
 compiler:
-  - g++-5
+  - g++
 
 addons:
   apt:
@@ -17,6 +17,8 @@ addons:
     - libglew-dev
     - libglm-dev
 
+before_install:
+    - export CXX=g++-5
 
 install:
   - git clone https://github.com/glfw/glfw.git
