@@ -77,7 +77,7 @@ float	GUI::getAspectRatio() {
 
 void	GUI::doUpdate(IUserInterface &ui) {
 	float newTime = glfwGetTime();
-	_dt = _time - newTime;
+	_dt = newTime - _time;
 	_time = newTime;
 
 	glfwPollEvents();
