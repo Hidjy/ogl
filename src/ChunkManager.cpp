@@ -37,14 +37,14 @@ void ChunkManager::update(float dt)
 }
 
 void	ChunkManager::render(IRenderContext *renderContext) {
-	renderContext->getShaderManager()->getShader("Block")->use();
+	renderContext->getShaderManager()->getShader("Chunk")->use();
 
 	for (auto it = _renderList.begin(); it != _renderList.end(); ++it) {
 		glm::mat4 MVP;
 		glm::vec3 pos = (*it)->getPos();
 		MVP = glm::translate(MVP, glm::vec3(pos.x * Chunk::SIZE, pos.y * Chunk::SIZE, pos.z * Chunk::SIZE));
 		MVP = renderContext->getProjectionMatrix() * renderContext->getViewMatrix() * MVP;
-		glUniformMatrix4fv(glGetUniformLocation(renderContext->getShaderManager()->getShader("Block")->getProgram(), "MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
+		glUniformMatrix4fv(glGetUniformLocation(renderContext->getShaderManager()->getShader("Chunk")->getProgram(), "MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
 		(*it)->render(renderContext);
 	}
 }

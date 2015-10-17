@@ -22,10 +22,10 @@ Game::Game() {
 	_renderContext->setViewMatrix(_camera->getViewMatrix());
 
 	Shader *blockShader = new Shader();
-	blockShader->loadFromFile(GL_VERTEX_SHADER,"shaders/block.vs");
-	blockShader->loadFromFile(GL_FRAGMENT_SHADER,"shaders/block.fs");
+	blockShader->loadFromFile(GL_VERTEX_SHADER,"shaders/chunk.vs");
+	blockShader->loadFromFile(GL_FRAGMENT_SHADER,"shaders/chunk.fs");
 	blockShader->createAndLinkProgram();
-	_renderContext->getShaderManager()->setShader("Block", blockShader);
+	_renderContext->getShaderManager()->setShader("Chunk", blockShader);
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
@@ -69,7 +69,7 @@ void	Game::update(float dt) {
 void	Game::render() {
 	_renderContext->setViewMatrix(_camera->getViewMatrix());
 
-	_renderContext->getShaderManager()->getShader("Block")->use();
+	_renderContext->getShaderManager()->getShader("Chunk")->use();
 	_world->render(_renderContext);
-	_renderContext->getShaderManager()->getShader("Block")->unUse();
+	_renderContext->getShaderManager()->getShader("Chunk")->unUse();
 }
