@@ -72,7 +72,7 @@ bool		Chunk::needRebuild() const {
 	return _setup;
 }
 
-glm::vec3	Chunk::getPos() const {
+glm::vec3	const &Chunk::getPos() const {
 	return _pos;
 }
 

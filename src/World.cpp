@@ -84,7 +84,7 @@ GLint	World::getWorldBlockId(float x, float y, float z) {
 		// 	y,
 		// 	z
 		// );
-		Chunk chunk = getChunk( floor(x / Chunk::SIZE), floor(y / Chunk::SIZE), floor(z / Chunk::SIZE));
+		Chunk &chunk = getChunk( floor(x / Chunk::SIZE), floor(y / Chunk::SIZE), floor(z / Chunk::SIZE));
 		return chunk.getBlock(
 			static_cast<int>(x) % Chunk::SIZE,
 			static_cast<int>(y) % Chunk::SIZE,

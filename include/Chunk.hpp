@@ -45,7 +45,7 @@ public:
 
 	GLuint	countBlocks();
 
-	glm::vec3	getPos() const;
+	glm::vec3	const &getPos() const;
 	Block		getBlock(int x, int y, int z) const;
 
 	Block		&getBlock(int x, int y, int z);
