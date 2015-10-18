@@ -33,19 +33,19 @@ World::World() {
 				Chunk *chunk = new Chunk();
 				chunk->setPos(glm::vec3(x, y, z));
 
-				for (size_t x1 = 0; x1 < Chunk::SIZE; x1++) {
-					for (size_t y1 = 0; y1 < Chunk::SIZE; y1++) {
-						for (size_t z1 = 0; z1 < Chunk::SIZE; z1++) {
+				for (size_t x1 = 0; x1 < Chunk::SizeX; x1++) {
+					for (size_t y1 = 0; y1 < Chunk::SizeY; y1++) {
+						for (size_t z1 = 0; z1 < Chunk::SizeZ; z1++) {
 							std::string block_type("");
-							if ((y1 + (y * Chunk::SIZE)) < ((*perlinNoise)[x1 + ((x ) * Chunk::SIZE)][z1 + ((z ) * Chunk::SIZE)] * static_cast<float>(Chunk::SIZE * 3.0f) - 32)) {
-								if ((y1 + (y * Chunk::SIZE)) == 9)
+							if ((y1 + (y * Chunk::SizeY)) < ((*perlinNoise)[x1 + ((x ) * Chunk::SizeX)][z1 + ((z ) * Chunk::SizeZ)] * static_cast<float>(Chunk::SizeY * 3.0f) - 32)) {
+								if ((y1 + (y * Chunk::SizeY)) == 9)
 									block_type = "Sand";
-								else if (((y1 + (y * Chunk::SIZE)) + 5 < ((*perlinNoise)[x1 + ((x ) * Chunk::SIZE)][z1 + ((z ) * Chunk::SIZE)] * static_cast<float>(Chunk::SIZE * 3.0f) - 32)))
+								else if (((y1 + (y * Chunk::SizeY)) + 5 < ((*perlinNoise)[x1 + ((x ) * Chunk::SizeX)][z1 + ((z ) * Chunk::SizeZ)] * static_cast<float>(Chunk::SizeY * 3.0f) - 32)))
 									block_type = "Stone";
 								else
 									block_type = "Dirt";
 							}
-							else if ((y1 + (y * Chunk::SIZE)) < 10)
+							else if ((y1 + (y * Chunk::SizeY)) < 10)
 								block_type = "Water";
 
 							if (block_type != "") {
@@ -75,20 +75,15 @@ void	World::render(IRenderContext *renderContext) {
 
 
 GLint	World::getWorldBlockId(float x, float y, float z) {
+	int ix = static_cast<int>(x);
+	int iy = static_cast<int>(y);
+	int iz = static_cast<int>(z);
 	try {
-		// printf("chunk = {%d, %d, %d} = {%f, %f, %f}\n",
-		// 	static_cast<int>(floor(x / Chunk::SIZE)),
-		// 	static_cast<int>(floor(y / Chunk::SIZE)),
-		// 	static_cast<int>(floor(z / Chunk::SIZE)),
-		// 	x,
-		// 	y,
-		// 	z
-		// );
-		Chunk &chunk = getChunk( floor(x / Chunk::SIZE), floor(y / Chunk::SIZE), floor(z / Chunk::SIZE));
+		Chunk &chunk = getChunk( ix >> Chunk::LogSizeX, iy >> Chunk::LogSizeY, iz >> Chunk::LogSizeZ);
 		return chunk.getBlock(
-			static_cast<int>(x) % Chunk::SIZE,
-			static_cast<int>(y) % Chunk::SIZE,
-			static_cast<int>(z) % Chunk::SIZE
+			ix & Chunk::MaskX,
+			iy & Chunk::MaskY,
+			iz & Chunk::MaskZ
 		).getType() != nullptr; //FIXME: BlockType::getID() ?
 	}
 	catch (std::exception e) {

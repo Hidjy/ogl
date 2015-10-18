@@ -43,7 +43,7 @@ void	ChunkManager::render(IRenderContext *renderContext) {
 	for (auto it = _renderList.begin(); it != _renderList.end(); ++it) {
 		glm::mat4 MVP;
 		glm::vec3 pos = (*it)->getPos();
-		MVP = glm::translate(MVP, glm::vec3(pos.x * Chunk::SIZE, pos.y * Chunk::SIZE, pos.z * Chunk::SIZE));
+		MVP = glm::translate(MVP, glm::vec3(pos.x * Chunk::SizeX, pos.y * Chunk::SizeY, pos.z * Chunk::SizeZ));
 		MVP = renderContext->getProjectionMatrix() * renderContext->getViewMatrix() * MVP;
 		glUniformMatrix4fv(glGetUniformLocation(renderContext->getShaderManager()->getShader("Chunk")->getProgram(), "MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
 		(*it)->render(renderContext);
@@ -137,7 +137,7 @@ void ChunkManager::updateVisibilityList()
 	glm::vec3 pos = _cameraPos;
 	for (auto it = _chunks.begin(); it != _chunks.end(); ++it) {
 		if (*it != nullptr) {
-			glm::vec3 temp = glm::vec3(pos.x / Chunk::SIZE + 0.5f, pos.y / Chunk::SIZE + 0.5f, pos.z / Chunk::SIZE + 0.5f) - (*it)->getPos();
+			glm::vec3 temp = glm::vec3(pos.x / Chunk::SizeX + 0.5f, pos.y / Chunk::SizeY + 0.5f, pos.z / Chunk::SizeZ + 0.5f) - (*it)->getPos();
 			GLfloat distSqr = glm::dot(temp, temp);
 			if (sqrt(distSqr) < 10)
 				_visibilityList.push_back(*it);

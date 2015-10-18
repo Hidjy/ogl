@@ -19,9 +19,9 @@ void	ChunkRenderer::generateMesh(Chunk *chunk)
 {
 		std::vector<GLfloat> vertices;
 
-		for (int x = 0; x < Chunk::SIZE; x++) {
-			for (int y = 0; y < Chunk::SIZE; y++) {
-				for (int z = 0; z < Chunk::SIZE; z++) {
+		for (int x = 0; x < Chunk::SizeX; x++) {
+			for (int y = 0; y < Chunk::SizeY; y++) {
+				for (int z = 0; z < Chunk::SizeZ; z++) {
 					Block current = chunk->getBlock(x, y, z);
 					if (current.isActive()) {
 						float vx, vy, vz;
@@ -38,11 +38,11 @@ void	ChunkRenderer::generateMesh(Chunk *chunk)
 							ao[0] *= AO_COEFF;
 							ao[4] *= AO_COEFF;
 						}
-						if (y > 0 and x < Chunk::SIZE - 1 and chunk->getBlock(x + 1, y - 1, z).isActive()) {
+						if (y > 0 and x < Chunk::SizeX - 1 and chunk->getBlock(x + 1, y - 1, z).isActive()) {
 							ao[4] *= AO_COEFF;
 							ao[5] *= AO_COEFF;
 						}
-						if (y > 0 and z < Chunk::SIZE - 1 and chunk->getBlock(x, y - 1, z + 1).isActive()) {
+						if (y > 0 and z < Chunk::SizeY - 1 and chunk->getBlock(x, y - 1, z + 1).isActive()) {
 							ao[1] *= AO_COEFF;
 							ao[5] *= AO_COEFF;
 						}
@@ -51,38 +51,38 @@ void	ChunkRenderer::generateMesh(Chunk *chunk)
 							ao[1] *= AO_COEFF;
 						}
 
-						if (y < Chunk::SIZE - 1 and z > 0 and chunk->getBlock(x, y + 1, z - 1).isActive()) {
+						if (y < Chunk::SizeZ - 1 and z > 0 and chunk->getBlock(x, y + 1, z - 1).isActive()) {
 							ao[2] *= AO_COEFF;
 							ao[6] *= AO_COEFF;
 						}
-						if (y < Chunk::SIZE - 1 and x < Chunk::SIZE - 1 and chunk->getBlock(x + 1, y + 1, z).isActive()) {
+						if (y < Chunk::SizeX - 1 and x < Chunk::SizeY - 1 and chunk->getBlock(x + 1, y + 1, z).isActive()) {
 							ao[6] *= AO_COEFF;
 							ao[7] *= AO_COEFF;
 						}
-						if (y < Chunk::SIZE - 1 and z < Chunk::SIZE - 1 and chunk->getBlock(x, y + 1, z + 1).isActive()) {
+						if (y < Chunk::SizeX - 1 and z < Chunk::SizeZ - 1 and chunk->getBlock(x, y + 1, z + 1).isActive()) {
 							ao[3] *= AO_COEFF;
 							ao[7] *= AO_COEFF;
 						}
-						if (y < Chunk::SIZE - 1 and x > 0 and chunk->getBlock(x - 1, y + 1, z).isActive()) {
+						if (y < Chunk::SizeX - 1 and x > 0 and chunk->getBlock(x - 1, y + 1, z).isActive()) {
 							ao[2] *= AO_COEFF;
 							ao[3] *= AO_COEFF;
 						}
 
 						if (x > 0 and y > 0 and z > 0 and chunk->getBlock(x - 1, y - 1, z - 1).isActive())
 							ao[0] *= AO_COEFF;
-						if (x > 0 and y > 0 and z < Chunk::SIZE - 1 and chunk->getBlock(x - 1, y - 1, z + 1).isActive())
+						if (x > 0 and y > 0 and z < Chunk::SizeX - 1 and chunk->getBlock(x - 1, y - 1, z + 1).isActive())
 							ao[1] *= AO_COEFF;
-						if (x > 0 and y < Chunk::SIZE - 1 and z > 0 and chunk->getBlock(x - 1, y + 1, z - 1).isActive())
+						if (x > 0 and y < Chunk::SizeY - 1 and z > 0 and chunk->getBlock(x - 1, y + 1, z - 1).isActive())
 							ao[2] *= AO_COEFF;
-						if (x > 0 and y < Chunk::SIZE - 1 and z < Chunk::SIZE - 1 and chunk->getBlock(x - 1, y + 1, z + 1).isActive())
+						if (x > 0 and y < Chunk::SizeX - 1 and z < Chunk::SizeY - 1 and chunk->getBlock(x - 1, y + 1, z + 1).isActive())
 							ao[3] *= AO_COEFF;
-						if (x < Chunk::SIZE - 1 and y > 0 and z > 0 and chunk->getBlock(x + 1, y - 1, z - 1).isActive())
+						if (x < Chunk::SizeY - 1 and y > 0 and z > 0 and chunk->getBlock(x + 1, y - 1, z - 1).isActive())
 							ao[4] *= AO_COEFF;
-						if (x < Chunk::SIZE - 1 and y > 0 and z < Chunk::SIZE - 1 and chunk->getBlock(x + 1, y - 1, z + 1).isActive())
+						if (x < Chunk::SizeZ - 1 and y > 0 and z < Chunk::SizeY - 1 and chunk->getBlock(x + 1, y - 1, z + 1).isActive())
 							ao[5] *= AO_COEFF;
-						if (x < Chunk::SIZE - 1 and y < Chunk::SIZE - 1 and z > 0 and chunk->getBlock(x + 1, y + 1, z - 1).isActive())
+						if (x < Chunk::SizeZ - 1 and y < Chunk::SizeY - 1 and z > 0 and chunk->getBlock(x + 1, y + 1, z - 1).isActive())
 							ao[6] *= AO_COEFF;
-						if (x < Chunk::SIZE - 1 and y < Chunk::SIZE - 1 and z < Chunk::SIZE - 1 and chunk->getBlock(x + 1, y + 1, z + 1).isActive())
+						if (x < Chunk::SizeY - 1 and y < Chunk::SizeZ - 1 and z < Chunk::SizeZ - 1 and chunk->getBlock(x + 1, y + 1, z + 1).isActive())
 							ao[7] *= AO_COEFF;
 
 						if (x == 0 or not chunk->getBlock(x - 1, y, z).isActive()) {
@@ -110,7 +110,7 @@ void	ChunkRenderer::generateMesh(Chunk *chunk)
 							multipush(vertices, {vx + 0.0f, vy + 1.0f, vz + 0.0f, r * ao[2], g * ao[2], b * ao[2], a});
 							multipush(vertices, {vx + 1.0f, vy + 1.0f, vz + 0.0f, r * ao[6], g * ao[6], b * ao[6], a});
 						}
-						if (x == Chunk::SIZE - 1 or not chunk->getBlock(x + 1, y, z).isActive()) {
+						if (x == Chunk::SizeX - 1 or not chunk->getBlock(x + 1, y, z).isActive()) {
 							multipush(vertices, {vx + 1.0f, vy + 1.0f, vz + 1.0f, r * ao[7], g * ao[7], b * ao[7], a});
 							multipush(vertices, {vx + 1.0f, vy + 0.0f, vz + 1.0f, r * ao[5], g * ao[5], b * ao[5], a});
 							multipush(vertices, {vx + 1.0f, vy + 1.0f, vz + 0.0f, r * ao[6], g * ao[6], b * ao[6], a});
@@ -118,7 +118,7 @@ void	ChunkRenderer::generateMesh(Chunk *chunk)
 							multipush(vertices, {vx + 1.0f, vy + 1.0f, vz + 0.0f, r * ao[6], g * ao[6], b * ao[6], a});
 							multipush(vertices, {vx + 1.0f, vy + 0.0f, vz + 1.0f, r * ao[5], g * ao[5], b * ao[5], a});
 						}
-						if (y == Chunk::SIZE - 1 or not chunk->getBlock(x, y + 1, z).isActive()) {
+						if (y == Chunk::SizeY - 1 or not chunk->getBlock(x, y + 1, z).isActive()) {
 							multipush(vertices, {vx + 1.0f, vy + 1.0f, vz + 1.0f, r * ao[7], g * ao[7], b * ao[7], a});
 							multipush(vertices, {vx + 0.0f, vy + 1.0f, vz + 0.0f, r * ao[2], g * ao[2], b * ao[2], a});
 							multipush(vertices, {vx + 0.0f, vy + 1.0f, vz + 1.0f, r * ao[3], g * ao[3], b * ao[3], a});
@@ -126,7 +126,7 @@ void	ChunkRenderer::generateMesh(Chunk *chunk)
 							multipush(vertices, {vx + 1.0f, vy + 1.0f, vz + 0.0f, r * ao[6], g * ao[6], b * ao[6], a});
 							multipush(vertices, {vx + 0.0f, vy + 1.0f, vz + 0.0f, r * ao[2], g * ao[2], b * ao[2], a});
 						}
-						if (z == Chunk::SIZE - 1 or not chunk->getBlock(x, y, z + 1).isActive()) {
+						if (z == Chunk::SizeZ - 1 or not chunk->getBlock(x, y, z + 1).isActive()) {
 							multipush(vertices, {vx + 1.0f, vy + 1.0f, vz + 1.0f, r * ao[7], g * ao[7], b * ao[7], a});
 							multipush(vertices, {vx + 0.0f, vy + 1.0f, vz + 1.0f, r * ao[3], g * ao[3], b * ao[3], a});
 							multipush(vertices, {vx + 1.0f, vy + 0.0f, vz + 1.0f, r * ao[5], g * ao[5], b * ao[5], a});

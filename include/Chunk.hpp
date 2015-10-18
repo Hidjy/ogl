@@ -31,7 +31,17 @@ private:
 	Block		***_blocks;
 
 public:
-	static const int SIZE = 32;
+	static const int LogSizeX = 5;
+	static const int LogSizeY = 5;
+	static const int LogSizeZ = 5;
+
+	static const int SizeX = 1 << LogSizeX;
+	static const int SizeY = 1 << LogSizeY;
+	static const int SizeZ = 1 << LogSizeZ;
+
+	static const int MaskX = SizeX - 1;
+	static const int MaskY = SizeX - 1;
+	static const int MaskZ = SizeX - 1;
 
 public:
 	Chunk();

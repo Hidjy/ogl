@@ -14,14 +14,14 @@
 
 Chunk::Chunk() : _pos(glm::vec3(0, 0, 0)), _empty(false), _loaded(false), _setup(false), _needRebuild(false) //FIXME
 {
-	_blocks = new Block**[SIZE];
-	for(int i = 0; i < SIZE; i++)
+	_blocks = new Block**[SizeX];
+	for(int i = 0; i < SizeX; i++)
 	{
-		_blocks[i] = new Block*[SIZE];
+		_blocks[i] = new Block*[SizeY];
 
-		for(int j = 0; j < SIZE; j++)
+		for(int j = 0; j < SizeY; j++)
 		{
-			_blocks[i][j] = new Block[SIZE];
+			_blocks[i][j] = new Block[SizeZ];
 		}
 	}
 
@@ -31,9 +31,9 @@ Chunk::Chunk() : _pos(glm::vec3(0, 0, 0)), _empty(false), _loaded(false), _setup
 Chunk::Chunk(Chunk const &src) : Chunk() {
 	_pos = src.getPos();
 	_empty = src.empty();
-	for (size_t x = 0; x < SIZE; x++) {
-		for (size_t y = 0; y < SIZE; y++) {
-			for (size_t z = 0; z < SIZE; z++) {
+	for (size_t x = 0; x < SizeX; x++) {
+		for (size_t y = 0; y < SizeY; y++) {
+			for (size_t z = 0; z < SizeZ; z++) {
 				_blocks[x][y][z] = src.getBlock(x, y, z);
 			}
 		}
@@ -42,9 +42,9 @@ Chunk::Chunk(Chunk const &src) : Chunk() {
 
 Chunk::~Chunk()
 {
-	for (int i = 0; i < SIZE; ++i)
+	for (int i = 0; i < SizeX; ++i)
 	{
-		for (int j = 0; j < SIZE; ++j)
+		for (int j = 0; j < SizeY; ++j)
 		{
 			delete [] _blocks[i][j];
 		}
@@ -103,9 +103,9 @@ void	Chunk::setBlock(int x, int y, int z, Block block) {
 GLuint	Chunk::countBlocks()
 {
 	_blockCount = 0;
-	for (int x = 0; x < Chunk::SIZE; x++) {
-		for (int y = 0; y < Chunk::SIZE; y++) {
-			for (int z = 0; z < Chunk::SIZE; z++) {
+	for (int x = 0; x < SizeX; x++) {
+		for (int y = 0; y < SizeY; y++) {
+			for (int z = 0; z < SizeZ; z++) {
 				if (_blocks[x][y][z].isActive()) {
 					_blockCount++;
 				}
@@ -150,9 +150,9 @@ Chunk	&Chunk::operator=(Chunk const &src) {
 	_pos = src.getPos();
 	_empty = src.empty();
 
-	for (size_t x = 0; x < SIZE; x++) {
-		for (size_t y = 0; y < SIZE; y++) {
-			for (size_t z = 0; z < SIZE; z++) {
+	for (size_t x = 0; x < SizeX; x++) {
+		for (size_t y = 0; y < SizeY; y++) {
+			for (size_t z = 0; z < SizeZ; z++) {
 				_blocks[x][y][z] = src.getBlock(x, y, z);
 			}
 		}
