@@ -81,7 +81,7 @@ Block 	Chunk::getBlock(int x, int y, int z) const {
 }
 
 Block 	&Chunk::getBlock(int x, int y, int z) {
-	_needRebuild = true;
+	// _needRebuild = true;
 	return _blocks[x][y][z];
 }
 

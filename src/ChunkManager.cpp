@@ -13,6 +13,7 @@
 #include "IRenderContext.hpp"
 
 #include <exception>
+#include <utility>
 
 ChunkManager::ChunkManager() {
 }
@@ -52,7 +53,6 @@ void	ChunkManager::render(IRenderContext *renderContext) {
 void	ChunkManager::addChunk(Chunk *chunk) {
 	_chunks.push_back(chunk);
 	_loadQueue.push(chunk);
-	_setupQueue.push(chunk);
 }
 
 void	ChunkManager::setCamera(glm::vec3 cameraPosition, glm::vec3 cameraView)
@@ -71,11 +71,7 @@ Chunk	&ChunkManager::getChunk(glm::vec3 pos) {
 }
 
 void	ChunkManager::updateAsyncChunker() {
-	for (auto it = _chunks.begin() ; it != _chunks.end(); ++it) {
-		Chunk *chunk = *it;
-		if (chunk->needRebuild())
-			_rebuildQueue.push(chunk);
-	}
+
 }
 
 void ChunkManager::updateLoadQueue()
@@ -86,6 +82,7 @@ void ChunkManager::updateLoadQueue()
 		Chunk *chunk = _loadQueue.front();
 		if (chunk->isLoaded() == false) {
 			chunk->load();
+			_setupQueue.push(chunk);
 			i++;
 		}
 		_loadQueue.pop();
