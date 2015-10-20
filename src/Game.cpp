@@ -14,6 +14,8 @@ Game::Game() {
 	_player = new Player();
 	_camera = new Camera();
 
+	_world->setPlayer(_player);
+
 	_player->setWorld(_world);
 	_player->setCamera(_camera);
 
@@ -62,8 +64,8 @@ void	Game::initWorld() {
 }
 
 void	Game::update(float dt) {
-	_player->update(dt);
 	_world->update(dt);
+	_player->update(dt);
 }
 
 void	Game::render() {

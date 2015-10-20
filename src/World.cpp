@@ -10,6 +10,7 @@
 
 #include "Chunk.hpp"
 #include "EWorld.hpp"
+#include "Player.hpp"
 #include "ChunkManager.hpp"
 #include "Block.hpp"
 #include "ShaderManager.hpp"
@@ -17,46 +18,25 @@
 
 #include "WorldGenerator.hpp"
 
-#include "BlockTypeFactory.hpp"
-
 # include <cmath>
 
+#include <iostream>
+
 World::World() {
-	float (*perlinNoise)[GENERATOR_SIZE][GENERATOR_SIZE] = NULL;
-	WorldGenerator::GenerateMap(&perlinNoise, 7);
 
-	_blockTypeFactory = new BlockTypeFactory();
+	_worldGenerator = new WorldGenerator();
 
-	for (int x = 0; x < 10; x++) {
-		for (int y = 0; y < 2; y++) {
-			for (int z = 0; z < 10; z++) {
-				Chunk *chunk = new Chunk();
-				chunk->setPos(glm::vec3(x, y, z));
+	_chunkManager.setOrigin(-6, -1, -6);
 
-				for (size_t x1 = 0; x1 < Chunk::SizeX; x1++) {
-					for (size_t y1 = 0; y1 < Chunk::SizeY; y1++) {
-						for (size_t z1 = 0; z1 < Chunk::SizeZ; z1++) {
-							std::string block_type("");
-							if ((y1 + (y * Chunk::SizeY)) < ((*perlinNoise)[x1 + ((x ) * Chunk::SizeX)][z1 + ((z ) * Chunk::SizeZ)] * static_cast<float>(Chunk::SizeY * 3.0f) - 32)) {
-								if ((y1 + (y * Chunk::SizeY)) == 9)
-									block_type = "Sand";
-								else if (((y1 + (y * Chunk::SizeY)) + 5 < ((*perlinNoise)[x1 + ((x ) * Chunk::SizeX)][z1 + ((z ) * Chunk::SizeZ)] * static_cast<float>(Chunk::SizeY * 3.0f) - 32)))
-									block_type = "Stone";
-								else
-									block_type = "Dirt";
-							}
-							else if ((y1 + (y * Chunk::SizeY)) < 10)
-								block_type = "Water";
-
-							if (block_type != "") {
-								chunk->getBlock(x1, y1, z1).setActive(true);
-								chunk->getBlock(x1, y1, z1).setType(_blockTypeFactory->create(block_type));
-							}
-						}
-					}
+	for (int x = 0; x < ChunkManager::SizeX; x++) {
+		for (int y = 0; y < ChunkManager::SizeY; y++) {
+			for (int z = 0; z < ChunkManager::SizeZ; z++) {
+				Chunk *chunk = _chunkManager.getChunk(x, y, z);
+				if (chunk == nullptr) {
+					chunk = new Chunk();
+					_chunkManager.setChunk(chunk, x, y, z);
 				}
-				chunk->generateMesh();
-				addChunk(chunk);
+				_worldGenerator->generateChunk(chunk, x + _chunkManager.getX(), y +_chunkManager.getY(), z + _chunkManager.getZ());
 			}
 		}
 	}
@@ -66,6 +46,15 @@ World::~World() {
 }
 
 void	World::update(float dt) {
+	int px, py, pz;
+	_player->getPos(px, py, pz);
+	px = px >> Chunk::LogSizeX;
+	py = py >> Chunk::LogSizeY;
+	pz = pz >> Chunk::LogSizeZ;
+	if (px < _chunkManager.getX() + ViewX or py < _chunkManager.getY() + ViewY or pz < _chunkManager.getZ() + ViewZ
+			or px > _chunkManager.getX() + ChunkManager::SizeX - ViewX or py > _chunkManager.getY() + ChunkManager::SizeY - ViewY or pz > _chunkManager.getZ() + ChunkManager::SizeZ - ViewZ) {
+		_chunkManager.setOrigin(px, py, pz);
+	}
 	_chunkManager.update(dt);
 }
 
@@ -74,33 +63,25 @@ void	World::render(IRenderContext *renderContext) {
 }
 
 
-GLint	World::getWorldBlockId(float x, float y, float z) {
-	int ix = static_cast<int>(x);
-	int iy = static_cast<int>(y);
-	int iz = static_cast<int>(z);
-	try {
-		Chunk &chunk = getChunk( ix >> Chunk::LogSizeX, iy >> Chunk::LogSizeY, iz >> Chunk::LogSizeZ);
-		return chunk.getBlock(
-			ix & Chunk::MaskX,
-			iy & Chunk::MaskY,
-			iz & Chunk::MaskZ
-		).getType() != nullptr; //FIXME: BlockType::getID() ?
-	}
-	catch (std::exception e) {
-		// std::cout << "Pas de chunk" << std::endl;
-		return -1;
-	}
+Block	*World::getBlock(int x, int y, int z) {
+	Chunk *chunk = getChunk(
+		x >> Chunk::LogSizeX,
+		y >> Chunk::LogSizeY,
+		z >> Chunk::LogSizeZ
+	);
+	if (chunk == nullptr)
+		throw std::exception();
+	return chunk->getBlock(
+		x & Chunk::MaskX,
+		y & Chunk::MaskY,
+		z & Chunk::MaskZ
+	);
 }
 
-GLint	World::getWorldBlockId(glm::vec3 const &v) {
-	return getWorldBlockId(v.x, v.y, v.z);
+Chunk	*World::getChunk(int x, int y, int z) {
+	return _chunkManager.getChunk(x - _chunkManager.getX(), y - _chunkManager.getY(), z - _chunkManager.getZ());
 }
 
-void	World::addChunk(Chunk *chunk) {
-	_chunkManager.addChunk(chunk);
-}
-
-
-Chunk	&World::getChunk(int x, int y, int z) {
-	return _chunkManager.getChunk(glm::vec3(x, y, z));
+void	World::setPlayer(Player *p) {
+	_player = p;
 }

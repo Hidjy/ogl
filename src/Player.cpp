@@ -35,6 +35,12 @@ Player::Player(){
 Player::~Player() {
 }
 
+void	Player::getPos(int &x, int &y, int &z) {
+	x = _pos.x;
+	y = _pos.y;
+	z = _pos.z;
+}
+
 void	Player::setWorld(World *w) {
 	_world = w;
 }
@@ -64,30 +70,25 @@ void	Player::update(float dt) {
 
 void	Player::move(Input input, GLfloat dt)
 {
+	glm::vec3 nextPos;
 	switch (input) {
 		case UP:
-			if (_world->getWorldBlockId(_camera->_pos + (dt * _speed * _camera->_up)) == 0)
-				_pos += _up * _speed * dt;
+			nextPos = _pos + _up * _speed * dt;
 			break;
 		case DOWN:
-			if (_world->getWorldBlockId(_camera->_pos - (dt * _speed * _camera->_up)) == 0)
-				_pos -= _up * _speed * dt;
+			nextPos = _pos - _up * _speed * dt;
 			break;
 		case FORWARD:
-			if (_world->getWorldBlockId(_camera->_pos + (dt * _speed * _camera->_front)) == 0)
-				_pos += _front * _speed * dt;
+			nextPos = _pos + _front * _speed * dt;
 			break;
 		case BACKWARD:
-			if (_world->getWorldBlockId(_camera->_pos - (dt * _speed * _camera->_front)) == 0)
-				_pos -= _front * _speed * dt;
+			nextPos = _pos - _front * _speed * dt;
 			break;
 		case LEFT:
-			if (_world->getWorldBlockId(_camera->_pos - (glm::normalize(glm::cross(_camera->_front, _camera->_up)) * dt * _speed)) == 0)
-				_pos += _left * _speed * dt;
+			nextPos = _pos + _left * _speed * dt;
 			break;
 		case RIGHT:
-			if (_world->getWorldBlockId(_camera->_pos + (glm::normalize(glm::cross(_camera->_front, _camera->_up)) * dt * _speed)) == 0)
-				_pos -= _left * _speed * dt;
+			nextPos = _pos - _left * _speed * dt;
 			break;
 		case BOOST_PLUS:
 			_speed += 10.0f * dt;
@@ -95,6 +96,15 @@ void	Player::move(Input input, GLfloat dt)
 		case BOOST_MOINS:
 			_speed -= 10.0f * dt;
 			break;
+	}
+
+	try {
+		Block *block = _world->getBlock(nextPos.x, nextPos.y, nextPos.z);
+		if (block == nullptr or not block->isActive())
+			_pos = nextPos;
+	}
+	catch (std::exception e) {
+		_pos = nextPos;
 	}
 	_camera->_pos = _pos;
 }

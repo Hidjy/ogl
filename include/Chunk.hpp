@@ -7,28 +7,18 @@
 #include <glm/glm.hpp>
 
 #include "Block.hpp"
-#include "ShaderManager.hpp"
 #include "ChunkRenderer.hpp"
 #include "IRenderContext.hpp"
-
-//TODO: Block counter (for accurate _empty)
 
 class ChunkRenderer;
 
 class Chunk {
 private:
-	glm::vec3	_pos;
-
 	ChunkRenderer	*_chunkRenderer;
 
-	bool		_empty;
-	bool		_loaded;
 	bool		_setup;
-	bool		_needRebuild;
 
-	GLuint		_blockCount;
-
-	Block		***_blocks;
+	Block		****_blocks;
 
 public:
 	static const int LogSizeX = 5;
@@ -48,27 +38,14 @@ public:
 	Chunk(Chunk const &src);
 	~Chunk();
 
-	bool		empty() const;
-	bool		isLoaded() const;
-	bool		isSetup() const;
-	bool		needRebuild() const;
+	bool	isSetup() const;
 
-	GLuint	countBlocks();
+	Block	*getBlock(int x, int y, int z);
 
-	glm::vec3	const &getPos() const;
-	Block		getBlock(int x, int y, int z) const;
-
-	Block		&getBlock(int x, int y, int z);
-
-	void		setPos(glm::vec3 pos);
-	void		setBlock(int x, int y, int z, Block block);
+	void	setBlock(Block *b, int x, int y, int z);
 
 	void	generateMesh();
 	void	update(float dt);
 	void	render(IRenderContext *renderContext);
-	void	load();
-	void	unload();
 	void	setup();
-
-	Chunk	&operator=(Chunk const &src);
 };

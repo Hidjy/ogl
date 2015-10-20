@@ -16,23 +16,42 @@
 #include <utility>
 
 ChunkManager::ChunkManager() {
+	_x = 0;
+	_y = 0;
+	_z = 0;
+
+	_chunks = new Chunk***[SizeX];
+	for (int x = 0; x < SizeX; x++) {
+		_chunks[x] = new Chunk**[SizeY];
+		for (int y = 0; y < SizeY; y++) {
+			_chunks[x][y] = new Chunk*[SizeZ];
+			for (int z = 0; z < SizeZ; z++)
+				_chunks[x][y][z] = nullptr;
+		}
+	}
 }
 
 ChunkManager::~ChunkManager() {
+	for (int x = 0; x < SizeX; x++) {
+		for (int y = 0; y < SizeY; y++) {
+			for (int z = 0; z < SizeZ; z++) {
+				if (_chunks[x][y][z] != nullptr)
+					delete _chunks[x][y][z];
+			}
+			delete [] _chunks[x][y];
+		}
+		delete [] _chunks[x];
+	}
+	delete [] _chunks;
 }
 
 void ChunkManager::update(float dt)
 {
 	updateAsyncChunker();
 
-	updateLoadQueue();
 	updateSetupQueue();
 	updateRebuildQueue();
-
 	updateUnloadQueue();
-
-	updateVisibilityList();
-	updateRenderList();
 
 	// updateChunkList();
 }
@@ -40,52 +59,110 @@ void ChunkManager::update(float dt)
 void	ChunkManager::render(IRenderContext *renderContext) {
 	renderContext->getShaderManager()->getShader("Chunk")->use();
 
-	for (auto it = _renderList.begin(); it != _renderList.end(); ++it) {
-		glm::mat4 MVP;
-		glm::vec3 pos = (*it)->getPos();
-		MVP = glm::translate(MVP, glm::vec3(pos.x * Chunk::SizeX, pos.y * Chunk::SizeY, pos.z * Chunk::SizeZ));
-		MVP = renderContext->getProjectionMatrix() * renderContext->getViewMatrix() * MVP;
-		glUniformMatrix4fv(glGetUniformLocation(renderContext->getShaderManager()->getShader("Chunk")->getProgram(), "MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
-		(*it)->render(renderContext);
+	for (int x = 0; x < SizeX; x++) {
+		for (int y = 0; y < SizeY; y++) {
+			for (int z = 0; z < SizeZ; z++) {
+				if (_chunks[x][y][z] != nullptr) {
+					if (_chunks[x][y][z]->isSetup()) {
+						glm::mat4 MVP;
+						MVP = glm::translate(MVP, glm::vec3((_x + x) * Chunk::SizeX, (_y + y) * Chunk::SizeY, (_z + z) * Chunk::SizeZ));
+						MVP = renderContext->getProjectionMatrix() * renderContext->getViewMatrix() * MVP;
+						glUniformMatrix4fv(glGetUniformLocation(renderContext->getShaderManager()->getShader("Chunk")->getProgram(), "MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
+						_chunks[x][y][z]->render(renderContext);
+					}
+				}
+			}
+		}
 	}
+
 }
 
-void	ChunkManager::addChunk(Chunk *chunk) {
-	_chunks.push_back(chunk);
-	_loadQueue.push(chunk);
+int		ChunkManager::getX() {
+	return _x;
 }
 
-void	ChunkManager::setCamera(glm::vec3 cameraPosition, glm::vec3 cameraView)
-{
-	_cameraPos = cameraPosition;
-	_cameraView = cameraView;
+int		ChunkManager::getY() {
+	return _y;
 }
 
-Chunk	&ChunkManager::getChunk(glm::vec3 pos) {
-	for (auto it = _chunks.begin() ; it != _chunks.end(); ++it) {
-		glm::vec3 cpos = (**it).getPos();
-		if (pos == cpos)
-			return (**it);
+int		ChunkManager::getZ() {
+	return _z;
+}
+
+void	ChunkManager::setOrigin(int x, int y, int z) {
+	int sx, ex, stepx, sy, ey, stepy, sz, ez, stepz;
+	if (x >= _x) {
+		sx = 0;
+		ex = SizeX - 1;
+		stepx = 1;
 	}
-	throw std::exception();
+	else {
+		sx = SizeX - 1;
+		ex = 0;
+		stepx = -1;
+	}
+
+	if (y >= _y) {
+		sy = 0;
+		ey = SizeY - 1;
+		stepy = 1;
+	}
+	else {
+		sy = SizeY - 1;
+		ey = 0;
+		stepy = -1;
+	}
+
+	if (z >= _z) {
+		sz = 0;
+		ez = SizeZ - 1;
+		stepz = 1;
+	}
+	else {
+		sz = SizeZ - 1;
+		ez = 0;
+		stepz = -1;
+	}
+
+	for (int ix = sx; ix != ex; ix += stepx) {
+		for (int iy = sy; iy != ey; iy += stepy) {
+			for (int iz = sz; iz != ez; iz += stepz) {
+				int xoffset = x - _x;
+				int yoffset = y - _y;
+				int zoffset = z - _z;
+				if (ix + xoffset >= 0 and ix + xoffset < SizeX and iy + yoffset >= 0 and iy + yoffset < SizeY and iz + zoffset >= 0 and iz + zoffset < SizeZ)
+					_chunks[ix][iy][iz] = _chunks[ix + xoffset][iy + yoffset][iz + zoffset];
+				else
+					_chunks[ix][iy][iz] = nullptr;
+			}
+		}
+	}
+	_x = x;
+	_y = y;
+	_z = z;
+}
+
+Chunk	*ChunkManager::getChunk(int x, int y, int z) {
+	if (x < 0 or y < 0 or z < 0 or x >= SizeX or y >= SizeY or z >= SizeZ)
+		throw std::exception();
+	return _chunks[x][y][z];
+}
+
+void	ChunkManager::setChunk(Chunk *c, int x, int y, int z) {
+	_chunks[x][y][z] = c;
 }
 
 void	ChunkManager::updateAsyncChunker() {
-
-}
-
-void ChunkManager::updateLoadQueue()
-{
-	int i = 0;
-	while (_loadQueue.size() and i < CHUNKS_PER_FRAME)
-	{
-		Chunk *chunk = _loadQueue.front();
-		if (chunk->isLoaded() == false) {
-			chunk->load();
-			_setupQueue.push(chunk);
-			i++;
+	for (int x = 0; x < SizeX; x++) {
+		for (int y = 0; y < SizeY; y++) {
+			for (int z = 0; z < SizeZ; z++) {
+				if (_chunks[x][y][z] != nullptr) {
+					if (not _chunks[x][y][z]->isSetup()) {
+						_setupQueue.push(_chunks[x][y][z]);
+					}
+				}
+			}
 		}
-		_loadQueue.pop();
 	}
 }
 
@@ -95,7 +172,7 @@ void ChunkManager::updateSetupQueue()
 	while (_setupQueue.size() and i < CHUNKS_PER_FRAME)
 	{
 		Chunk *chunk = _setupQueue.front();
-		if (chunk->isLoaded() and chunk->isSetup() == false) {
+		if (chunk->isSetup() == false) {
 			chunk->setup();
 			i++;
 		}
@@ -109,57 +186,12 @@ void ChunkManager::updateRebuildQueue()
 	while (_rebuildQueue.size() and i < CHUNKS_PER_FRAME)
 	{
 		Chunk *chunk = _rebuildQueue.front();
-		if (chunk->needRebuild()) {
-			chunk->generateMesh();
-			i++;
-		}
+		chunk->generateMesh();
+		i++;
 		_rebuildQueue.pop();
 	}
 }
 
-void ChunkManager::updateUnloadQueue()
-{
-	int i = 0;
-	while (_unloadQueue.size() and i < CHUNKS_PER_FRAME)
-	{
-		Chunk *chunk = _unloadQueue.front();
-		if (chunk->isLoaded()) {
-			chunk->unload();
-			i++;
-		}
-		_unloadQueue.pop();
-	}
-}
+void	ChunkManager::updateUnloadQueue() {
 
-void ChunkManager::updateVisibilityList()
-{
-	_visibilityList.clear();
-	glm::vec3 pos = _cameraPos;
-	for (auto it = _chunks.begin(); it != _chunks.end(); ++it) {
-		if (*it != nullptr) {
-			glm::vec3 temp = glm::vec3(pos.x / Chunk::SizeX + 0.5f, pos.y / Chunk::SizeY + 0.5f, pos.z / Chunk::SizeZ + 0.5f) - (*it)->getPos();
-			GLfloat distSqr = glm::dot(temp, temp);
-			if (sqrt(distSqr) < 10)
-				_visibilityList.push_back(*it);
-		}
-	}
-}
-
-void ChunkManager::updateRenderList()
-{
-	_renderList.clear();
-
-	for(auto it = _visibilityList.begin(); it != _visibilityList.end(); ++it)
-	{
-		Chunk* pChunk = (*it);
-
-		if(pChunk != nullptr)
-		{
-			if(pChunk->isLoaded() && pChunk->isSetup())
-			{
-				//Frustum Culling
-				_renderList.push_back(pChunk);
-			}
-		}
-	}
 }

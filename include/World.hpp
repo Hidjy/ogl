@@ -11,15 +11,24 @@
 #include "IRenderContext.hpp"
 #include "ChunkManager.hpp"
 
-#include "BlockTypeFactory.hpp"
+#include "WorldGenerator.hpp"
 
 #include <vector>
+
+#include "Player.hpp"
+
+class Player;
 
 class World {
 public:
 	ChunkManager	_chunkManager;
-	BlockTypeFactory *_blockTypeFactory;
-	//TODO: Must contain Player
+	WorldGenerator	*_worldGenerator;
+	Player			*_player;
+
+public:
+	static const int ViewX = 5;
+	static const int ViewY = 1;
+	static const int ViewZ = 5;
 
 public:
 	World();
@@ -28,9 +37,8 @@ public:
 	void	update(float dt);
 	void	render(IRenderContext *renderContext);
 
-	Chunk	&getChunk(int x, int y, int z);
-	void	addChunk(Chunk *chunk);
+	Chunk	*getChunk(int x, int y, int z);
+	Block	*getBlock(int x, int y, int z);
 
-	GLint	getWorldBlockId(float x, float y, float z);
-	GLint	getWorldBlockId(glm::vec3 const &v);
+	void	setPlayer(Player *p);
 };

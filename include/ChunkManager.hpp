@@ -18,42 +18,43 @@
 
 class ChunkManager {
 private:
-	glm::vec3				_cameraPos;
-	glm::vec3				_cameraView;
+	Chunk					****_chunks;
 
-	std::vector<Chunk *>	_chunks;
+	int						_x;
+	int						_y;
+	int						_z;
 
-	std::queue<Chunk *>		_loadQueue;
 	std::queue<Chunk *>		_setupQueue;
 	std::queue<Chunk *>		_rebuildQueue;
 	std::queue<Chunk *>		_unloadQueue;
 
-	std::vector<Chunk *>	_visibilityList;
-	std::vector<Chunk *>	_renderList;
-
-	bool					_forceVisibilityUpdate;
+public:
+	static const int SizeX = 12;
+	static const int SizeY = 3;
+	static const int SizeZ = 12;
 
 public:
 	ChunkManager();
 	~ChunkManager();
 
-	void	setCamera(glm::vec3 cameraPosition, glm::vec3 cameraView);
-	void	addChunk(Chunk *chunk);
+	void	setOrigin(int x, int y, int z);
 
-	Chunk	&getChunk(glm::vec3 pos);
+	int		getX();
+	int		getY();
+	int		getZ();
+
+	Chunk	*getChunk(int x, int y, int z);
+
+	void	setChunk(Chunk *c, int x, int y, int z);
 
 	void 	update(float dt);
 	void 	render(IRenderContext *renderContext);
 
 	void	updateAsyncChunker();
 
-	void	updateLoadQueue();
 	void	updateSetupQueue();
 	void	updateRebuildQueue();
 	void	updateUnloadQueue();
-
-	void	updateVisibilityList();
-	void	updateRenderList();
 
 	// void	updateChunkList();
 

@@ -12,6 +12,8 @@
 #include "InputManager.hpp"
 #include "IInputReceiver.hpp"
 
+class	World;
+
 class	Player : public IInputReceiver
 {
 private:
@@ -32,6 +34,8 @@ private:
 public:
 	Player();
 	~Player();
+
+	void	getPos(int &x, int &y, int &z);
 
 	void	setWorld(World *w);
 	void	setCamera(Camera *c);
