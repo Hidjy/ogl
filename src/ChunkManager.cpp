@@ -93,43 +93,43 @@ void	ChunkManager::setOrigin(int x, int y, int z) {
 	int sx, ex, stepx, sy, ey, stepy, sz, ez, stepz;
 	if (x >= _x) {
 		sx = 0;
-		ex = SizeX - 1;
+		ex = SizeX;
 		stepx = 1;
 	}
 	else {
 		sx = SizeX - 1;
-		ex = 0;
+		ex = -1;
 		stepx = -1;
 	}
 
 	if (y >= _y) {
 		sy = 0;
-		ey = SizeY - 1;
+		ey = SizeY;
 		stepy = 1;
 	}
 	else {
 		sy = SizeY - 1;
-		ey = 0;
+		ey = -1;
 		stepy = -1;
 	}
 
 	if (z >= _z) {
 		sz = 0;
-		ez = SizeZ - 1;
+		ez = SizeZ;
 		stepz = 1;
 	}
 	else {
 		sz = SizeZ - 1;
-		ez = 0;
+		ez = -1;
 		stepz = -1;
 	}
 
+	int xoffset = x - _x;
+	int yoffset = y - _y;
+	int zoffset = z - _z;
 	for (int ix = sx; ix != ex; ix += stepx) {
 		for (int iy = sy; iy != ey; iy += stepy) {
 			for (int iz = sz; iz != ez; iz += stepz) {
-				int xoffset = x - _x;
-				int yoffset = y - _y;
-				int zoffset = z - _z;
 				if (ix + xoffset >= 0 and ix + xoffset < SizeX and iy + yoffset >= 0 and iy + yoffset < SizeY and iz + zoffset >= 0 and iz + zoffset < SizeZ)
 					_chunks[ix][iy][iz] = _chunks[ix + xoffset][iy + yoffset][iz + zoffset];
 				else

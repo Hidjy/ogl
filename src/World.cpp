@@ -53,7 +53,7 @@ void	World::update(float dt) {
 	pz = pz >> Chunk::LogSizeZ;
 	if (px < _chunkManager.getX() + ViewX or py < _chunkManager.getY() + ViewY or pz < _chunkManager.getZ() + ViewZ
 			or px > _chunkManager.getX() + ChunkManager::SizeX - ViewX or py > _chunkManager.getY() + ChunkManager::SizeY - ViewY or pz > _chunkManager.getZ() + ChunkManager::SizeZ - ViewZ) {
-		_chunkManager.setOrigin(px, py, pz);
+		_chunkManager.setOrigin(px - (ChunkManager::SizeX >> 1), py - (ChunkManager::SizeY >> 1), pz - (ChunkManager::SizeZ >> 1));
 	}
 	_chunkManager.update(dt);
 }
